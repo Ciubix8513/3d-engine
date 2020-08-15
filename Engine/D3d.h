@@ -29,7 +29,10 @@ using namespace DirectX;
 		ID3D11DeviceContext* getDeviceContext();
 		void GetProjectionMat(XMMATRIX&);
 		void GetWorldMat(XMMATRIX&);
+		void GetOrthoMat(XMMATRIX&);
+		void ToggleAlphaBlend(bool);
 		void GetVCardInfo(char*, int&);
+		void ToggleZBuffer(bool state);
 #pragma endregion
 #pragma region private Vars
 	private:
@@ -47,6 +50,9 @@ using namespace DirectX;
 		XMMATRIX m_projectionMat;
 		XMMATRIX m_orthomat;
 		XMMATRIX m_worldMat;
+		ID3D11DepthStencilState* m_depthDisabledStencilState;
+		ID3D11BlendState* m_AlphaBlendOn;
+		ID3D11BlendState* m_AlphaBlendOff;
 #pragma endregion
 	};
 

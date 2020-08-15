@@ -24,8 +24,11 @@ bool Texture::Init(ID3D11Device* device, ID3D11DeviceContext* ctxt, char* file)
     unsigned int rowPitch;
     CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     result = loadTarga(file, height, width);
-    if (!result)
+    if (!result) 
+    {
+        std::cout << file << " does not exist" << std::endl;
         return false;
+    }
     desc.Height = height;
     desc.Width = width;
     desc.MipLevels = 0;

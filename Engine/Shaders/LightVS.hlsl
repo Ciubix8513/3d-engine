@@ -6,6 +6,12 @@ cbuffer MatrixBuffer
 	matrix projectionMatrix;
 	matrix objectMat;
 };
+cbuffer CamBuffer
+{
+    float3 camPosition;
+    float padding;
+};
+
 //stucts
 struct Vertex
 {
@@ -17,7 +23,7 @@ struct Vertex
 struct PixelInput
 {
 	float4 position: SV_POSITION;
-	//float4 color : COLOR;
+    float3 viewDir : TEXCOORD1;
 	float2 UV: TEXCOORD0;
 	float3 normal : NORMAL;
 };
@@ -26,7 +32,7 @@ struct PixelInput
 PixelInput LightVertexShader(Vertex input) 
 {
 	PixelInput output;
-	
+    float4 worldPosition;
 	
 	input.position.w = 1.0f;
 	output.position = mul(input.position, objectMat);
@@ -39,5 +45,14 @@ PixelInput LightVertexShader(Vertex input)
 	output.normal = mul(output.normal, (float3x3) worldMatrix);
 	output.normal = normalize(output.normal);
 
+   worldPosition = mul(input.position, objectMat);
+	//worldPosition = mul(input.position, worldMatrix);
+	
+	worldPosition = mul(worldPosition, worldMatrix);
+	
+    output.viewDir = camPosition.xyz - worldPosition.xyz;
+	
+    output.viewDir = normalize(output.viewDir);
+	
 	return output;
 }

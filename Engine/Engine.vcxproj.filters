@@ -37,6 +37,12 @@
     <Filter Include="Graphics\Shader Classes">
       <UniqueIdentifier>{b693f505-7ad2-4a24-971b-56653952f5aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Shader Classes\Headers">
+      <UniqueIdentifier>{d6db8a3a-3ffc-4a4e-9ffe-3cc3433e7ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shader Classes\Sources">
+      <UniqueIdentifier>{88b1bd6c-c14b-48ab-be3a-e65f9295af7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Launcher.cpp">
@@ -60,20 +66,35 @@
     <ClCompile Include="Model.cpp">
       <Filter>Graphics\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="ColorShader.cpp">
-      <Filter>Graphics\Shader Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
-      <Filter>Graphics\Shader Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Graphics\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Graphics\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="LightShader.cpp">
-      <Filter>Graphics\Shader Classes</Filter>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClasses\LightShader.cpp">
+      <Filter>Graphics\Shader Classes\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClasses\FontShader.cpp">
+      <Filter>Graphics\Shader Classes\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClasses\ColorShader.cpp">
+      <Filter>Graphics\Shader Classes\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClasses\TextureShader.cpp">
+      <Filter>Graphics\Shader Classes\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,20 +119,35 @@
     <ClInclude Include="Model.h">
       <Filter>Graphics\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ColorShader.h">
-      <Filter>Graphics\Shader Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureShader.h">
-      <Filter>Graphics\Shader Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Graphics\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Graphics\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="LightShader.h">
-      <Filter>Graphics\Shader Classes</Filter>
+    <ClInclude Include="Bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClasses\ColorShader.h">
+      <Filter>Graphics\Shader Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClasses\LightShader.h">
+      <Filter>Graphics\Shader Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClasses\TextureShader.h">
+      <Filter>Graphics\Shader Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClasses\FontShader.h">
+      <Filter>Graphics\Shader Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +168,12 @@
     </None>
     <None Include="Shaders\Texture.hlsl">
       <Filter>Shaders\Pixel</Filter>
+    </None>
+    <None Include="Shaders\Font.hlsl">
+      <Filter>Shaders\Pixel</Filter>
+    </None>
+    <None Include="Shaders\FontVS.hlsl">
+      <Filter>Shaders\Vertex</Filter>
     </None>
   </ItemGroup>
 </Project>

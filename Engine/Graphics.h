@@ -6,11 +6,13 @@
 #pragma region includes
 #include "D3d.h"
 #include "Camera.h"
-#include "ColorShader.h"
+#include "../Engine/ShaderClasses/ColorShader.h"
 #include "Model.h"
-#include "TextureShader.h"
+#include "../Engine/ShaderClasses/TextureShader.h"
 #include "Light.h"
-#include "LightShader.h"
+#include "../Engine/ShaderClasses/LightShader.h"
+#include "Bitmap.h"
+#include "Text.h"
 #pragma endregion
 
 #pragma region Globals
@@ -30,11 +32,15 @@
 		~Graphics();
 		bool Init(int, int, HWND);
 		void ShutDown();
-		bool Frame();
+		bool Frame(int posX, int posY);
+
+		
 #pragma endregion
 #pragma region Private funcs
 	private:
-		bool Render();
+		bool Render(int posX, int posY);
+
+
 #pragma endregion
 #pragma region Private Vars
 	private:
@@ -45,9 +51,10 @@
 		TextureShader* m_texShader;
 		LightShader* m_LightShader;
 		Light* m_Light;
+		Bitmap* m_Bitmap;
+		Text* m_Text;
 #pragma endregion
-	public:
-		bool ShaderIndex = true;
+
 	};
 
 #endif

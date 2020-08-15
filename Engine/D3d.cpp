@@ -9,6 +9,9 @@
         m_device = 0;
         m_DeviceContext = 0;
         m_RasterizerState = 0;
+        m_DepthStencilState = 0;
+        m_AlphaBlendOff = 0;
+        m_AlphaBlendOn = 0;
     }
     D3d::D3d(D3d&)
     {
@@ -34,6 +37,10 @@
         D3D11_DEPTH_STENCIL_DESC depthStncilDesc;
         D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
         D3D11_RASTERIZER_DESC rasterizerDesc;
+        D3D11_DEPTH_STENCIL_DESC depthDisableStateDesc;
+        D3D11_BLEND_DESC blendDesc;
+
+
         D3D11_VIEWPORT viewport;
         float FOV, screenAspect;
         m_Vsync = Vsync;
@@ -261,7 +268,48 @@
         m_projectionMat =  XMMatrixPerspectiveFovLH(FOV, screenAspect, screenNear, screenDepth);
         m_worldMat = XMMatrixIdentity();
         m_orthomat = XMMatrixOrthographicLH((float)screenWidth, (float) screenHeight, screenNear, screenDepth);
-        
+
+        ZeroMemory(&depthDisableStateDesc, sizeof(depthDisableStateDesc));
+
+        depthDisableStateDesc.DepthEnable = false;
+        depthDisableStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+        depthDisableStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+        depthDisableStateDesc.StencilEnable = true;
+        depthDisableStateDesc.StencilReadMask = 0XFF;
+        depthDisableStateDesc.StencilWriteMask = 0XFF;
+        depthDisableStateDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+        depthDisableStateDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+        depthDisableStateDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+        depthDisableStateDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+        depthDisableStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+        depthDisableStateDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+        depthDisableStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+        depthDisableStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+        result = m_device->CreateDepthStencilState(&depthDisableStateDesc, &m_depthDisabledStencilState);
+        if (FAILED(result))
+            return false;
+
+        ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+
+        blendDesc.RenderTarget[0].BlendEnable = TRUE;
+        blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+        blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+        result = m_device->CreateBlendState(&blendDesc, &m_AlphaBlendOn);
+        if (FAILED(result))
+            return false;
+        blendDesc.RenderTarget[0].BlendEnable = FALSE;
+        result = m_device->CreateBlendState(&blendDesc, &m_AlphaBlendOff);
+        if (FAILED(result))
+            return false;
+
         return true;
     }
 
@@ -272,6 +320,11 @@
            m_swapChain->SetFullscreenState(false, NULL);
            m_swapChain->Release();
            m_swapChain = 0;
+        }
+        if (m_depthDisabledStencilState)
+        {            
+            m_depthDisabledStencilState->Release();
+            m_depthDisabledStencilState = 0;
         }
         if (m_RasterizerState)
         {
@@ -307,6 +360,16 @@
         {
             m_device->Release();
             m_device = 0;
+        }
+        if(m_AlphaBlendOff)
+        {
+            m_AlphaBlendOff->Release();
+            m_AlphaBlendOff = 0;
+        }
+        if (m_AlphaBlendOn)
+        {
+            m_AlphaBlendOn->Release();
+            m_AlphaBlendOn = 0;
         }
         return;
     }
@@ -352,9 +415,49 @@
         return;
 
     }
+    void D3d::GetOrthoMat(XMMATRIX& matrix)
+    {
+        matrix = m_orthomat;
+        return;
+    }
+    void D3d::ToggleAlphaBlend(bool state)
+    {
+        float blendFactor[4];
+        blendFactor[0] = 0.0f;
+        blendFactor[1] = 0.0f;
+        blendFactor[2] = 0.0f;
+        blendFactor[3] = 0.0f;
+
+        if(state)
+        {            
+            //turn on
+            m_DeviceContext->OMSetBlendState(m_AlphaBlendOn, blendFactor, 0xffffffff);
+        }
+        else
+        {
+            //turn off
+            m_DeviceContext->OMSetBlendState(m_AlphaBlendOff, blendFactor, 0xffffffff);
+
+        }
+        return;
+    }
     void D3d::GetVCardInfo(char* cardname, int& memory)
     {
         strcpy_s(cardname, 128, m_VCardDescr);
         memory = m_VcardMem;
         return;
+    }
+
+    void D3d::ToggleZBuffer(bool state)
+    {
+        if(state)
+        {
+            m_DeviceContext->OMSetDepthStencilState(m_DepthStencilState, 1);
+            return;
+        }
+        else
+        {
+            m_DeviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
+            return;
+        }
     }

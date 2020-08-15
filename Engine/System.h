@@ -35,6 +35,7 @@
 		HWND m_hwnd;
 		Input* m_Input;
 		Graphics* m_Graphics;
+		
 #pragma endregion
 #pragma region  public Vars
 

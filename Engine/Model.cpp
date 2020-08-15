@@ -15,9 +15,18 @@ Model::~Model()
 {
 }
 
+vector<XMFLOAT2> ListToVector(list<XMFLOAT2> List) {
+	vector<XMFLOAT2> Vector(List.begin(), List.end());
+	return Vector;
+}
 
-vector<string> ListToVector(list<string> List) {
-	vector<string> Vector(List.begin(), List.end());
+vector<unsigned long> ListToVector(list<unsigned long> List) {
+	vector<unsigned long> Vector(List.begin(), List.end());
+	return Vector;
+}
+
+vector<XMFLOAT3> ListToVector(list<XMFLOAT3> List) {
+	vector<XMFLOAT3> Vector(List.begin(), List.end());
 	return Vector;
 }
 
@@ -29,267 +38,196 @@ XMMATRIX Model::Getobjectmatrix()
 	return output;
 }
 
+vector<Model::vertex> ListToVector(list<Model::vertex> List) {
+	vector<Model::vertex> Vector(List.begin(), List.end());
+	return Vector;
+}
+
 Model::Mesh Model::loadMeshFromFile(char* fileName)
 {
-	Mesh mesh = Mesh();
+	Mesh mesh = Mesh();	
 	ifstream file(fileName);
 	string line;
 	string fstChar = "01";
-	list<string> vLines,vtLines,vnLines,fLines;
-	vector<string> wipVec;
-	if (!file.is_open())
-		return Mesh();
-	int vCount = 0 , vtCount = 0, vnCount = 0, fCount = 0;
-	while (getline(file,line))
-	{
-		fstChar[0] = line[0];
-		fstChar[1] = line[1];
-		if(fstChar == "v ")
-		{
-			vLines.push_back(line);
-			vCount++;
-		}
-		else if(fstChar == "vt")
-		{
-			vtLines.push_back(line);
 
-			vtCount++;
-		}else if(fstChar == "vn")
+	vector<string> wipVec;
+	if (!file.is_open()) 
+	{
+		cout << "Failed to open file";
+		return Mesh();
+	}
+	cout << "opened file"<<endl;
+	int vCount = 0 , vtCount = 0, vnCount = 0, fCount = 0;
+
+	vector<XMFLOAT2> a;
+	
+
+	vector<XMFLOAT3> Vertices, Normals;
+	vector<vertex> Tris;
+	vector<XMFLOAT2> UVs;
+	while (getline(file, line))
+	{
+
+		if (line[0] == 'v' && line[1] == ' ')
 		{
-			vnLines.push_back(line);
-			vnCount++;
+
+			string currentFloat;
+			int XYZ = 0;
+			XMFLOAT3 currentVec;
+			for (int i = 2; i < line.length(); i++)
+			{
+				if (line[i] != ' ')
+					currentFloat += line[i];
+				else
+				{
+					if (XYZ == 0)
+						currentVec.x = atof(currentFloat.c_str());
+					if (XYZ == 1)
+						currentVec.y = atof(currentFloat.c_str());
+					XYZ++;
+					currentFloat = ' ';
+				}
+				if (XYZ == 2)
+					currentVec.z = atof(currentFloat.c_str());
+			}
+
+			Vertices.push_back(currentVec);
+
 		}
-		else if(fstChar == "f ")
+
+		if (line[0] == 'v' && line[1] == 't')
 		{
-			fLines.push_back(line);
-			fCount++;
+
+			string currentFloat;
+			int XY = 0;
+			XMFLOAT2 currentVec;
+			for (int i = 3; i < line.length(); i++)
+			{
+				if (line[i] != ' ')
+					currentFloat += line[i];
+				else
+				{
+					if (XY == 0)
+						currentVec.x = atof(currentFloat.c_str());
+					XY++;
+					currentFloat = ' ';
+				}
+				if (XY == 1)
+					currentVec.y = atof(currentFloat.c_str());
+			}
+
+			UVs.push_back(currentVec);
+
+		}
+
+		if (line[0] == 'v' && line[1] == 'n')
+		{
+		
+			string currentFloat;
+			int XYZ = 0;
+			XMFLOAT3 currentVec;
+			for (int i = 3; i < line.length(); i++)
+			{
+				if (line[i] != ' ')
+					currentFloat += line[i];
+				else
+				{
+					if (XYZ == 0)
+						currentVec.x = atof(currentFloat.c_str());
+					if (XYZ == 1)
+						currentVec.y = atof(currentFloat.c_str());
+					XYZ++;
+					currentFloat = ' ';
+				}
+				if (XYZ == 2)
+					currentVec.z = atof(currentFloat.c_str());
+			}
+
+			Normals.push_back(currentVec);
+		}
+
+		auto Vs = Vertices;
+		auto VTs = UVs;
+		auto VNs = Normals;
+
+
+
+		if (line[0] == 'f')
+		{
+
+			vertex currentVertex;
+			string curentIndex;
+			int Index = 0;
+
+			for (int i = 2; i < line.length(); i++)
+			{
+				if (line[i] != '/' && line[i] != ' ')
+				{
+					curentIndex += line[i];
+				}
+				else
+				{
+					switch (Index)
+					{
+					case 0:
+						currentVertex.position = Vs[atof(curentIndex.c_str()) - 1];
+						Index++;
+						curentIndex = ' ';
+						break;
+					case 1:
+						currentVertex.UV = VTs[atof(curentIndex.c_str()) - 1];
+						Index++;
+						curentIndex = ' ';
+						break;
+					case 2:
+						currentVertex.normal = VNs[atof(curentIndex.c_str()) - 1];
+						Index++;
+						Index = 0;
+						Tris.push_back(currentVertex);
+						curentIndex = ' ';
+						break;
+					}
+				}
+			}
+			currentVertex.normal = VNs[atof(curentIndex.c_str()) - 1];
+			Tris.push_back(currentVertex);
 		}
 	}
 	file.close();
-
-	XMFLOAT3* ver = new XMFLOAT3[vCount];
-	XMFLOAT2* Tex = new XMFLOAT2[vtCount];
-	XMFLOAT3* Norm = new XMFLOAT3[vnCount];
-	unsigned long* ind = new unsigned long[fCount*3];
-	string procesing ;
-	#pragma region  Vertices
-	wipVec = ListToVector(vLines);
-	for (int i = 0; i < vCount; i++)
+	auto Faces = Tris;
+	vector<vertex> FinalVertices;
+	vector<unsigned long> Indecies;
+	for (int i = 0; i < Faces.size(); i++)
 	{
-		procesing = wipVec[i];
-		int* begining = new int[3]; int* end = new int[3];
-		bool start = false;
-		int counter = 0;
-		begining[0] = 2;
-		end[2] = procesing.size();
-		for (int j = 2; j < procesing.size(); j++)
+		for (int j = 0; j < Faces.size(); j++)
 		{
-
-			if (procesing[j] == ' ')
-			{
-				end[counter] = j;
-				counter++;
-				begining[counter] = j + 1;
-
-			}
-		}
-		string* value = new string[3];
-		for (int j = 0; j < 3; j++)
-		{
-			for (int k = begining[j]; k < end[j]; k++)
-			{
-				value[j] += procesing[k];
-			}
-		}
-		XMFLOAT3 a = XMFLOAT3(atof(value[0].c_str()), atof(value[1].c_str()), atof(value[2].c_str()));
-		ver[i] = a;
-	}
-	#pragma endregion
-	#pragma region UVs
-	wipVec = ListToVector(vtLines);
-	for (int i = 0; i < vtCount; i++)
-	{
-		procesing = wipVec[i];
-		int* begining = new int[2]; int* end = new int[2];
-		bool start = false;
-		int counter = 0;
-		begining[0] = 3;
-		end[2] = procesing.size();
-		for (int j = 3; j < procesing.size(); j++)
-		{
-
-			if (procesing[j] == ' ')
-			{
-				end[counter] = j;
-				counter++;
-				begining[counter] = j + 1;
-
-			}
-		}
-		string* value = new string[2];
-		for (int j = 0; j < 2; j++)
-		{
-			for (int k = begining[j]; k < end[j]; k++)
-			{
-				value[j] += procesing[k];
-			}
-		}
-		XMFLOAT2 a = XMFLOAT2(atof(value[0].c_str()), atof(value[1].c_str()));
-		Tex[i] = a;
-	}
-	#pragma endregion
-	#pragma region Normals
-	wipVec = ListToVector(vnLines);
-	for (int i = 0; i < vnCount; i++)
-	{
-		procesing = wipVec[i];
-		int* begining = new int[3]; int* end = new int[3];
-		bool start = false;
-		int counter = 0;
-		begining[0] = 3;
-		end[2] = procesing.size();
-		for (int j = 3; j < procesing.size(); j++)
-		{
-
-			if (procesing[j] == ' ')
-			{
-				end[counter] = j;
-				counter++;
-				begining[counter] = j + 1;
-
-			}
-		}
-		string* value = new string[3];
-		for (int j = 0; j < 3; j++)
-		{
-			for (int k = begining[j]; k < end[j]; k++)
-			{
-				value[j] += procesing[k];
-			}
-		}
-		XMFLOAT3 a = XMFLOAT3(atof(value[0].c_str()), atof(value[1].c_str()), atof(value[2].c_str()));
-		Norm[i] = a;
-	}
-	#pragma endregion
-	cout << "vertices" << endl;
-	for (size_t i = 0; i < vCount; i++)
-	{
-		cout << ver[i].x << " " << ver[i].y << " " << ver[i].z << endl;
-	}
-
-	#pragma region tris
-	wipVec = ListToVector(fLines);
-	vertex *vs = new vertex[fCount * 3];
-	list<int> missing;
-	for (int i = 0; i < fCount; i++)
-	{		
-		procesing = wipVec[i];
-
-		int counter = 0;	
-		int Begining[3][ 3];
-		int End[3][ 3];
-
-
-		Begining[0][ 0] = 2;
-		End[2][ 2] = procesing.size();
-		int Xcounter = 0, Ycounter = 0;
-		for (int j = 2; j < procesing.size(); j++)
-		{
-			if (procesing[j] == ' ')
-			{
-				End[Xcounter][ Ycounter] = j;
-				Ycounter++;
-				Xcounter = 0;
-				Begining[Xcounter][ Ycounter] = j + 1;
-			}
-			else if (procesing[j] == '/') 
-			{
-				End[Xcounter][ Ycounter] = j;
-				Xcounter++;
-				Begining[Xcounter][Ycounter] = j + 1;
-			}
-		}
-		string value;
-		int indecies [3][3];
-		//creating index array
-		for (int j = 0; j < 3; j++)
-		{
-			for (int  k = 0; k < 3; k++)
-			{
-				for (int w = Begining[k][j]; w < End[k][j]; w++)
-				{
-					value += procesing[w];
-
-				}
-				cout << 1;
-
-				indecies[j][k] = atof(value.c_str()) -1;
-				value = "";
-			}
-		}
-
-		vertex v[3];
-		//creating vertices
-		for (int j = 0; j < 3; j++)
-		{
-			v[j].position = ver[indecies[j][ 0]];
-			v[j].UV = Tex[indecies[j][ 1]];
-			v[j].normal = Norm[indecies[j][ 2]];
-			bool exists = false;
-			int existingIndex;
-
-			for (int k = 0; k < fCount*3; k++)
-			{
-				if (vs[k] == v[k])
-				{
-					exists = true;
-					existingIndex = k;
-				}
-			}
-			if (!exists)
-				vs[(i * 3) + j] = v[j];
-			else
-			{
-				missing.push_back(existingIndex);
-			}
+			if (Faces[i] == Faces[j]) {
 				
-			
+				Indecies.push_back(j);
+				FinalVertices.push_back(Faces[i]);
+				goto a;
+			}
 		}
-		cout << "VS = " << endl;
-		for (int i = 0; i < fCount * 3; i++)
-		{
-			cout << vs[i].position.x << " " << vs[i].position.y << " " << vs[i].position.z << endl;
-		}
+	a:
+		cout << ' '<<endl;
+	}
 
-	}
-	#pragma endregion
-	vertex* t = new vertex[1];
-	int  missingCounter = 0;
-	vector<int> m(missing.begin(),missing.end());
-	for (int i = 0; i < fCount*3; i++)
+	
+	auto SetVertices = FinalVertices;
+	auto Setindecies = Indecies;
+
+	mesh.indexCount = Setindecies.size();
+	mesh.vertexCount = SetVertices.size();
+	mesh.indecies = new unsigned long [Setindecies.size()];
+	mesh.vertices = new vertex[SetVertices.size()];
+	for (size_t i = 0; i < mesh.vertexCount; i++)
 	{
-		if (vs[i] == t[0]) 
-		{
-			ind[i] = m[missingCounter];
-			missingCounter ++ ;
-		}
-		else
-		{
-			ind[i] = i;
-		}
-	}	
-	
-	mesh.indecies = new unsigned long[fCount *3];
-	mesh.vertices = new vertex[fCount*3];
-	for (size_t i = 0; i < fCount *3; i++)
-	{
-		mesh.vertices[i] = vs[i];
-		mesh.indecies[i] = ind[i];
+		mesh.vertices[i] = SetVertices[i];
 	}
-	mesh.vertexCount = fCount * 3;
-	
-	mesh.indexCount = fCount * 3;
-	
+	for (size_t i = 0; i < mesh.indexCount; i++)
+	{
+		mesh.indecies[i] = Setindecies[i];
+	}
 	return mesh;
 }
 
@@ -463,10 +401,10 @@ bool Model::InitBuffers(ID3D11Device* device, char* file)
 	}
 
 
-	vertexBuffDesc.Usage = D3D11_USAGE_DYNAMIC;
+	vertexBuffDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBuffDesc.ByteWidth = sizeof(vertex) * m_vertexCount;
 	vertexBuffDesc.BindFlags = 0x1L;//0x1L = bind vertex buffer
-	vertexBuffDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+	vertexBuffDesc.CPUAccessFlags = 0;
 	vertexBuffDesc.MiscFlags = 0;
 	vertexBuffDesc.StructureByteStride = 0;
 
@@ -529,14 +467,9 @@ void Model::SetDefaultTransform()
 
 void Model::RenderBuffers(ID3D11DeviceContext* ctxt)
 {
-	unsigned int stride;
-	unsigned int offset;
-
+	unsigned int stride, offset;
 	stride = sizeof(vertex);
-	offset = 0;
-
-
-	
+	offset = 0;	
 	ctxt->IASetVertexBuffers(0, 1, &m_vertexBuf, &stride, &offset);
 	ctxt->IASetIndexBuffer(m_indexBuf, DXGI_FORMAT_R32_UINT,0);
 	ctxt->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -546,19 +479,19 @@ void Model::RenderBuffers(ID3D11DeviceContext* ctxt)
 
 bool Model::vertex::operator==(vertex& b)
 {
-	bool e = false;
+	int e = 1;
 	vertex* a = this;
-	e *= a->color.x == b.color.x;
-	e *= a->color.y == b.color.y;
-	e *= a->color.z == b.color.z;
-	e *= a->color.w == b.color.w;
-	e *= a->normal.x == b.normal.x;
-	e *= a->normal.z == b.normal.z;
-	e *= a->normal.y == b.normal.y;
-	e *= a->position.x == b.position.x;
-	e *= a->position.y == b.position.y;
-	e *= a->position.z == b.position.z;
-	e *= a->UV.x == b.UV.x;
-	e *= a->UV.y == b.UV.y;
-	return e;
+	e *= (int)(a->color.x * 10000) == (int)(b.color.x * 10000);
+	e *= (int)(a->color.y * 10000) == (int)(b.color.y * 10000);
+	e *= (int)(a->color.z * 10000) == (int)(b.color.z * 10000);
+	e *= (int)(a->color.w * 10000) == (int)(b.color.w * 10000);
+	e *= (int)(a->normal.x * 10000) == (int)(b.normal.x * 10000);
+	e *= (int)(a->normal.z * 10000) == (int)(b.normal.z * 10000);
+	e *= (int)(a->normal.y * 10000) == (int)(b.normal.y * 10000);
+	e *= (int)(a->position.x * 10000) == (int)(b.position.x * 10000);
+	e *= (int)(a->position.y * 10000) == (int)(b.position.y * 10000);
+	e *= (int)(a->position.z * 10000) == (int)(b.position.z * 10000);
+	e *= (int)(a->UV.x * 10000) == (int)(b.UV.x * 10000);
+	e *= (int)(a->UV.y * 10000) == (int)(b.UV.y * 10000);
+	return e == 1;
 }

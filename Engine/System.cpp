@@ -24,9 +24,12 @@
 		m_Input = new Input;
 		if (!m_Input)
 			return false;
-		m_Input->Init();
-
-
+		result =  m_Input->Init(m_hinstance,m_hwnd, ScreenWidth,ScreenHeight);
+		if (!result) 		
+		{
+			MessageBox(m_hwnd, L"Could not initialize input object", L"Application Initialization error", MB_OK);
+			return false;
+		}
 		m_Graphics = new Graphics;
 		if (!m_Graphics)
 			return false;
@@ -47,6 +50,7 @@
 		}
 		if (m_Input)
 		{
+			m_Input->ShutDown();
 			delete m_Input;
 			m_Input = 0;
 		}
@@ -81,36 +85,23 @@
 	}
 
 	LRESULT System::MsgHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
-	{
-		switch (umsg)
-		{
-		case 0x0100: //0x0100 = Key pressed
-		{
-			m_Input->KeyDown((unsigned int)wparam);
-			return 0;
-		}
-		case 0x0101: //0x0101 = Key up
-		{
-			m_Input->KeyUp((unsigned int)wparam);
-			return 0;
-		}
-
-		default:
-		{
+	{	
 			return DefWindowProc(hwnd, umsg, wparam, lparam);
-		}
-		}
-
-		return LRESULT();
 	}
 
 	bool System::Frame()
 	{
-		if (m_Input->isKeyDown(0x1B))//0x1B = Escape
+		bool result;
+		int mouseX, mouseY;
+
+		result = m_Input->Frame();
+		if (!result)
 			return false;
-		if (m_Input->isKeyDown(0x20))//0x20 = VK_SPACE = space
-			m_Graphics->ShaderIndex = !m_Graphics->ShaderIndex;
-		return m_Graphics->Frame();
+
+		m_Input->GetMousePosition(mouseX, mouseY);
+		if (m_Input->isKeyDown(DIK_ESCAPE))
+			return false;	
+		return m_Graphics->Frame(mouseX,mouseY);
 	}
 
 	void System::InitWindows(int& screenWidth, int& screenHeight)
@@ -162,7 +153,7 @@
 		ShowWindow(m_hwnd, 5);
 		SetForegroundWindow(m_hwnd);
 		SetFocus(m_hwnd);
-		ShowCursor(false);
+		ShowCursor(true);
 	}
 
 	void System::ShutDownWindows()

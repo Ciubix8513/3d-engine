@@ -4,6 +4,7 @@
 #pragma region includes
 #include <d3d11.h>
 #include <stdio.h>
+#include <iostream>
 #pragma endregion
 class Texture
 {

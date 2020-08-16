@@ -8,6 +8,7 @@
 #include <windows.h>
 #include "Graphics.h"
 #include "Input.h"
+#include "Sound.h"
 #pragma endregion
 
 	class System
@@ -35,7 +36,7 @@
 		HWND m_hwnd;
 		Input* m_Input;
 		Graphics* m_Graphics;
-		
+		Sound* m_sound;
 #pragma endregion
 #pragma region  public Vars
 

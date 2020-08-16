@@ -4,6 +4,7 @@
 	{
 		m_Input = 0;
 		m_Graphics = 0;
+		m_sound = 0;
 	}
 
 	System::System(System&)
@@ -37,6 +38,14 @@
 
 		if (!result)
 			return false;
+		m_sound = new Sound;
+		if (!m_sound)
+			return false;
+
+		result = m_sound->Init(m_hwnd);
+		if (!result)
+			return false;
+
 		return true;
 	}
 
@@ -53,6 +62,13 @@
 			m_Input->ShutDown();
 			delete m_Input;
 			m_Input = 0;
+		}
+
+		if(m_sound)
+		{
+			m_sound->Shutdown();
+			delete m_sound;
+			m_sound = 0;
 		}
 		ShutDownWindows();
 		return;

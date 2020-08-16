@@ -27,7 +27,7 @@
 		bool Frame();
 		void InitWindows(int&, int&);
 		void ShutDownWindows();
-#pragma endregion
+#pragma endregion 
 #pragma region  private Vars
 	private:
 		LPCWSTR m_appName;

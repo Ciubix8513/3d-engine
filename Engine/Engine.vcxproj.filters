@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{564593c1-8e1d-4a2d-9b27-839fe8decf0a}</UniqueIdentifier>
     </Filter>
@@ -31,9 +19,6 @@
     <Filter Include="Shaders\Vertex">
       <UniqueIdentifier>{ce39c5bf-e0de-40da-81e5-60ff11518891}</UniqueIdentifier>
     </Filter>
-    <Filter Include="maths">
-      <UniqueIdentifier>{c9bd7527-f160-4f2e-a244-fe66855b731a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Shader Classes">
       <UniqueIdentifier>{b693f505-7ad2-4a24-971b-56653952f5aa}</UniqueIdentifier>
     </Filter>
@@ -43,41 +28,74 @@
     <Filter Include="Graphics\Shader Classes\Sources">
       <UniqueIdentifier>{88b1bd6c-c14b-48ab-be3a-e65f9295af7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Timers">
+      <UniqueIdentifier>{141fa6ad-c613-43db-8188-ee95c9a2de12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timers\Headers">
+      <UniqueIdentifier>{ffab891e-2fcc-4551-87c9-e947e33ceec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timers\Sources">
+      <UniqueIdentifier>{3db71626-dbe9-4ae7-a56a-c4d8c7c3bc3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{a670e8d8-c74c-4864-8132-719f0384ed6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\Sources">
+      <UniqueIdentifier>{b714b675-37ab-419d-9889-50157cd513bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\Headers">
+      <UniqueIdentifier>{122a02ec-684d-4bb6-8f29-94cd9b84b66e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{fc6392a7-2363-4ce2-82f2-7f8baf0b5082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input\Headers">
+      <UniqueIdentifier>{1e943f4a-e2b7-4cbf-86ca-5dfc3f525bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input\Sources">
+      <UniqueIdentifier>{cf927384-1b67-43de-80a4-a51bd1975747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System">
+      <UniqueIdentifier>{047a017e-002f-4c4f-ad91-27f8ec7c1cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Launcher">
+      <UniqueIdentifier>{792c149a-8cc6-4fb0-822f-a3f391031d1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Launcher\Sources">
+      <UniqueIdentifier>{680c0e76-cb39-46cc-a537-76995dcaadd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Launcher\Headers">
+      <UniqueIdentifier>{2322d090-9ccc-4081-b93c-25cbb5a588cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Main control">
+      <UniqueIdentifier>{2dd36b7d-d198-44da-aef1-d8dc10b8163b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Main control\Headers">
+      <UniqueIdentifier>{5b5eb15e-8e02-4c08-8622-35ff83a2341a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Main control\Sources">
+      <UniqueIdentifier>{23268c50-ebac-4ccd-b9c5-4abdcc60737d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Movement">
+      <UniqueIdentifier>{481ed1d7-7d1c-4b65-b9fc-4c52b2b8ce3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Movement\Sources">
+      <UniqueIdentifier>{77345dc8-a388-40c3-9e08-76fb921be101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Movement\Headers">
+      <UniqueIdentifier>{05d9e879-13df-492f-8bb3-cd922c25c337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Camera">
+      <UniqueIdentifier>{bb74b4c3-5000-4131-89fe-b841f3781da6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Camera\Headers">
+      <UniqueIdentifier>{0bd98e7d-0287-4c30-bdc8-8d780a7bd365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Camera\Sources">
+      <UniqueIdentifier>{8e495b98-2b33-477a-a6c1-0bce820e1395}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Launcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="D3d.cpp">
-      <Filter>Graphics\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Graphics\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Graphics\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Graphics\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Graphics\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderClasses\LightShader.cpp">
       <Filter>Graphics\Shader Classes\Sources</Filter>
     </ClCompile>
@@ -90,47 +108,62 @@
     <ClCompile Include="ShaderClasses\TextureShader.cpp">
       <Filter>Graphics\Shader Classes\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Graphics\Font.cpp">
+      <Filter>Graphics\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Graphics\Graphics.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Light.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Model.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Text.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Bitmap.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3d.cpp">
+      <Filter>Graphics\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Timers\Fps.cpp">
+      <Filter>Timers\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Timers\Time.cpp">
+      <Filter>Timers\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Timers\Cpu.cpp">
+      <Filter>Timers\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\System.cpp">
+      <Filter>Main System\Main control\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Launcher.cpp">
+      <Filter>Main System\Launcher\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\Sound.cpp">
+      <Filter>Sound\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Input.cpp">
+      <Filter>Input\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Movement\FreeMovement.cpp">
+      <Filter>Movement\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Camera\Camera.cpp">
+      <Filter>Graphics\Camera\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Camera\Frustum.cpp">
+      <Filter>Graphics\Camera\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Launcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3d.h">
-      <Filter>Graphics\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Graphics\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Graphics\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Graphics\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Graphics\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderClasses\ColorShader.h">
       <Filter>Graphics\Shader Classes\Headers</Filter>
     </ClInclude>
@@ -143,11 +176,59 @@
     <ClInclude Include="ShaderClasses\FontShader.h">
       <Filter>Graphics\Shader Classes\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Font.h">
+      <Filter>Graphics\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Graphics.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Light.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Text.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Bitmap.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3d.h">
+      <Filter>Graphics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timers\Cpu.h">
+      <Filter>Timers\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timers\Fps.h">
+      <Filter>Timers\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timers\Time.h">
+      <Filter>Timers\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>Main System\Main control\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Launcher.h">
+      <Filter>Main System\Launcher\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\Sound.h">
+      <Filter>Sound\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Input.h">
+      <Filter>Input\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Movement\FreeMovement.h">
+      <Filter>Movement\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera\Camera.h">
+      <Filter>Graphics\Camera\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera\Frustum.h">
+      <Filter>Graphics\Camera\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

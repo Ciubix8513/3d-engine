@@ -94,6 +94,27 @@
     <Filter Include="Graphics\Camera\Sources">
       <UniqueIdentifier>{8e495b98-2b33-477a-a6c1-0bce820e1395}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main System\Math">
+      <UniqueIdentifier>{bbf2602c-5a21-443f-87c7-9e64d8f7ab03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Math\Vectors">
+      <UniqueIdentifier>{40a2e777-13af-4781-89e5-93b05e13db41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Math\Vectors\Headers">
+      <UniqueIdentifier>{463b2bc4-e031-4c30-9a02-20260010c6d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Math\Vectors\Sources">
+      <UniqueIdentifier>{2d845d14-12bb-4176-b73a-dcb21659ae05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Math\Matrices">
+      <UniqueIdentifier>{8cc73196-1f02-493c-9798-6564d62987df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Math\Matrices\Headers">
+      <UniqueIdentifier>{2986c38d-71ba-4b08-aca4-66833f967947}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\Math\Matrices\Sources">
+      <UniqueIdentifier>{530f0680-6f29-4c17-b8d7-ffbfb5a4fccf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderClasses\LightShader.cpp">
@@ -162,6 +183,18 @@
     <ClCompile Include="Graphics\Camera\Frustum.cpp">
       <Filter>Graphics\Camera\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="System\Math\Vectors\Vector4.cpp">
+      <Filter>Main System\Math\Vectors\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Math\Vectors\Vector3.cpp">
+      <Filter>Main System\Math\Vectors\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Math\Vectors\Vector2.cpp">
+      <Filter>Main System\Math\Vectors\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Math\Matrices\Matrix4x4.cpp">
+      <Filter>Main System\Math\Matrices\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">
@@ -229,6 +262,18 @@
     </ClInclude>
     <ClInclude Include="Graphics\Camera\Frustum.h">
       <Filter>Graphics\Camera\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\Vectors\Vector3.h">
+      <Filter>Main System\Math\Vectors\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\Vectors\Vector4.h">
+      <Filter>Main System\Math\Vectors\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\Vectors\Vector2.h">
+      <Filter>Main System\Math\Vectors\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\Matrices\Matrix4x4.h">
+      <Filter>Main System\Math\Matrices\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

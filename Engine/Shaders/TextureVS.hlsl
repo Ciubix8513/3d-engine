@@ -30,7 +30,8 @@ PixelInput TextureVertexShader(Vertex input)
 	output.position = mul(input.position, worldMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
-
+    float4x4 m;
+	
     output.UV = input.UV;
     //output.UV = float2(1, 1);
 

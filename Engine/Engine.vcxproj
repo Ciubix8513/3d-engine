@@ -161,6 +161,10 @@
     <ClCompile Include="ShaderClasses\TextureShader.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="System\Launcher.cpp" />
+    <ClCompile Include="System\Math\Matrices\Matrix4x4.cpp" />
+    <ClCompile Include="System\Math\Vectors\Vector2.cpp" />
+    <ClCompile Include="System\Math\Vectors\Vector3.cpp" />
+    <ClCompile Include="System\Math\Vectors\Vector4.cpp" />
     <ClCompile Include="System\System.cpp" />
     <ClCompile Include="Timers\Cpu.cpp" />
     <ClCompile Include="Timers\Fps.cpp" />
@@ -185,6 +189,10 @@
     <ClInclude Include="ShaderClasses\TextureShader.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="System\Launcher.h" />
+    <ClInclude Include="System\Math\Matrices\Matrix4x4.h" />
+    <ClInclude Include="System\Math\Vectors\Vector2.h" />
+    <ClInclude Include="System\Math\Vectors\Vector3.h" />
+    <ClInclude Include="System\Math\Vectors\Vector4.h" />
     <ClInclude Include="System\System.h" />
     <ClInclude Include="Timers\Cpu.h" />
     <ClInclude Include="Timers\Fps.h" />

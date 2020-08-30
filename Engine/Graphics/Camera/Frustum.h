@@ -26,7 +26,10 @@ public:
 #pragma endregion
 #pragma region Public vars
 	XMVECTOR  m_Planes[6];
-
+	//bool operator<( XMVECTOR& );	
+	friend bool operator <( const XMVECTOR&, float);
+	bool operator >=(XMVECTOR&);
+	friend bool operator >=(XMVECTOR&, float);
 #pragma endregion
 
 

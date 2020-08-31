@@ -30,26 +30,23 @@ EngineMath::Matrix4x4::Matrix4x4(Vector4 row0, Vector4 row1, Vector4 row2, Vecto
     SetRow(2, row2);
     SetRow(3, row3);
 }
-Matrix4x4 EngineMath::Matrix4x4::Identity()
+EngineMath::Matrix4x4::Matrix4x4()
 {
-    return Matrix4x4(
-        Vector4(1, 0, 0, 0),
-        Vector4(0, 1, 0, 0),
-        Vector4(0, 0, 1, 0),
-        Vector4(0, 0, 0, 1));
+    
+    SetRow(0, Vector4(1, 0, 0, 0));
+    SetRow(1, Vector4(0, 1, 0, 0));
+    SetRow(2, Vector4(0, 0, 1, 0));
+    SetRow(3, Vector4(0, 0, 0, 1));
+
 }
 
-Matrix4x4 EngineMath::Matrix4x4::Transpose(Matrix4x4 m)
-{
-    return m.Transposed();
-}
 Matrix4x4 EngineMath::Matrix4x4::Transposed()
 {
 
-    Matrix4x4 m = Identity();
+    Matrix4x4 m;
     for (int i = 0; i < 4; i++)
         m.SetRow(i, GetRow(i));
-    Matrix4x4 Out= Identity();
+    Matrix4x4 Out;
 
     Out._m00 = m._m00;
     Out._m01 = m._m10;
@@ -75,7 +72,7 @@ Matrix4x4 EngineMath::Matrix4x4::Transposed()
 }
 void EngineMath::Matrix4x4::Transpose()
 {
-    Matrix4x4 m = Identity();
+    Matrix4x4 m ;
     for (int i = 0; i < 4; i++)    
         m.SetRow(i,GetRow(i));
     
@@ -96,10 +93,7 @@ void EngineMath::Matrix4x4::Transpose()
     _m32 = m._m23;
     _m03 = m._m30;  
 }
-Matrix4x4 EngineMath::Matrix4x4::Multiply(Matrix4x4 a, Matrix4x4 b)
-{
-    return a*b;
-}
+
 void EngineMath::Matrix4x4::SetRow(int row, Vector4 value)
 {
     switch (row)
@@ -144,10 +138,6 @@ Vector4 EngineMath::Matrix4x4::TransformVector(Vector4 v)
     out.w = v.x * _m30 + v.y * _m31 + v.z * _m32 + v.w * _m33;
 
     return out;
-}
-Vector4 EngineMath::Matrix4x4::TransformVector(Vector4 v, Matrix4x4 m)
-{
-    return  m * v;
 }
 
 Matrix4x4 EngineMath::Matrix4x4::operator+(Matrix4x4 m)

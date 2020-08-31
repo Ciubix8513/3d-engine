@@ -15,18 +15,16 @@ namespace EngineMath
 				   float m20, float m21, float m22, float m23,
 			       float m30, float m31, float m32, float m33);
 		Matrix4x4(Vector4 row0, Vector4 row1, Vector4 row2, Vector4 row3);
-
-		static Matrix4x4 Identity();
+		Matrix4x4();
 #pragma endregion
 #pragma region Functions
-		static Matrix4x4 Transpose(Matrix4x4 m);
 		Matrix4x4 Transposed();
 		void Transpose();
-		static Matrix4x4 Multiply(Matrix4x4 a, Matrix4x4 b);		
+
+
 		void SetRow(int row, Vector4 value);
 		Vector4 TransformVector(Vector4 v);
-		static Vector4 TransformVector(Vector4 v, Matrix4x4 m);
-
+	
 #pragma endregion
 
 

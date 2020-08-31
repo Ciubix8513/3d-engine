@@ -26,7 +26,7 @@ void Camera::SetPosition(float x, float y, float z)
 	m_PosZ = z;
 }
 
-void Camera::SetPosition(XMFLOAT3 pos)
+void Camera::SetPosition(Vector3 pos)
 {
 	m_PosX =pos.x;
 	m_PosY = pos.y;
@@ -45,30 +45,26 @@ void Camera::SetRotation(float x, float y, float z, float w)
 	//TODO: impliment quaternions
 }
 
-XMFLOAT3 Camera::GetPosition()
+Vector3 Camera::GetPosition()
 {
-	return XMFLOAT3(m_PosX,m_PosY,m_PosZ);
+	return Vector3(m_PosX,m_PosY,m_PosZ);
 }
 
-XMFLOAT3 Camera::GetRotation()
+Vector3 Camera::GetRotation()
 {
-	return XMFLOAT3(m_RotX, m_RotY, m_RotZ);
+	return Vector3(m_RotX, m_RotY, m_RotZ);
 }
 
 void Camera::Render()
 {
-	XMFLOAT3 up, pos, lookAt;
+
 	float yaw, pitch, roll;
-	XMMATRIX rotMatrix;
-	XMVECTOR upVector, positionVector, lookAtVector;
+	Matrix4x4 rotMatrix;
 
-	up = XMFLOAT3(0, 1, 0);
-	pos = GetPosition();
-	lookAt = XMFLOAT3(0, 0, 1);
 
-	upVector = XMLoadFloat3(&up);
-	lookAtVector = XMLoadFloat3(&lookAt);
-	positionVector = XMLoadFloat3(&pos);
+
+
+
 
 	pitch = m_RotX * 0.0174532925f;
 	yaw = m_RotY * 0.0174532925f;

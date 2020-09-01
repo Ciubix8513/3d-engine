@@ -46,6 +46,7 @@ namespace EngineMath
 		Vector4 operator*(float c);
 		Vector4 operator/(float c);
 		float operator[](int index);
+		void operator+=(Vector3 v);
 		void operator+=(Vector4 v);
 		void operator-=(Vector4 v);
 		void operator*=(float c);

@@ -174,6 +174,16 @@ float EngineMath::Vector4::operator[](int index)
 	return 1/0;
 }
 
+
+void EngineMath::Vector4::operator+=(Vector3 v)
+{
+	x = x + v.x;
+	y = y + v.y;
+	z = z + v.z;
+	w = w;
+	return;
+}
+
 void EngineMath::Vector4::operator+=(Vector4 v)
 {
 	x = x + v.x;

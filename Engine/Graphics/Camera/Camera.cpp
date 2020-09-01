@@ -60,8 +60,8 @@ void Camera::Render()
 
 	float yaw, pitch, roll;
 	Matrix4x4 rotMatrix;
-
-
+	Vector4 lookAtVector = Vector4(0,0,1,0);
+	Vector4 upVector = Vector4(0, 1, 0, 0);
 
 
 
@@ -70,13 +70,12 @@ void Camera::Render()
 	yaw = m_RotY * 0.0174532925f;
 	roll = m_RotZ * 0.0174532925f;
 
-	rotMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
+	rotMatrix = RotationPitchYawRoll(pitch, yaw, roll);
 
-	XMVector3TransformCoord(lookAtVector, rotMatrix);
-	lookAtVector = XMVector3TransformCoord(lookAtVector, rotMatrix);
-	upVector = XMVector3TransformCoord(upVector, rotMatrix);
-
-	lookAtVector = XMVectorAdd(positionVector, lookAtVector);
+	
+	lookAtVector = rotMatrix * lookAtVector ;
+	upVector = rotMatrix * upVector;
+	lookAtVector += GetPosition();
 	m_viewMat = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
 	return;
 }

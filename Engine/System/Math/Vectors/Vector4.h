@@ -38,6 +38,7 @@ namespace EngineMath
 		static void Normalize(Vector4& v);
 		void Normalize();
 		static float DotProduct(Vector4 a, Vector4 b);
+		Vector3 XYZ();
 #pragma endregion
 
 #pragma region operators

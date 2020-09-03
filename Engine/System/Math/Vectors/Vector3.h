@@ -40,6 +40,8 @@ namespace EngineMath
 		Vector3 operator+(Vector3 v);
 		Vector3 operator-(Vector3 v);
 		Vector3 operator*(float c);
+		float operator*(Vector3 c);
+
 		Vector3 operator/(float c);
 		void operator+=(Vector3 v);
 		void operator-=(Vector3 v);

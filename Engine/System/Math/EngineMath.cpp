@@ -55,6 +55,19 @@ Matrix4x4 EngineMath::Identity()
         Vector4(0, 0, 0, 1));
 }
 
+Matrix4x4 EngineMath::LookAtMatrix(Vector3 CameraPosition, Vector3 CameraForward, Vector3 cameraUp)
+{
+    Vector3 zaxis, xaxis, yaxis;
+    zaxis = (CameraPosition - CameraForward).Normalized();
+    xaxis = (zaxis.CrossProdut(zaxis, cameraUp)).Normalized();
+    yaxis = zaxis.CrossProdut(zaxis, xaxis);
+    return Matrix4x4(
+        xaxis.x, yaxis.x, zaxis.x, 0,
+        xaxis.y, yaxis.y, zaxis.y, 0,
+        xaxis.z, yaxis.z, zaxis.z, 0,
+        -(xaxis * CameraPosition), -(yaxis * CameraPosition), -(zaxis * CameraPosition), 1);
+}
+
 Matrix4x4 EngineMath::RotationPitchYawRoll(float pitch, float yaw, float roll)
 {
 
@@ -78,6 +91,7 @@ Matrix4x4 EngineMath::RotationPitchYawRoll(float pitch, float yaw, float roll)
 
     return p*y*r;
 }
+
 
 Matrix4x4 EngineMath::Transpose(Matrix4x4 m)
 {

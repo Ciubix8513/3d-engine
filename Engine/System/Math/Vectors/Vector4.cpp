@@ -131,6 +131,11 @@ float EngineMath::Vector4::DotProduct(Vector4 a, Vector4 b)
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
+Vector3 EngineMath::Vector4::XYZ()
+{
+	return Vector3(x,y,z);
+}
+
 
 
 

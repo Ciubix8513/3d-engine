@@ -15,33 +15,7 @@ Model::~Model()
 {
 }
 
-vector<XMFLOAT2> ListToVector(list<XMFLOAT2> List) {
-	vector<XMFLOAT2> Vector(List.begin(), List.end());
-	return Vector;
-}
 
-vector<unsigned long> ListToVector(list<unsigned long> List) {
-	vector<unsigned long> Vector(List.begin(), List.end());
-	return Vector;
-}
-
-vector<XMFLOAT3> ListToVector(list<XMFLOAT3> List) {
-	vector<XMFLOAT3> Vector(List.begin(), List.end());
-	return Vector;
-}
-
-XMMATRIX Model::Getobjectmatrix()
-{
-	XMMATRIX output; 
-	output = XMMatrixAffineTransformation(XMLoadFloat3(&m_scale), XMLoadFloat3(&m_RotationOrigin), XMQuaternionRotationRollPitchYawFromVector(XMLoadFloat3(&m_Rotaion)), XMLoadFloat3(&m_position));
-
-	return output;
-}
-
-vector<Model::vertex> ListToVector(list<Model::vertex> List) {
-	vector<Model::vertex> Vector(List.begin(), List.end());
-	return Vector;
-}
 
 Model::Mesh Model::loadMeshFromFile(char* fileName)
 {

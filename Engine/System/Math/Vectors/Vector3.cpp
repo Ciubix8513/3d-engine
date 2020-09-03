@@ -105,6 +105,10 @@ Vector3 EngineMath::Vector3::operator*(float c)
 {
 	return Vector3(x*c,y*c,z*c);
 }
+float EngineMath::Vector3::operator*(Vector3 c)
+{
+	return DotProduct(Vector3(x,y,z),c);
+}
 Vector3 EngineMath::Vector3::operator/(float c)
 {
 	return Vector3(x / c, y / c, z / c);

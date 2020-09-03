@@ -14,7 +14,8 @@ namespace EngineMath
 	static Matrix4x4 OrthographicProjectionMatrix(float screenWidth, float screenHeight, float screenNear,float screenDepth);
 	static Matrix4x4 Transpose(Matrix4x4 m);
 	static Matrix4x4 Identity();
-	
+	static Matrix4x4 LookAtMatrix(Vector3 CameraPosition, Vector3 CameraForward, Vector3 cameraUp);
+
 	static Matrix4x4 RotationPitchYawRoll(float pitch, float yaw, float roll);
 };
 #endif

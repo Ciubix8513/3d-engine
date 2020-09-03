@@ -25,7 +25,7 @@ public:
 	Vector3 GetRotation();
 
 	void Render();
-	void GetViewMatrix(Matrix4x4&);
+	Matrix4x4 GetViewMatrix();
 #pragma endregion
 #pragma region private vars
 	float m_PosX, m_PosY, m_PosZ,

@@ -76,12 +76,11 @@ void Camera::Render()
 	lookAtVector = rotMatrix * lookAtVector ;
 	upVector = rotMatrix * upVector;
 	lookAtVector += GetPosition();
-	m_viewMat = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
+	m_viewMat = LookAtMatrix(GetPosition(), lookAtVector.XYZ(), upVector.XYZ());
 	return;
 }
 
-void Camera::GetViewMatrix(XMMATRIX& matrix)
+Matrix4x4 Camera::GetViewMatrix()
 {
-	matrix = m_viewMat;
-	return;
+	return m_viewMat;
 }

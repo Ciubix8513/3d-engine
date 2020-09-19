@@ -6,7 +6,7 @@ Text::Text()
     m_FontShader = 0;   
     m_screenH = 0;
     m_screenW = 0;
-    m_baseViewMat = XMMatrixIdentity();
+    m_baseViewMat = Identity();
  
 }
 
@@ -18,7 +18,7 @@ Text::~Text()
 {
 }
 
-bool Text::Init(ID3D11Device* device, ID3D11DeviceContext* ctxt, HWND hwnd, int scrW, int scrH, XMMATRIX viewMat)
+bool Text::Init(ID3D11Device* device, ID3D11DeviceContext* ctxt, HWND hwnd, int scrW, int scrH, Matrix4x4 viewMat)
 {
     bool res;
 
@@ -214,10 +214,10 @@ void Text::Releasesentence(Sentence** sentence)
     return;
 }
 
-bool Text::RenderSentence(ID3D11DeviceContext* ctxt, Sentence* sentence, XMMATRIX world, XMMATRIX ortho)
+bool Text::RenderSentence(ID3D11DeviceContext* ctxt, Sentence* sentence, Matrix4x4 world, Matrix4x4 ortho)
 {
     unsigned int stride, offset;
-    XMFLOAT4 pixelColor;
+    Vector4 pixelColor;
     bool result;
 
     stride = sizeof(Vertex);
@@ -227,7 +227,7 @@ bool Text::RenderSentence(ID3D11DeviceContext* ctxt, Sentence* sentence, XMMATRI
     ctxt->IASetIndexBuffer(sentence->indexBuffer, DXGI_FORMAT_R32_UINT,0);
     ctxt->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    pixelColor = XMFLOAT4(sentence->red, sentence->green, sentence->blue, 1.0f);
+    pixelColor = Vector4(sentence->red, sentence->green, sentence->blue, 1.0f);
     result = m_FontShader->Render(ctxt, sentence->indexCount, world, m_baseViewMat, ortho, m_Font->GetTexture(), pixelColor);
     if (!result)
         return false;

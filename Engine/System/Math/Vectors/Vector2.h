@@ -3,15 +3,17 @@
 #define _VECTOR2_H_
 #include <math.h>
 #include <exception>
+#include <DirectXMath.h>
 using namespace std;
-using namespace EngineMath;
 
 namespace EngineMath
 {
-	static class Vector2
+	using namespace EngineMath;
+	struct  Vector2
 	{
 	public:
 #pragma region VectorCreation + Consts
+		Vector2();
 		Vector2(float NewX, float NewY);
 		static Vector2 Up();
 		static Vector2 Down();
@@ -42,6 +44,7 @@ namespace EngineMath
 		void operator-=(Vector2 v);
 		void operator*=(float c);
 		void operator/=(float c);
+		 operator DirectX::XMFLOAT2() ;
 #pragma endregion
 		float x,y;	
 	};

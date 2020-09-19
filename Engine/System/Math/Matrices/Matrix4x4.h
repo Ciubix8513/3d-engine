@@ -41,7 +41,7 @@ namespace EngineMath
 		void operator= (Matrix4x4 m);
 		Vector4 operator[] (int index);
 		Vector4 operator* (Vector4 v);
-
+		operator DirectX::XMFLOAT4X4() ;
 #pragma endregion
 
 

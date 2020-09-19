@@ -15,6 +15,13 @@ Model::~Model()
 {
 }
 
+Matrix4x4 Model::Getobjectmatrix()
+{
+	auto a =
+	 GetTramsformationMatrix(m_position, m_Rotaion, m_scale);
+	return a;
+}
+
 
 
 Model::Mesh Model::loadMeshFromFile(char* fileName)
@@ -33,12 +40,12 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	cout << "opened file"<<endl;
 	int vCount = 0 , vtCount = 0, vnCount = 0, fCount = 0;
 
-	vector<XMFLOAT2> a;
+	vector<Vector2> a;
 	
 
-	vector<XMFLOAT3> Vertices, Normals;
+	vector<Vector3> Vertices, Normals;
 	vector<vertex> Tris;
-	vector<XMFLOAT2> UVs;
+	vector<Vector2> UVs;
 	while (getline(file, line))
 	{
 
@@ -47,7 +54,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 
 			string currentFloat;
 			int XYZ = 0;
-			XMFLOAT3 currentVec;
+			Vector3 currentVec;
 			for (int i = 2; i < line.length(); i++)
 			{
 				if (line[i] != ' ')
@@ -74,7 +81,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 
 			string currentFloat;
 			int XY = 0;
-			XMFLOAT2 currentVec;
+			Vector2 currentVec;
 			for (int i = 3; i < line.length(); i++)
 			{
 				if (line[i] != ' ')
@@ -99,7 +106,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 		
 			string currentFloat;
 			int XYZ = 0;
-			XMFLOAT3 currentVec;
+			Vector3 currentVec;
 			for (int i = 3; i < line.length(); i++)
 			{
 				if (line[i] != ' ')
@@ -241,33 +248,32 @@ void Model::SetRotation(float x, float y, float z)
 		z -= 360;
 		goto z;
 	}
-	m_Rotaion = XMFLOAT3(x, y, z);
+	m_Rotaion = Vector3(x, y, z);
 
 }
 
-void Model::SetRotation(XMVECTOR v)
+void Model::SetRotation(Vector3 v)
 {
-	XMFLOAT3 vec;
-	XMStoreFloat3(&vec, v);
+	
 x:
-	if (vec.x >= 360)
+	if (v.x >= 360)
 	{
-		vec.x -= 360;
+		v.x -= 360;
 		goto x;
 	}
 y:
-	if (vec.y >= 360)
+	if (v.y >= 360)
 	{
-		vec.y -= 360;
+		v.y -= 360;
 		goto y;
 	}
 z:
-	if (vec.z >= 360)
+	if (v.z >= 360)
 	{
-		vec.z -= 360;
+		v.z -= 360;
 		goto z;
 	}
-	m_Rotaion =vec;
+	m_Rotaion =v;
 
 }
 
@@ -292,7 +298,7 @@ void Model::Render(ID3D11DeviceContext* ctxt, ID3D11Device* device)
 	return;
 }
 
-XMFLOAT3 Model::GetRotation()
+Vector3 Model::GetRotation()
 {
 	return m_Rotaion;
 }
@@ -345,20 +351,20 @@ bool Model::InitBuffers(ID3D11Device* device, char* file)
 		indices = new unsigned long[m_indexCount];
 		if (!indices)
 			return false;
-		vertices[0].color = XMFLOAT4(1, 1, 1, 1);
-		vertices[0].position = XMFLOAT3(-1, -1, 0);
-		vertices[0].UV = XMFLOAT2(0.0f, .7f);
-		vertices[0].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+		vertices[0].color = Vector4(1, 1, 1, 1);
+		vertices[0].position = Vector3(-1, -1, 0);
+		vertices[0].UV = Vector2(0.0f, .7f);
+		vertices[0].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertices[1].color = XMFLOAT4(1, 1, 1, 1);
-		vertices[1].position = XMFLOAT3(0, 1, 0);
-		vertices[1].UV = XMFLOAT2(0.5f, 0.0f);
-		vertices[1].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+		vertices[1].color = Vector4(1, 1, 1, 1);
+		vertices[1].position = Vector3(0, 1, 0);
+		vertices[1].UV = Vector2(0.5f, 0.0f);
+		vertices[1].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertices[2].color = XMFLOAT4(1, 1, 1, 1);
-		vertices[2].position = XMFLOAT3(1, -1, 0);
-		vertices[2].UV = XMFLOAT2(1.0f, 0.7f);
-		vertices[2].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+		vertices[2].color = Vector4(1, 1, 1, 1);
+		vertices[2].position = Vector3(1, -1, 0);
+		vertices[2].UV = Vector2(1.0f, 0.7f);
+		vertices[2].normal = Vector3(0.0f, 0.0f, 1.0f);
 
 		indices[0] = 0;
 		indices[1] = 1;
@@ -432,10 +438,10 @@ void Model::ShutDownBuffers()
 
 void Model::SetDefaultTransform()
 {
-	m_scale = XMFLOAT3( 1, 1, 1);
-	m_Rotaion = XMFLOAT3(0, 0, 0);
-	m_position = XMFLOAT3(0, 0, 2);	
-	m_RotationOrigin = XMFLOAT3(0, 0, 0); 
+	m_scale = Vector3( 1, 1, 1);
+	m_Rotaion = Vector3(0, 0, 0);
+	m_position = Vector3(0, 0, 0);
+
 	return;
 }
 
@@ -450,6 +456,84 @@ void Model::RenderBuffers(ID3D11DeviceContext* ctxt)
 	return;
 	
 }
+
+bool Model::SerialiseMesh(string FileName, Mesh mesh)
+{
+	FILE* F;
+	int result;
+	Count c;
+	c.indexCount = mesh.indexCount;
+	c.vertexCount = mesh.vertexCount;
+	string location = FileName;
+	location[location.length()] = ' ';
+	location[location.length() -1] = ' ';
+	location[location.length()- 2] = ' ';
+	location[location.length()- 3] = ' ';
+	result = fopen_s(&F, (location + "/Verties.dat").c_str(), "w");
+	if (result != 0)
+		return false;
+	result = fwrite(mesh.vertices, sizeof(vertex), mesh.vertexCount,F);
+	if (result < mesh.vertexCount)
+		return false;
+	fclose(F);
+	result = fopen_s(&F, (location + "/Indecies.dat").c_str(), "w");
+	if (result != 0)
+		return false;
+	result = fwrite(mesh.indecies, sizeof(unsigned long), mesh.indexCount, F);
+	if (result < mesh.indexCount)
+		return false;
+	fclose(F);
+	result = fopen_s(&F, (location + "/Count.dat").c_str(), "w");
+	if (result != 0)
+		return false;
+	result = fwrite(&c, sizeof(c),1, F);
+	if (result < 1)
+		return false;
+	fclose(F);
+	return true;
+
+}
+
+bool Model::UnSerialiseMesh(string FileName, Mesh& mesh)
+{
+	FILE* F;
+	int result;
+	Count c;
+	string location = FileName;
+	location[location.length()] = ' ';
+	location[location.length() - 1] = ' ';
+	location[location.length() - 2] = ' ';
+	location[location.length() - 3] = ' ';
+	result = fopen_s(&F, (location + "/Count.dat").c_str(), "r");
+	if (result != 0)
+		return false;
+	result = fread(&c, sizeof(Count), 1, F);
+	if(result < 1)
+	return false;
+	fclose(F);
+	mesh.vertexCount = c.vertexCount;
+	mesh.indexCount = c.indexCount;
+
+	result = fopen_s(&F, (location + "/Verties.dat").c_str(), "r");
+	if (result != 0)
+		return false;
+	result = fread(mesh.vertices, sizeof(vertex), mesh.vertexCount, F);
+	if (result < mesh.vertexCount)
+		return false;
+	fclose(F);
+	result = fopen_s(&F, (location + "/Indecies.dat").c_str(), "r");
+	if (result != 0)
+		return false;
+	result = fread(mesh.indecies, sizeof(unsigned long), mesh.indexCount, F);
+	if (result < mesh.indexCount)
+		return false;
+	fclose(F);
+	return true;
+	
+}
+
+
+
 
 bool Model::vertex::operator==(vertex& b)
 {

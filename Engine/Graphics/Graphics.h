@@ -16,8 +16,8 @@
 #pragma endregion
 
 #pragma region Globals
-	const bool FullScreen = false;
-	const bool Vsync = false;
+	const bool FullScreen = true;
+	const bool Vsync = true;
 	const float ScreenDepth = 1000.0f;
 	const float ScreenNear = .1f;
 	

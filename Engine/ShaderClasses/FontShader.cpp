@@ -30,7 +30,7 @@ bool FontShader::Init(ID3D11Device* device, HWND hwnd)
 	return result;
 }
 
-bool FontShader::Render(ID3D11DeviceContext* ctxt, int indexCount, XMMATRIX world, XMMATRIX view, XMMATRIX project, ID3D11ShaderResourceView* texture, XMFLOAT4 pixelColor)
+bool FontShader::Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project, ID3D11ShaderResourceView* texture, Vector4 pixelColor)
 {
 	bool result;
 	result = SetShaderParams(ctxt, world, view, project, texture,pixelColor);
@@ -224,7 +224,7 @@ void FontShader::OutputShaderErrorMsg(ID3D10Blob* msg, HWND hwnd, WCHAR* file)
 	return;
 }
 
-bool FontShader::SetShaderParams(ID3D11DeviceContext* ctxt, XMMATRIX world, XMMATRIX view, XMMATRIX proj, ID3D11ShaderResourceView* texture, XMFLOAT4 pixelColor)
+bool FontShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Matrix4x4 view, Matrix4x4 proj, ID3D11ShaderResourceView* texture, Vector4 pixelColor)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
@@ -233,9 +233,9 @@ bool FontShader::SetShaderParams(ID3D11DeviceContext* ctxt, XMMATRIX world, XMMA
 	unsigned int bufferNum;
 
 	
-	world = XMMatrixTranspose(world);
-	view = XMMatrixTranspose(view);
-	proj = XMMatrixTranspose(proj);
+	world.Transpose();
+	view.Transpose();
+	proj.Transpose();
 
 	result = ctxt->Map(m_matBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
 	if (FAILED(result))

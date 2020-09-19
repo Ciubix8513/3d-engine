@@ -11,116 +11,125 @@ Frustum::~Frustum()
 }
 
 
-void Frustum::ConstructFrustum(float screenDepth, XMMATRIX projectionMatrix, XMMATRIX viewMatrix)
+void Frustum::ConstructFrustum(float screenDepth, Matrix4x4 projectionMatrix, Matrix4x4 viewMatrix)
 {
 	float minimumZ, r;
-	XMMATRIX matrix;
-	XMFLOAT4 proj[4],frustum[4],planes[6];
-	
-	for (int i = 0; i < 4; i++)	
-		XMStoreFloat4(&proj[i], projectionMatrix.r[i]);
-	
-	minimumZ = -proj[3].z / proj[2].y;
+	Matrix4x4 frustum;
+	minimumZ = -projectionMatrix._m32 / projectionMatrix._m22;
 	r = screenDepth / (screenDepth - minimumZ);
-	projectionMatrix = XMMatrixSet
-	   (proj[0].x, proj[0].y, proj[0].z, proj[0].w,
-		   proj[1].x, proj[1].y, proj[1].z, proj[1].w,
-		   proj[2].x, proj[2].y, r, proj[2].w,
-		   proj[3].x, proj[3].y, -r*minimumZ, proj[3].w);
-	matrix = XMMatrixMultiply(viewMatrix, projectionMatrix);
-	for (int i = 0; i < 4; i++)
-		XMStoreFloat4(&frustum[i], matrix.r[i]);
+	projectionMatrix._m22 = r;
+	projectionMatrix._m32 = -r * minimumZ;
+
+	frustum = viewMatrix * projectionMatrix;
 
 	//near plane
-	planes[0].x = frustum[0].w + frustum[0].z;
-	planes[0].y = frustum[1].w + frustum[1].z;
-	planes[0].z = frustum[2].w + frustum[2].z;
-	planes[0].w = frustum[3].w + frustum[3].z;
+	m_Planes[0].a = frustum[0].w + frustum[0].z;
+	m_Planes[0].b = frustum[1].w + frustum[1].z;
+	m_Planes[0].c = frustum[2].w + frustum[2].z;
+	m_Planes[0].d = frustum[3].w + frustum[3].z;
 	
 	//far plane
-	planes[1].x = frustum[0].w - frustum[0].z;
-	planes[1].y = frustum[1].w - frustum[1].z;
-	planes[1].z = frustum[2].w - frustum[2].z;
-	planes[1].w = frustum[3].w - frustum[3].z;
+	m_Planes[1].a = frustum[0].w - frustum[0].z;
+	m_Planes[1].b = frustum[1].w - frustum[1].z;
+	m_Planes[1].c = frustum[2].w - frustum[2].z;
+	m_Planes[1].d = frustum[3].w - frustum[3].z;
 
 	//left plane
-	planes[2].x = frustum[0].w + frustum[0].x;
-	planes[2].y = frustum[1].w + frustum[1].x;
-	planes[2].z = frustum[2].w + frustum[2].x;
-	planes[2].w = frustum[3].w + frustum[3].x;
+	m_Planes[2].a = frustum[0].w + frustum[0].x;
+	m_Planes[2].b = frustum[1].w + frustum[1].x;
+	m_Planes[2].c = frustum[2].w + frustum[2].x;
+	m_Planes[2].d = frustum[3].w + frustum[3].x;
 
 	//right plane
-	planes[3].x = frustum[0].w - frustum[0].x;
-	planes[3].y = frustum[1].w - frustum[1].x;
-	planes[3].z = frustum[2].w - frustum[2].x;
-	planes[3].w = frustum[3].w - frustum[3].x;
+	m_Planes[3].a = frustum[0].w - frustum[0].x;
+	m_Planes[3].b = frustum[1].w - frustum[1].x;
+	m_Planes[3].c = frustum[2].w - frustum[2].x;
+	m_Planes[3].d = frustum[3].w - frustum[3].x;
 
 	//top plane
-	planes[4].x = frustum[0].w - frustum[0].y;
-	planes[4].y = frustum[1].w - frustum[1].y;
-	planes[4].z = frustum[2].w - frustum[2].y;
-	planes[4].w = frustum[3].w - frustum[3].y;
+	m_Planes[4].a = frustum[0].w - frustum[0].y;
+	m_Planes[4].b = frustum[1].w - frustum[1].y;
+	m_Planes[4].c = frustum[2].w - frustum[2].y;
+	m_Planes[4].d = frustum[3].w - frustum[3].y;
 
 	//bottom plane
-	planes[5].x = frustum[0].w + frustum[0].y;
-	planes[5].y = frustum[1].w + frustum[1].y;
-	planes[5].z = frustum[2].w + frustum[2].y;
-	planes[5].w = frustum[3].w + frustum[3].y;
-
-	for (int i = 0; i < 6; i++)
-	{
-		m_Planes[i] = XMLoadFloat4(&planes[i]);
-		m_Planes[i] = XMPlaneNormalize(m_Planes[i]);
-	}
+	m_Planes[5].a = frustum[0].w + frustum[0].y;
+	m_Planes[5].b = frustum[1].w + frustum[1].y;
+	m_Planes[5].c = frustum[2].w + frustum[2].y;
+	m_Planes[5].d = frustum[3].w + frustum[3].y;
 
 	return;
 	
 }
 
-bool Frustum::CheckPoint(XMFLOAT3 position)
+bool Frustum::CheckPoint(Vector3 position)
 {
 	for (int i = 0; i < 6; i++)	
-		if (XMPlaneDotCoord(m_Planes[i], XMLoadFloat3(&position)) < 0.0f)
+		if (PlaneDotCoord(m_Planes[i],position) < 0.0f)
 			return false;
 	return true;
 }
 
-bool Frustum::CheckCube(XMFLOAT3 position, float radius)
+bool Frustum::CheckCube(Vector3 position, float radius)
 {
+
 	for (int i = 0; i < 6; i++)
 	{
-		if (XMPlaneDotCoord(m_Planes[i], XMLoadFloat3(&XMFLOAT3()) >= 0.0f))
-		{
-			continue; 
-		}
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x - radius), (position.y - radius), (position.z - radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x + radius), (position.y - radius), (position.z - radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x - radius), (position.y + radius), (position.z - radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x + radius), (position.y + radius), (position.z - radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x - radius), (position.y - radius), (position.z + radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x + radius), (position.y - radius), (position.z + radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x - radius), (position.y + radius), (position.z + radius))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((position.x + radius), (position.y + radius), (position.z + radius))) >= 0.0f)
+			continue;
+		return false;
 	}
 
 	return true;
 }
 
-bool Frustum::CheckSphere(XMFLOAT3 position, float radius)
+bool Frustum::CheckSphere(Vector3 position, float radius)
 {
-	return true;
-}
-
-bool Frustum::CheckRectangle(float, float, float, float, float, float)
-{
-	return true;
-}
-
-
-bool operator<(XMVECTOR& v, float f)
-{
-	for (int i = 0; i < 4; i++)
-		if (v.m128_f32[i] > f)
+	for (int i = 0; i < 6; i++)	
+		if (PlaneDotCoord(m_Planes[i], position) < -radius)
 			return false;
+
 	return true;
 }
 
-bool operator>=(XMVECTOR& v, float f)
+bool Frustum::CheckRectangle(float PositionX, float PositionY, float PositionZ, float SizeX, float SizeY, float SizeZ)
 {
-	for (int i = 0; i < 4; i++)
-		if (v.m128_f32[i] < f)
-			return false;
+	for ( int i = 0; i < 6;  i++)
+	{
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX - SizeX), (PositionY - SizeY), (PositionZ - SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX + SizeX), (PositionY - SizeY), (PositionZ - SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX - SizeX), (PositionY + SizeY), (PositionZ - SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX - SizeX), (PositionY - SizeY), (PositionZ + SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX + SizeX), (PositionY + SizeY), (PositionZ - SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX + SizeX), (PositionY - SizeY), (PositionZ + SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX - SizeX), (PositionY + SizeY), (PositionZ + SizeZ))) >= 0.0f)
+			continue;
+		if (PlaneDotCoord(m_Planes[i], Vector3((PositionX + SizeX), (PositionY + SizeY), (PositionZ + SizeZ))) >= 0.0f)
+			continue;
+		return false;
+	}
 	return true;
 }
+
+
+

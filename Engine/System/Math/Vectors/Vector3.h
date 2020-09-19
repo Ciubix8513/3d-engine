@@ -7,7 +7,7 @@ using namespace EngineMath;
 namespace EngineMath 
 {
 
-	class Vector3
+	struct Vector3
 	{
 	public:
 #pragma region VectorCreation + Consts
@@ -30,7 +30,6 @@ namespace EngineMath
 		float Length();
 		static float Length(Vector3& v);
 		Vector3 Normalized();
-		static void Normalize(Vector3& v);
 		void Normalize();
 		static float DotProduct(Vector3 a, Vector3 b);
 		static Vector3 CrossProdut(Vector3 a, Vector3 b);
@@ -39,6 +38,7 @@ namespace EngineMath
 #pragma region operators
 		Vector3 operator+(Vector3 v);
 		Vector3 operator-(Vector3 v);
+		Vector3 operator-(float c);
 		Vector3 operator*(float c);
 		float operator*(Vector3 c);
 
@@ -47,6 +47,9 @@ namespace EngineMath
 		void operator-=(Vector3 v);
 		void operator*=(float c);
 		void operator/=(float c);
+		 operator DirectX::XMFLOAT3() ;
+
+		bool operator!=(Vector3 v);
 #pragma endregion
 
 

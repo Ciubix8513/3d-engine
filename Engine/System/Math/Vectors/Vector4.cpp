@@ -176,7 +176,7 @@ float EngineMath::Vector4::operator[](int index)
 		throw exception("wrong index value");
 		break;
 	}
-	return 1/0;
+	return -10000000000000000000.0f;
 }
 
 
@@ -222,3 +222,10 @@ void EngineMath::Vector4::operator/=(float c)
 	w = w * c;
 	return;
 }
+
+EngineMath::Vector4::operator DirectX::XMFLOAT4()
+{
+	return DirectX::XMFLOAT4(x, y, z, w);
+
+}
+

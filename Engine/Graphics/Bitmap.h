@@ -4,8 +4,8 @@
 #pragma region includes
 #include <d3d11.h>
 #include <iostream>
-#include <DirectXMath.h>
-using namespace DirectX;
+#include "../System/Math/EngineMath.h"
+using namespace EngineMath;
 #include "Texture.h"
 #pragma endregion
 
@@ -16,8 +16,8 @@ class Bitmap
 #pragma region structs
 	struct BitmapVertex
 	{
-		XMFLOAT3 position;
-		XMFLOAT2 Texture;
+		Vector3 position;
+		Vector2 Texture;
 	};
 #pragma endregion	
 #pragma region PublicFuncs

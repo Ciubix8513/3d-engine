@@ -3,10 +3,10 @@
 #define _FONTSHADER_H_
 #pragma region includes
 #include <d3d11.h>
-#include <DirectXMath.h>
+#include "../System/Math/EngineMath.h"
 #include <d3dcompiler.h>
 #include <fstream>
-using namespace DirectX;
+using namespace EngineMath;
 using namespace std;
 #pragma endregion
 
@@ -16,13 +16,13 @@ class FontShader
 private:
 	struct MatrixBuffer
 	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;		
+		Matrix4x4 world;
+		Matrix4x4 view;
+		Matrix4x4 projection;
 	};
 	struct Pixelbuffer
 	{
-		XMFLOAT4 pixelColor;
+		Vector4 pixelColor;
 	};
 
 
@@ -33,14 +33,14 @@ public:
 	FontShader(const FontShader&);
 	void ShutDown();
 	bool Init(ID3D11Device* device, HWND hwnd);
-	bool Render(ID3D11DeviceContext*, int, XMMATRIX, XMMATRIX, XMMATRIX,ID3D11ShaderResourceView*,XMFLOAT4 pixelColor);
+	bool Render(ID3D11DeviceContext*, int, Matrix4x4, Matrix4x4, Matrix4x4,ID3D11ShaderResourceView*, Vector4 pixelColor);
 #pragma endregion
 #pragma region  private Funcs
 private:
 	bool InitShader(ID3D11Device*, HWND, WCHAR*, WCHAR*);
 	void ShutdownShader();
 	void OutputShaderErrorMsg(ID3D10Blob*, HWND, WCHAR*);
-	bool SetShaderParams(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView*, XMFLOAT4 pixelColor);
+	bool SetShaderParams(ID3D11DeviceContext*, Matrix4x4, Matrix4x4, Matrix4x4, ID3D11ShaderResourceView*, Vector4 pixelColor);
 	void RenderShader(ID3D11DeviceContext*, int);
 #pragma endregion
 #pragma region private Vars

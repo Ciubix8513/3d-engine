@@ -263,7 +263,7 @@
         viewport.TopLeftY = 0.0f;
 
         m_DeviceContext->RSSetViewports(1, &viewport);
-        FOV = (float)PI / 3.0f; //FOV of 60 degrees
+        FOV = (float)PI / 3; //  / 4.0f; //FOV of 60 degrees
         screenAspect = (float)screenWidth / (float)screenHeight;
         Matrix4x4 a;
      
@@ -407,21 +407,21 @@
     {
         return  m_DeviceContext;
     }
-    void D3d::GetProjectionMat(Matrix4x4& matrix)
+    Matrix4x4 D3d::GetProjectionMat()
     {
-        matrix = m_projectionMat;
-        return;
+        return  m_projectionMat;
+        
     }
-    void D3d::GetWorldMat(Matrix4x4& matrix)
+    Matrix4x4 D3d::GetWorldMat()
     {
-        matrix = m_worldMat;
-        return;
+        return m_worldMat;
+       
 
     }
-    void D3d::GetOrthoMat(Matrix4x4& matrix)
+    Matrix4x4 D3d::GetOrthoMat()
     {
-        matrix = m_orthomat;
-        return;
+        return m_orthomat;
+        
     }
     void D3d::ToggleAlphaBlend(bool state)
     {

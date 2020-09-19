@@ -71,29 +71,29 @@ void Font::BuidVertexarray(void* vertices, char* sentence, float drawX, float dr
         {
             //triangle 0
             // First triangle in quad.
-            vertexPtr[index].position = XMFLOAT3(drawX, drawY, 0.0f);  // Top left.
-            vertexPtr[index].Texture = XMFLOAT2(m_Font[letter].left, 0.0f);
+            vertexPtr[index].position = Vector3(drawX, drawY, 0.0f);  // Top left.
+            vertexPtr[index].Texture = Vector2(m_Font[letter].left, 0.0f);
             index++;
 
-            vertexPtr[index].position = XMFLOAT3((drawX + m_Font[letter].size), (drawY - 16), 0.0f);  // Bottom right.
-            vertexPtr[index].Texture = XMFLOAT2(m_Font[letter].right, 1.0f);
+            vertexPtr[index].position = Vector3((drawX + m_Font[letter].size), (drawY - 16), 0.0f);  // Bottom right.
+            vertexPtr[index].Texture = Vector2(m_Font[letter].right, 1.0f);
             index++;
             
-            vertexPtr[index].position = XMFLOAT3(drawX, (drawY - 16), 0.0f);  // Bottom left.
-            vertexPtr[index].Texture = XMFLOAT2(m_Font[letter].left, 1.0f);
+            vertexPtr[index].position = Vector3(drawX, (drawY - 16), 0.0f);  // Bottom left.
+            vertexPtr[index].Texture = Vector2(m_Font[letter].left, 1.0f);
             index++;
 
             // Second triangle in quad.
-            vertexPtr[index].position = XMFLOAT3(drawX, drawY, 0.0f);  // Top left.
-            vertexPtr[index].Texture = XMFLOAT2(m_Font[letter].left, 0.0f);
+            vertexPtr[index].position = Vector3(drawX, drawY, 0.0f);  // Top left.
+            vertexPtr[index].Texture = Vector2(m_Font[letter].left, 0.0f);
             index++;
 
-            vertexPtr[index].position = XMFLOAT3(drawX + m_Font[letter].size, drawY, 0.0f);  // Top right.
-            vertexPtr[index].Texture = XMFLOAT2(m_Font[letter].right, 0.0f);
+            vertexPtr[index].position = Vector3(drawX + m_Font[letter].size, drawY, 0.0f);  // Top right.
+            vertexPtr[index].Texture = Vector2(m_Font[letter].right, 0.0f);
             index++;
 
-            vertexPtr[index].position = XMFLOAT3((drawX + m_Font[letter].size), (drawY - 16), 0.0f);  // Bottom right.
-            vertexPtr[index].Texture = XMFLOAT2(m_Font[letter].right, 1.0f);
+            vertexPtr[index].position = Vector3((drawX + m_Font[letter].size), (drawY - 16), 0.0f);  // Bottom right.
+            vertexPtr[index].Texture = Vector2(m_Font[letter].right, 1.0f);
             index++;
 
             // Update the x location for drawing by the size of the letter and one pixel.

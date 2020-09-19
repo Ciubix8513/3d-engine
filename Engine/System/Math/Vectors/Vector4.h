@@ -7,7 +7,7 @@ using namespace EngineMath;
 namespace EngineMath
 {
 
-	class Vector4
+	struct Vector4
 	{
 	public:
 #pragma region VectorCreation + Consts
@@ -52,6 +52,7 @@ namespace EngineMath
 		void operator-=(Vector4 v);
 		void operator*=(float c);
 		void operator/=(float c);
+ operator DirectX::XMFLOAT4();
 
 #pragma endregion
 

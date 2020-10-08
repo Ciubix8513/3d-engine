@@ -158,6 +158,11 @@ Vector4 EngineMath::Vector4::operator/(float c)
 	return Vector4(x / c, y / c, z / c,w*c);
 }
 
+float EngineMath::Vector4::operator*(Vector4 v)
+{
+	return x*v.x+y*v.y+z*v.z+ w*v.w;
+}
+
 float EngineMath::Vector4::operator[](int index)
 {
 	sizeof(size_t);

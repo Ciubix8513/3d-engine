@@ -256,18 +256,18 @@
 
 		m_D3d->BeginScene(0, 0, 0, 0);
 		m_camera->Render();
-		view =  m_camera->GetViewMatrix();
-		world =	m_D3d->GetWorldMat();
-		proj =	m_D3d->GetProjectionMat();
-		ortho =m_D3d->GetOrthoMat();
+		view = m_camera->GetViewMatrix();
+		world = m_D3d->GetWorldMat();
+		proj = m_D3d->GetProjectionMat();
+		ortho = m_D3d->GetOrthoMat();
 		
 
 
 
 
 		m_model->Render(m_D3d->getDeviceContext(), m_D3d->getDevice());
-		result = m_LightShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj, m_model->Getobjectmatrix(), m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_Light->GetAmbientColor(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower(), m_camera->GetPosition());
-		//result = m_colorShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj);
+	result = m_LightShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj, m_model->Getobjectmatrix(), m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_Light->GetAmbientColor(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower(), m_camera->GetPosition());
+	//	result = m_colorShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj);
 		if (!result)
 			return false;
 

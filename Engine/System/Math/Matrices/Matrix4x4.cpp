@@ -63,10 +63,10 @@ Matrix4x4 EngineMath::Matrix4x4::Transposed()
     Out._m20 = m._m02;
     Out._m23 = m._m32;
 
-    Out._m33 = m._m33;
+    Out._m30 = m._m03;
     Out._m31 = m._m13;
     Out._m32 = m._m23;
-    Out._m03 = m._m30;
+    Out._m33 = m._m33;
 
     return Out;
 }
@@ -85,13 +85,13 @@ void EngineMath::Matrix4x4::Transpose()
     _m12 = m._m21;
     _m13 = m._m31;
 
-    _m21 = m._m12;
     _m20 = m._m02;
+    _m21 = m._m12;
     _m23 = m._m32;
 
     _m31 = m._m13;
     _m32 = m._m23;
-    _m03 = m._m30;  
+    _m30 = m._m03;  
 }
 
 void EngineMath::Matrix4x4::SetRow(int row, Vector4 value)
@@ -159,27 +159,25 @@ Matrix4x4 EngineMath::Matrix4x4::operator/(float c)
 }
 Matrix4x4 EngineMath::Matrix4x4::operator*(Matrix4x4 m)
 {
-    Vector4 Out[4];
-    Out[0].x = (_m00 * m._m00) + (_m01 * m._m10) + (_m02 * m._m20) + (_m03 * m._m30);
-    Out[0].y = (_m00 * m._m01) + (_m01 * m._m11) + (_m02 * m._m21) + (_m03 * m._m31);
-    Out[0].z = (_m00 * m._m02) + (_m01 * m._m12) + (_m02 * m._m22) + (_m03 * m._m32);
-    Out[0].w = (_m00 * m._m03) + (_m01 * m._m13) + (_m02 * m._m23) + (_m03 * m._m33);
+    
 
-    Out[1].x = (_m10 * m._m00) + (_m11 * m._m10) + (_m12 * m._m20) + (_m13 * m._m30);
-    Out[1].y = (_m10 * m._m01) + (_m11 * m._m11) + (_m12 * m._m21) + (_m13 * m._m31);
-    Out[1].z = (_m10 * m._m02) + (_m11 * m._m12) + (_m12 * m._m22) + (_m13 * m._m32);
-    Out[1].w = (_m10 * m._m03) + (_m11 * m._m13) + (_m12 * m._m23) + (_m13 * m._m33);
+    Vector4 A, A1, A2, A3, B, B1, B2, B3;;
+    A = Vector4(_m00, _m01, _m02, _m03);
+    A1 = Vector4(_m10, _m11, _m12, _m13);
+    A2 = Vector4(_m20, _m21, _m22, _m23);
+    A3 = Vector4(_m30, _m31, _m32, _m33);
+     
+    B = Vector4(m._m00, m._m10, m._m20, m._m30);
+    B1 = Vector4(m._m01, m._m11, m._m21, m._m31);
+    B2 = Vector4(m._m02, m._m12, m._m22, m._m32);
+    B3 = Vector4(m._m03, m._m13, m._m23, m._m33);
 
-    Out[2].x = (_m20 * m._m00) + (_m21 * m._m10) + (_m22 * m._m20) + (_m23 * m._m30);
-    Out[2].y = (_m20 * m._m01) + (_m21 * m._m11) + (_m22 * m._m21) + (_m23 * m._m31);
-    Out[2].z = (_m20 * m._m02) + (_m21 * m._m12) + (_m22 * m._m22) + (_m23 * m._m32);
-    Out[2].w = (_m20 * m._m03) + (_m21 * m._m13) + (_m22 * m._m23) + (_m23 * m._m33);
-
-    Out[3].x = (_m30 * m._m00) + (_m31 * m._m10) + (_m32 * m._m20) + (_m33 * m._m30);
-    Out[3].y = (_m30 * m._m01) + (_m31 * m._m11) + (_m32 * m._m21) + (_m33 * m._m31);
-    Out[3].z = (_m30 * m._m02) + (_m31 * m._m12) + (_m32 * m._m22) + (_m33 * m._m32);
-    Out[3].w = (_m30 * m._m03) + (_m31 * m._m13) + (_m32 * m._m23) + (_m33 * m._m33);
-    return Matrix4x4(Out[0], Out[1], Out[2], Out[3]);
+    return Matrix4x4(
+        A * B, A * B1, A * B2, A * B3,
+        A1 * B, A1 * B1, A1 * B2, A1 * B3,
+        A2 * B, A2 * B1, A2 * B2, A2 * B3,
+        A3 * B, A3 * B1, A3 * B2, A3 * B3
+    );
 }
 void EngineMath::Matrix4x4::operator+=(Matrix4x4 m)
 {

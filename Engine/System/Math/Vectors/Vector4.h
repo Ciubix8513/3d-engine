@@ -42,10 +42,12 @@ namespace EngineMath
 #pragma endregion
 
 #pragma region operators
+
 		Vector4 operator+(Vector4 v);
 		Vector4 operator-(Vector4 v);
 		Vector4 operator*(float c);
 		Vector4 operator/(float c);
+		float operator*(Vector4 v);
 		float operator[](int index);
 		void operator+=(Vector3 v);
 		void operator+=(Vector4 v);

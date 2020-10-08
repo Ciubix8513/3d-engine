@@ -1,10 +1,11 @@
 #include "Launcher.h"
-#include <iostream>
-#include "System.h"
 #include "System.h"
 
 
-	int main()
+
+
+
+int main()
 	{
 		System* system;
 		bool result;
@@ -19,3 +20,4 @@
 		system = 0;
 		return 1;
 	}
+

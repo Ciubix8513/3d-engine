@@ -114,8 +114,4 @@ void EngineMath::Vector2::operator/=(float c)
 	return;
 }
 
-EngineMath::Vector2::operator DirectX::XMFLOAT2()
-{
-	return DirectX::XMFLOAT2(x, y);
-}
 

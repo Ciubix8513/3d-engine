@@ -77,23 +77,23 @@ Matrix4x4 EngineMath::RotationPitchYawRoll(float pitch, float yaw, float roll) /
 
     Matrix4x4 p, y, r;
     y = Matrix4x4(
-        cos(pitch), 0, sin(pitch), 0,
+        cos(yaw), 0, -sin(yaw), 0,
         0, 1, 0, 0,
-        - sin(pitch), 0, cos(pitch), 0,
+         sin(yaw), 0, cos(yaw), 0,
         0, 0, 0, 1);
     r = Matrix4x4(
-        cos(yaw), -sin(yaw), 0, 0,
-        sin(yaw), cos(yaw), 0, 0,
+        cos(roll), sin(roll), 0, 0,
+        -sin(roll), cos(roll), 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1);
     p = Matrix4x4(
         1, 0, 0, 0,
-        0, cos(roll), -sin(roll),0,
-        0, sin(roll), cos(roll), 0,
+        0, cos(pitch), sin(pitch),0,
+        0, -sin(pitch), cos(pitch), 0,
         0, 0, 0, 1);
 
-
-    return (r* p)*y;
+    Matrix4x4 buff = (r.operator*(p));
+    return buff.operator*(y);
 }
 Matrix4x4 EngineMath::GetTramsformationMatrix(Vector3 posistion, Vector3 Rotation, Vector3 Scale)
 {

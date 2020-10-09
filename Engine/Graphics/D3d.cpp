@@ -263,11 +263,14 @@
         viewport.TopLeftY = 0.0f;
 
         m_DeviceContext->RSSetViewports(1, &viewport);
-        FOV = (float)XM_PI / 3.0f; //FOV of 60 degrees
+        FOV = (float)PI / 3; //  / 4.0f; //FOV of 60 degrees
         screenAspect = (float)screenWidth / (float)screenHeight;
-        m_projectionMat =  XMMatrixPerspectiveFovLH(FOV, screenAspect, screenNear, screenDepth);
-        m_worldMat = XMMatrixIdentity();
-        m_orthomat = XMMatrixOrthographicLH((float)screenWidth, (float) screenHeight, screenNear, screenDepth);
+        Matrix4x4 a;
+     
+        m_projectionMat =  PerspectiveProjectionMatrix(FOV, screenAspect, screenNear, screenDepth);
+        m_worldMat = Identity();
+
+        m_orthomat = OrthographicProjectionMatrix((float)screenWidth, (float) screenHeight, screenNear, screenDepth);
 
         ZeroMemory(&depthDisableStateDesc, sizeof(depthDisableStateDesc));
 
@@ -404,21 +407,21 @@
     {
         return  m_DeviceContext;
     }
-    void D3d::GetProjectionMat(XMMATRIX& matrix)
+    Matrix4x4 D3d::GetProjectionMat()
     {
-        matrix = m_projectionMat;
-        return;
+        return  m_projectionMat;
+        
     }
-    void D3d::GetWorldMat(XMMATRIX& matrix)
+    Matrix4x4 D3d::GetWorldMat()
     {
-        matrix = m_worldMat;
-        return;
+        return m_worldMat;
+       
 
     }
-    void D3d::GetOrthoMat(XMMATRIX& matrix)
+    Matrix4x4 D3d::GetOrthoMat()
     {
-        matrix = m_orthomat;
-        return;
+        return m_orthomat;
+        
     }
     void D3d::ToggleAlphaBlend(bool state)
     {

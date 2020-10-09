@@ -36,7 +36,7 @@ bool LightShader::Init(ID3D11Device* device, HWND hwnd)
 
 
 
-bool LightShader::Render(ID3D11DeviceContext* ctxt, int indexCount, XMMATRIX world, XMMATRIX view, XMMATRIX project,XMMATRIX object, ID3D11ShaderResourceView* texture,XMFLOAT3 lightDir,XMFLOAT4 diffuseColor,XMFLOAT4 ambientColor,XMFLOAT4 specularColor,float specularPow,XMFLOAT3 cameraPos)
+bool LightShader::Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project, Matrix4x4 object, ID3D11ShaderResourceView* texture,Vector3 lightDir, Vector4 diffuseColor, Vector4 ambientColor, Vector4 specularColor,float specularPow, Vector3 cameraPos)
 {
     bool result;
     result = SetShaderParams(ctxt, world, view, project,object, texture,lightDir,diffuseColor,ambientColor,specularColor,specularPow,cameraPos);
@@ -269,7 +269,7 @@ void LightShader::OutputShaderErrorMsg(ID3D10Blob* msg, HWND hwnd, WCHAR* file)
     return;
 }
 
-bool LightShader::SetShaderParams(ID3D11DeviceContext* ctxt, XMMATRIX world, XMMATRIX view, XMMATRIX proj,XMMATRIX object, ID3D11ShaderResourceView* texture, XMFLOAT3 lightDir, XMFLOAT4 diffuseColor,XMFLOAT4 ambientColor, XMFLOAT4 specularColor,float specularPower,XMFLOAT3 cameraPos)
+bool LightShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Matrix4x4 view, Matrix4x4 proj, Matrix4x4 object, ID3D11ShaderResourceView* texture, Vector3 lightDir, Vector4 diffuseColor, Vector4 ambientColor, Vector4 specularColor,float specularPower, Vector3 cameraPos)
 {
     HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedSubresource;
@@ -278,10 +278,10 @@ bool LightShader::SetShaderParams(ID3D11DeviceContext* ctxt, XMMATRIX world, XMM
     CameraBuffer* dataPtr2;
     unsigned int bufferNum;
 
-    object = XMMatrixTranspose(object);
-    world = XMMatrixTranspose(world);
-    view = XMMatrixTranspose(view);
-    proj = XMMatrixTranspose(proj);
+    object.Transpose();
+    world.Transpose();
+    view.Transpose();
+    proj.Transpose();
 
     result = ctxt->Map(m_matBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
     if (FAILED(result))

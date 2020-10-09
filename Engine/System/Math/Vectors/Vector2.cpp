@@ -1,29 +1,35 @@
 #include "Vector2.h"
 
-Vector2::Vector2(float NewX, float NewY)
+EngineMath::Vector2::Vector2()
+{
+	x = 0;
+	y = 0;
+}
+
+EngineMath::Vector2::Vector2(float NewX, float NewY)
 {
 	x = NewX;
 	y = NewY;
 	
 }
 
-Vector2 EngineMath::Vector2::Up()
+EngineMath::Vector2 EngineMath::Vector2::Up()
 {
 	return Vector2(0, 1);
 }
-Vector2 EngineMath::Vector2::Down()
+EngineMath::Vector2 EngineMath::Vector2::Down()
 {
 	return Vector2(0, -1);
 }
-Vector2 EngineMath::Vector2::Right()
+EngineMath::Vector2 EngineMath::Vector2::Right()
 {
 	return Vector2(1, 0);
 }
-Vector2 EngineMath::Vector2::Left()
+EngineMath::Vector2 EngineMath::Vector2::Left()
 {
 	return Vector2(-1, 0);
 }
-Vector2 EngineMath::Vector2::Zero()
+EngineMath::Vector2 EngineMath::Vector2::Zero()
 {
 	return Vector2(0, 0);
 }
@@ -62,19 +68,19 @@ float EngineMath::Vector2::DotProduct(Vector2 a, Vector2 b)
 
 
 
-Vector2 EngineMath::Vector2::operator+(Vector2 v)
+EngineMath::Vector2 EngineMath::Vector2::operator+(Vector2 v)
 {
 	return Vector2(x + v.x, y + v.y);
 }
-Vector2 EngineMath::Vector2::operator-(Vector2 v)
+EngineMath::Vector2 EngineMath::Vector2::operator-(Vector2 v)
 {
 	return Vector2(x - v.x, y - v.y);
 }
-Vector2 EngineMath::Vector2::operator*(float c)
+EngineMath::Vector2 EngineMath::Vector2::operator*(float c)
 {
 	return Vector2(x * c, y * c);
 }
-Vector2 EngineMath::Vector2::operator/(float c)
+EngineMath::Vector2 EngineMath::Vector2::operator/(float c)
 {
 	return Vector2(x / c, y / c);
 }
@@ -107,3 +113,5 @@ void EngineMath::Vector2::operator/=(float c)
 
 	return;
 }
+
+

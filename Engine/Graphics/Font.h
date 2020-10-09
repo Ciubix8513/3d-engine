@@ -4,10 +4,10 @@
 
 #pragma region includes
 #include <d3d11.h>
-#include <DirectXMath.h>
 #include <fstream>
+#include "../System/Math/EngineMath.h"
+using namespace EngineMath;
 using namespace std;
-using namespace DirectX;
 #include "Texture.h"
 #pragma endregion
 
@@ -24,8 +24,8 @@ private:
 	};
 	struct Vertex
 	{
-		XMFLOAT3 position;
-		XMFLOAT2 Texture;
+		Vector3 position;
+		Vector2 Texture;
 	};
 #pragma endregion
 #pragma region Public funcs

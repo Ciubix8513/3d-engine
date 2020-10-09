@@ -7,7 +7,7 @@ using namespace EngineMath;
 namespace EngineMath
 {
 
-	class Vector4
+	struct Vector4
 	{
 	public:
 #pragma region VectorCreation + Consts
@@ -38,18 +38,23 @@ namespace EngineMath
 		static void Normalize(Vector4& v);
 		void Normalize();
 		static float DotProduct(Vector4 a, Vector4 b);
+		Vector3 XYZ();
 #pragma endregion
 
 #pragma region operators
+
 		Vector4 operator+(Vector4 v);
 		Vector4 operator-(Vector4 v);
 		Vector4 operator*(float c);
 		Vector4 operator/(float c);
+		float operator*(Vector4 v);
 		float operator[](int index);
+		void operator+=(Vector3 v);
 		void operator+=(Vector4 v);
 		void operator-=(Vector4 v);
 		void operator*=(float c);
 		void operator/=(float c);
+ operator DirectX::XMFLOAT4();
 
 #pragma endregion
 

@@ -173,23 +173,23 @@ bool Bitmap::UpdateBuffers(ID3D11DeviceContext* ctxt, int posX, int posY)
     if (!vertices)
         return false;
 
-    vertices[0].position = XMFLOAT3(left, top, 0.0f);
-    vertices[0].Texture = XMFLOAT2(0.0f, 0.0f);
+    vertices[0].position = Vector3(left, top, 0.0f);
+    vertices[0].Texture = Vector2(0.0f, 0.0f);
 
-    vertices[1].position = XMFLOAT3(right, bottom, 0.0f);
-    vertices[1].Texture = XMFLOAT2(1, 1);// XMFLOAT2(1.0f, 1.0f);
+    vertices[1].position = Vector3(right, bottom, 0.0f);
+    vertices[1].Texture = Vector2(1, 1);// XMFLOAT2(1.0f, 1.0f);
     
-    vertices[2].position = XMFLOAT3(left, bottom, 0.0f);
-    vertices[2].Texture = XMFLOAT2(0.0f, 1.0f);
+    vertices[2].position = Vector3(left, bottom, 0.0f);
+    vertices[2].Texture = Vector2(0.0f, 1.0f);
 
-    vertices[3].position = XMFLOAT3(left, top, 0.0f);
-    vertices[3].Texture = XMFLOAT2(0.0f, 0.0f);
+    vertices[3].position = Vector3(left, top, 0.0f);
+    vertices[3].Texture = Vector2(0.0f, 0.0f);
 
-    vertices[4].position = XMFLOAT3(right, top, 0.0f);
-    vertices[4].Texture = XMFLOAT2(1.0f, 0.0f);
+    vertices[4].position = Vector3(right, top, 0.0f);
+    vertices[4].Texture = Vector2(1.0f, 0.0f);
 
-    vertices[5].position = XMFLOAT3(right, bottom, 0.0f);
-    vertices[5].Texture = XMFLOAT2(1.0f, 1.0f);
+    vertices[5].position = Vector3(right, bottom, 0.0f);
+    vertices[5].Texture = Vector2(1.0f, 1.0f);
     
     result = ctxt->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
     if (FAILED(result))

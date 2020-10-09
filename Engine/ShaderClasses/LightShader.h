@@ -3,10 +3,10 @@
 #define _LIGHTSHADER_H_
 #pragma region includes
 #include <d3d11.h>
-#include <DirectXMath.h>
+#include "../System/Math/EngineMath.h"
 #include <d3dcompiler.h>
 #include <fstream>
-using namespace DirectX;
+using namespace EngineMath;
 using namespace std;
 #pragma endregion
 
@@ -16,23 +16,23 @@ class LightShader
 private:
 	struct MatrixBuffer
 	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;
-		XMMATRIX object;
+		Matrix4x4 world;
+		Matrix4x4 view;
+		Matrix4x4 projection;
+		Matrix4x4 object;
 	};
 	struct CameraBuffer
 	{
-		XMFLOAT3 cameraPos;
+		Vector3 cameraPos;
 		float padding;
 	};
 	struct LightBuffer
 	{
-		XMFLOAT4 AmbientColor;
-		XMFLOAT4 diffuseColor;
-		XMFLOAT3 lightDirection;	
+		Vector4 AmbientColor;
+		Vector4 diffuseColor;
+		Vector3 lightDirection;
 		float specularPower;
-		XMFLOAT4 specularColor;
+		Vector4 specularColor;
 	};
 
 #pragma region public funcs
@@ -42,14 +42,14 @@ public:
 	LightShader(const LightShader&);
 	void ShutDown();
 	bool Init(ID3D11Device* device, HWND hwnd);
-	bool Render(ID3D11DeviceContext* ctxt, int indexCount, XMMATRIX world, XMMATRIX view, XMMATRIX project, XMMATRIX object, ID3D11ShaderResourceView* texture, XMFLOAT3 lightDir, XMFLOAT4 diffuseColor, XMFLOAT4 ambientColor, XMFLOAT4 specularColor, float specularPow, XMFLOAT3 cameraPos);
+	bool Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project, Matrix4x4 object, ID3D11ShaderResourceView* texture, Vector3 lightDir, Vector4 diffuseColor, Vector4 ambientColor, Vector4 specularColor, float specularPow, Vector3 cameraPos);
 #pragma endregion
 #pragma region  private Funcs
 private:
 	bool InitShader(ID3D11Device*, HWND, WCHAR*, WCHAR*);
 	void ShutdownShader();
 	void OutputShaderErrorMsg(ID3D10Blob*, HWND, WCHAR*);
-	bool SetShaderParams(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX,XMMATRIX, ID3D11ShaderResourceView*, XMFLOAT3 , XMFLOAT4, XMFLOAT4, XMFLOAT4,float,XMFLOAT3);
+	bool SetShaderParams(ID3D11DeviceContext*, Matrix4x4, Matrix4x4, Matrix4x4, Matrix4x4, ID3D11ShaderResourceView*, Vector3, Vector4, Vector4, Vector4,float, Vector3);
 	void RenderShader(ID3D11DeviceContext*, int);
 #pragma endregion
 #pragma region private Vars

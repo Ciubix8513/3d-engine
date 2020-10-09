@@ -67,11 +67,7 @@ EngineMath::Vector3 EngineMath::Vector3::Normalized()
 {
 	return Vector3(x,y,z)  / Length();
 }
-void EngineMath::Vector3::Normalize(Vector3& v)
-{
-	 v /= v.Length();
-	 return;
-}
+
 void EngineMath::Vector3::Normalize()
 {
 	x /= Length();
@@ -101,9 +97,17 @@ Vector3 EngineMath::Vector3::operator-(Vector3 v)
 {
 	return Vector3(x - v.x, y - v.y, z - v.z);
 }
+Vector3 EngineMath::Vector3::operator-(float c)
+{
+	return Vector3(x -c,y-c,z-c);
+}
 Vector3 EngineMath::Vector3::operator*(float c)
 {
 	return Vector3(x*c,y*c,z*c);
+}
+float EngineMath::Vector3::operator*(Vector3 c)
+{
+	return DotProduct(Vector3(x,y,z),c);
 }
 Vector3 EngineMath::Vector3::operator/(float c)
 {
@@ -137,4 +141,17 @@ void EngineMath::Vector3::operator/=(float c)
 	y = y / c;
 	z = z / c;
 	return;
+}
+
+EngineMath::Vector3::operator DirectX::XMFLOAT3()
+{
+	return DirectX::XMFLOAT3(x, y, z);
+}
+
+
+bool EngineMath::Vector3::operator!=(Vector3 v)
+{
+	if(x == v.x && z == v.z && y == v.y)
+	return false;	
+	return true;
 }

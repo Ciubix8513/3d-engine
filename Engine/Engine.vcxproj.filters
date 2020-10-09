@@ -195,6 +195,12 @@
     <ClCompile Include="System\Math\Matrices\Matrix4x4.cpp">
       <Filter>Main System\Math\Matrices\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="System\Math\EngineMath.cpp">
+      <Filter>Main System\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Math\Vectors\Plane.cpp">
+      <Filter>Main System\Math\Vectors\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">
@@ -274,6 +280,12 @@
     </ClInclude>
     <ClInclude Include="System\Math\Matrices\Matrix4x4.h">
       <Filter>Main System\Math\Matrices\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\EngineMath.h">
+      <Filter>Main System\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\Vectors\Plane.h">
+      <Filter>Main System\Math\Vectors\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

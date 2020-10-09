@@ -131,6 +131,11 @@ float EngineMath::Vector4::DotProduct(Vector4 a, Vector4 b)
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
+Vector3 EngineMath::Vector4::XYZ()
+{
+	return Vector3(x,y,z);
+}
+
 
 
 
@@ -153,6 +158,11 @@ Vector4 EngineMath::Vector4::operator/(float c)
 	return Vector4(x / c, y / c, z / c,w*c);
 }
 
+float EngineMath::Vector4::operator*(Vector4 v)
+{
+	return x*v.x+y*v.y+z*v.z+ w*v.w;
+}
+
 float EngineMath::Vector4::operator[](int index)
 {
 	sizeof(size_t);
@@ -171,7 +181,17 @@ float EngineMath::Vector4::operator[](int index)
 		throw exception("wrong index value");
 		break;
 	}
-	return 1/0;
+	return -10000000000000000000.0f;
+}
+
+
+void EngineMath::Vector4::operator+=(Vector3 v)
+{
+	x = x + v.x;
+	y = y + v.y;
+	z = z + v.z;
+	w = w;
+	return;
 }
 
 void EngineMath::Vector4::operator+=(Vector4 v)
@@ -207,3 +227,10 @@ void EngineMath::Vector4::operator/=(float c)
 	w = w * c;
 	return;
 }
+
+EngineMath::Vector4::operator DirectX::XMFLOAT4()
+{
+	return DirectX::XMFLOAT4(x, y, z, w);
+
+}
+

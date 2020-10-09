@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _MATRIX4X4_H_
 #define _MATRIX4X4_H_
-#include "../Vectors/Vector4.h"
+#include "../Vectors/Quaternion.h"
 
 using namespace EngineMath;
 namespace EngineMath 
@@ -15,18 +15,16 @@ namespace EngineMath
 				   float m20, float m21, float m22, float m23,
 			       float m30, float m31, float m32, float m33);
 		Matrix4x4(Vector4 row0, Vector4 row1, Vector4 row2, Vector4 row3);
-
-		static Matrix4x4 Identity();
+		Matrix4x4();
 #pragma endregion
 #pragma region Functions
-		static Matrix4x4 Transpose(Matrix4x4 m);
 		Matrix4x4 Transposed();
 		void Transpose();
-		static Matrix4x4 Multiply(Matrix4x4 a, Matrix4x4 b);		
+
+
 		void SetRow(int row, Vector4 value);
 		Vector4 TransformVector(Vector4 v);
-		static Vector4 TransformVector(Vector4 v, Matrix4x4 m);
-
+	
 #pragma endregion
 
 
@@ -43,7 +41,7 @@ namespace EngineMath
 		void operator= (Matrix4x4 m);
 		Vector4 operator[] (int index);
 		Vector4 operator* (Vector4 v);
-
+		operator DirectX::XMFLOAT4X4() ;
 #pragma endregion
 
 

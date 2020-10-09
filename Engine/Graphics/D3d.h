@@ -10,8 +10,8 @@
 #pragma endregion
 #pragma region Includes
 #include <d3d11.h>
-#include <DirectXMath.h>
-using namespace DirectX;
+#include "../System/Math/EngineMath.h"
+using namespace EngineMath;
 #pragma endregion
 
 	class D3d
@@ -27,9 +27,9 @@ using namespace DirectX;
 		void EndScene();
 		ID3D11Device* getDevice();
 		ID3D11DeviceContext* getDeviceContext();
-		void GetProjectionMat(XMMATRIX&);
-		void GetWorldMat(XMMATRIX&);
-		void GetOrthoMat(XMMATRIX&);
+		Matrix4x4 GetProjectionMat();
+		Matrix4x4 GetWorldMat();
+		Matrix4x4 GetOrthoMat();
 		void ToggleAlphaBlend(bool);
 		void GetVCardInfo(char*, int&);
 		void ToggleZBuffer(bool state);
@@ -47,9 +47,9 @@ using namespace DirectX;
 		ID3D11DepthStencilState* m_DepthStencilState;
 		ID3D11DepthStencilView* m_DepthStencilView;
 		ID3D11RasterizerState* m_RasterizerState;
-		XMMATRIX m_projectionMat;
-		XMMATRIX m_orthomat;
-		XMMATRIX m_worldMat;
+		Matrix4x4 m_projectionMat;
+		Matrix4x4 m_orthomat;
+		Matrix4x4 m_worldMat;
 		ID3D11DepthStencilState* m_depthDisabledStencilState;
 		ID3D11BlendState* m_AlphaBlendOn;
 		ID3D11BlendState* m_AlphaBlendOff;

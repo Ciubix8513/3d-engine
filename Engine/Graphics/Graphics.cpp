@@ -28,7 +28,7 @@
 	bool Graphics::Init(int scW, int scH, HWND hwnd)
 	{
 		bool result;
-		XMMATRIX baseView;
+		Matrix4x4 baseView;
 		m_D3d = new D3d;
 		if (!m_D3d)
 			return false;
@@ -37,13 +37,13 @@
 			return false;
 		m_camera->SetPosition(0, 0, -1);
 		m_camera->Render();
-		m_camera->GetViewMatrix(baseView);
+		baseView = m_camera->GetViewMatrix();
 		
 
 
 
-		m_camera->SetPosition(0, 0, -5);
-		m_camera->SetRotation(0, 0, 0);
+		m_camera->SetPosition(0, 0, -10);
+		m_camera->SetRotation(0, 0 , 0);
 	
 		m_colorShader = new ColorShader;
 		if (!m_colorShader)
@@ -240,8 +240,8 @@
 
 
 
-		XMFLOAT3 a = XMFLOAT3(0.0f, .002f * time, 0.0f);
-		m_model->SetRotation(XMLoadFloat3(&m_model->GetRotation()) + XMLoadFloat3(&a));
+		Vector3 a = Vector3(0.0f, 0, .2 * time);
+		m_model->SetRotation(m_model->GetRotation() + a);
 
 		return Render(posX, posY);
 
@@ -249,24 +249,25 @@
 
 	bool Graphics::Render(int posX, int posY)
 	{
-		XMMATRIX view, proj, world ,ortho;
+		Matrix4x4 view, proj, world ,ortho;
 		bool result;
 
 		
 
 		m_D3d->BeginScene(0, 0, 0, 0);
 		m_camera->Render();
-		m_camera->GetViewMatrix(view);
-		m_D3d->GetWorldMat(world);
-		m_D3d->GetProjectionMat(proj);
-		m_D3d->GetOrthoMat(ortho);
+		view = m_camera->GetViewMatrix();
+		world = m_D3d->GetWorldMat();
+		proj = m_D3d->GetProjectionMat();
+		ortho = m_D3d->GetOrthoMat();
 		
 
 
 
 
 		m_model->Render(m_D3d->getDeviceContext(), m_D3d->getDevice());
-		result = m_LightShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj, m_model->Getobjectmatrix(), m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_Light->GetAmbientColor(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower(), m_camera->GetPosition());
+	result = m_LightShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj, m_model->Getobjectmatrix(), m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_Light->GetAmbientColor(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower(), m_camera->GetPosition());
+	//	result = m_colorShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj);
 		if (!result)
 			return false;
 
@@ -282,21 +283,21 @@
 		}
 	
 		
+		/*
 
-
-		/*result = m_Coursor->Render(m_D3d->getDeviceContext(), posX, -posY);
+		result = m_Coursor->Render(m_D3d->getDeviceContext(), posX, -posY);
 		if (!result)
 			return false;
-		result = m_texShader->Render(m_D3d->getDeviceContext(), m_Coursor->GetIndexCount(), world, view, ortho, XMMatrixIdentity(), m_Coursor->GetTexture());
+		result = m_texShader->Render(m_D3d->getDeviceContext(), m_Coursor->GetIndexCount(), world, view, ortho, Identity(), m_Coursor->GetTexture());
 		if (!result)
-			return false;*/
-
+			return false;
+			*/
 
 		m_D3d->ToggleZBuffer(true);
 		m_D3d->ToggleAlphaBlend(false);
-
+		
 		m_D3d->EndScene();
-
+		cout << "Rendered scene \n";
 
 		return true;
 	}

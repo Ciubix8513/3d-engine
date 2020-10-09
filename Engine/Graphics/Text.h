@@ -19,8 +19,8 @@ struct Sentence
 private:
 struct Vertex
 {
-	XMFLOAT3 position;
-	XMFLOAT2 UV;
+	Vector3 position;
+	Vector2 UV;
 };
 #pragma endregion
 #pragma region public funcs
@@ -28,11 +28,11 @@ public:
 Text();
 Text(const Text&);
 ~Text();
-bool Init(ID3D11Device* device, ID3D11DeviceContext* ctxt, HWND hwnd, int scrW, int scrH, XMMATRIX viewMat);
+bool Init(ID3D11Device* device, ID3D11DeviceContext* ctxt, HWND hwnd, int scrW, int scrH, Matrix4x4 viewMat);
 bool UpdateSentence(Sentence* sentence, char* text, int posX, int posY, float r, float g, float b, ID3D11DeviceContext* ctxt);
 bool InitSentence(Sentence** sentence, int maxLength, ID3D11Device* device);
 static void Releasesentence(Sentence**);
-bool RenderSentence(ID3D11DeviceContext* ctxt, Sentence* sentence, XMMATRIX world, XMMATRIX ortho);
+bool RenderSentence(ID3D11DeviceContext* ctxt, Sentence* sentence, Matrix4x4 world, Matrix4x4 ortho);
 void ShutDown();
 
 #pragma endregion
@@ -44,7 +44,7 @@ private:
 	FontShader* m_FontShader;
 	int m_screenW;
 	int m_screenH;
-	XMMATRIX m_baseViewMat;
+	Matrix4x4 m_baseViewMat;
 
 #pragma endregion
 

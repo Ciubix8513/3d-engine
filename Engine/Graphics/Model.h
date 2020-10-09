@@ -5,7 +5,7 @@
 #pragma endregion
 #pragma region includes
 #include <d3d11.h>
-#include <DirectXMath.h>
+#include "../System/Math/EngineMath.h"
 #include "Texture.h"
 #include <stdio.h>
 #include <iostream>
@@ -13,22 +13,28 @@
 #include <string>
 #include <vector>
 #include <list>
-using namespace DirectX;
+using namespace EngineMath;
 using namespace std;
 #pragma endregion
 
 
 	class Model
 	{
+	private:
+		struct Count 
+		{
+			int vertexCount;
+			int indexCount;
+		};
 	public:
 
 		
 		struct vertex
 		{
-			XMFLOAT3 position;
-			XMFLOAT4 color;
-			XMFLOAT2 UV;
-			XMFLOAT3 normal;
+			DirectX::XMFLOAT3 position;
+			DirectX::XMFLOAT4 color;
+			DirectX::XMFLOAT2 UV;
+			DirectX::XMFLOAT3 normal;
 		
 			bool operator==(vertex& other);
 			
@@ -45,14 +51,14 @@ using namespace std;
 		Model();
 		Model(Model&);
 		~Model();
-		XMMATRIX Getobjectmatrix();
+		Matrix4x4 Getobjectmatrix();
 		Mesh loadMeshFromFile(char*);
 		void Shutdown();
 		bool Init(ID3D11Device*, ID3D11DeviceContext*, char*, char*);
 		void SetRotation(float, float, float);
-		void SetRotation(XMVECTOR);
+		void SetRotation(Vector3);
 		void Render(ID3D11DeviceContext*, ID3D11Device*);
-		XMFLOAT3 GetRotation();
+		Vector3 GetRotation();
 		int GetIndexCount();
 		ID3D11ShaderResourceView* GetTexture();
 #pragma endregion
@@ -63,16 +69,19 @@ using namespace std;
 		void ShutDownBuffers();
 		void SetDefaultTransform();
 		void RenderBuffers(ID3D11DeviceContext*);
+		bool SerialiseMesh(string fileLocation, Mesh mesh);
+		bool UnSerialiseMesh(string fileLocation , Mesh& mesh);
 #pragma endregion
 #pragma region Private vars
 	private:
+		
 		ID3D11Buffer* m_vertexBuf, * m_indexBuf;
 		int m_vertexCount, m_indexCount;
 		Texture* m_texture;
-		XMFLOAT3 m_Rotaion;
-		XMFLOAT3 m_scale;
-		XMFLOAT3 m_position;
-		XMFLOAT3 m_RotationOrigin;
+		Vector3 m_Rotaion;
+		Vector3 m_scale;
+		Vector3 m_position;
+
 #pragma endregion
 	};
 

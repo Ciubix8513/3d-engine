@@ -25,7 +25,7 @@ void ColorShader::Shutdown()
     ShutdownShader();
     return;
 }
-bool ColorShader::Render(ID3D11DeviceContext* ctxt, int indexCount, XMMATRIX world, XMMATRIX view, XMMATRIX project)
+bool ColorShader::Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project)
 {
     bool result;
     result = SetShaderParams(ctxt, world, view, project);
@@ -180,16 +180,16 @@ void ColorShader::OutputShaderErrorMsg(ID3D10Blob* msg, HWND hwnd, WCHAR* file)
     MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", file, MB_OK);
     return;
 }
-bool ColorShader::SetShaderParams(ID3D11DeviceContext* ctxt, XMMATRIX world, XMMATRIX view, XMMATRIX proj)
+bool ColorShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Matrix4x4 view, Matrix4x4 proj)
 {
     HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedSubresource;
     MatrixBuffer* dataPtr;
     unsigned int bufferNum;
 
-    world = XMMatrixTranspose(world);
-    view = XMMatrixTranspose(view);
-    proj = XMMatrixTranspose(proj);
+    world.Transpose();
+    view.Transpose();
+    proj.Transpose();
 
     result = ctxt->Map(m_matBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
     if (FAILED(result))

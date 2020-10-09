@@ -31,10 +31,10 @@ using namespace std;
 		
 		struct vertex
 		{
-			DirectX::XMFLOAT3 position;
-			DirectX::XMFLOAT4 color;
-			DirectX::XMFLOAT2 UV;
-			DirectX::XMFLOAT3 normal;
+			Vector3 position;
+			Vector4 color;
+			Vector2 UV;
+			Vector3 normal;
 		
 			bool operator==(vertex& other);
 			

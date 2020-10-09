@@ -20,8 +20,7 @@ namespace EngineMath
 #pragma region Functions
 		Matrix4x4 Transposed();
 		void Transpose();
-
-
+		float getDeterminant();
 		void SetRow(int row, Vector4 value);
 		Vector4 TransformVector(Vector4 v);
 	

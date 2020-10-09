@@ -94,6 +94,23 @@ void EngineMath::Matrix4x4::Transpose()
     _m30 = m._m03;  
 }
 
+float EngineMath::Matrix4x4::getDeterminant()
+{
+    return
+    _m03  * _m12  * _m21  * _m30  - _m02  * _m13  * _m21  * _m30  -
+    _m03  * _m11  * _m22  * _m30  + _m01  * _m13  * _m22  * _m30  +
+    _m02  * _m11  * _m23  * _m30  - _m01  * _m12  * _m23  * _m30  -
+    _m03  * _m12  * _m20  * _m31  + _m02  * _m13  * _m20  * _m31  +
+    _m03  * _m10  * _m22  * _m31  - _m00  * _m13  * _m22  * _m31  -
+    _m02  * _m10  * _m23  * _m31  + _m00  * _m12  * _m23  * _m31  +
+    _m03  * _m11  * _m20  * _m32  - _m01  * _m13  * _m20  * _m32  -
+    _m03  * _m10  * _m21  * _m32  + _m00  * _m13  * _m21  * _m32  +
+    _m01  * _m10  * _m23  * _m32  - _m00  * _m11  * _m23  * _m32  -
+    _m02  * _m11  * _m20  * _m33  + _m01  * _m12  * _m20  * _m33  +
+    _m02  * _m10  * _m21  * _m33  - _m00  * _m12  * _m21  * _m33  -
+    _m01  * _m10  * _m22  * _m33  + _m00  * _m11  * _m22  * _m33 ;
+}
+
 void EngineMath::Matrix4x4::SetRow(int row, Vector4 value)
 {
     switch (row)

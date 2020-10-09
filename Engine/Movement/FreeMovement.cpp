@@ -78,16 +78,17 @@ float roll = camera->m_RotZ * 0.0174532925f;
 	if (input->isKeyDown(m_Controls[4]))
 	{
 		Vector4 Direction = Vector4(0, 1, 0, 0);
-		Direction = rotMatrix * Direction;
+		//Direction = rotMatrix * Direction;
 
 		camera->SetPosition(Vector3(camera->GetPosition().x + (Direction.x * m_Speed * dTime), camera->GetPosition().y + (Direction.y * m_Speed * dTime), camera->GetPosition().z + (Direction.z * m_Speed * dTime)));
 	}
 	if (input->isKeyDown(m_Controls[5]))
 	{
 		Vector4 Direction = Vector4(0, -1, 0, 0);
-		Direction = rotMatrix * Direction;
+		//Direction = rotMatrix * Direction;
 		camera->SetPosition(Vector3(camera->GetPosition().x + (Direction.x * m_Speed * dTime), camera->GetPosition().y + (Direction.y * m_Speed * dTime), camera->GetPosition().z + (Direction.z * m_Speed * dTime)));
 	}
+
 
 	int Dx, Dy;
 	input->GetMouseDelta(Dx, Dy);

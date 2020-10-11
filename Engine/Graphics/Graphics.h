@@ -16,7 +16,7 @@
 #pragma endregion
 
 #pragma region Globals
-	const bool FullScreen = true;
+	const bool FullScreen = false;
 	const bool Vsync = true;
 	const float ScreenDepth = 1000.0f;
 	const float ScreenNear = .1f;
@@ -53,6 +53,9 @@
 		Bitmap* m_Coursor;
 		Text* m_Text;
 		Text::Sentence* sentences[4];	
+		Model* Axes;
+		Matrix4x4 m_baseView;
+		float scrW, scrH;
 #pragma endregion
 #pragma region Public Vars
 	public:

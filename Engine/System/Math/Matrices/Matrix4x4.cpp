@@ -1,6 +1,15 @@
 #include "Matrix4x4.h"
 
 
+Matrix4x4 EngineMath::Matrix4x4::Identity()
+{
+    return Matrix4x4(
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1);
+}
+
 EngineMath::Matrix4x4::Matrix4x4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)
 {
     _m00 = m00;
@@ -111,6 +120,11 @@ float EngineMath::Matrix4x4::getDeterminant()
     _m01  * _m10  * _m22  * _m33  + _m00  * _m11  * _m22  * _m33 ;
 }
 
+float EngineMath::Matrix4x4::trace()
+{
+    return  _m00 + _m11 + _m22 + _m33;
+}
+
 void EngineMath::Matrix4x4::SetRow(int row, Vector4 value)
 {
     switch (row)
@@ -157,18 +171,44 @@ Vector4 EngineMath::Matrix4x4::TransformVector(Vector4 v)
     return out;
 }
 
+Matrix4x4 EngineMath::Matrix4x4::Inversed()
+{
+    Matrix4x4 This = *this;
+    Matrix4x4 Squared = This * This;
+    Matrix4x4 Cubed = Squared * This;
+    Matrix4x4 A, B, C, D;
+    A = Identity() * (0.16666666666666666666666666666667f * (pow(This.trace(), 3) - 3 * This.trace() * Squared.trace() + 2 * Cubed.trace()));
+    B = This * (0.5f * (pow(This.trace(), 2) - Squared.trace()));
+    C = Squared * This.trace();
+    D = (A - B + C - Cubed) * (1 / This.getDeterminant());
+
+    return D;
+}
+
 Matrix4x4 EngineMath::Matrix4x4::operator+(Matrix4x4 m)
 {
-    return Matrix4x4(GetRow(0)+ m.GetRow(0), GetRow(1) + m.GetRow(1), GetRow(2) + m.GetRow(2), GetRow(3) + m.GetRow(3));
+    return Matrix4x4(
+        _m00 + m._m00, _m01 + m._m01, _m02 + m._m02, _m03 + m._m03,
+        _m10 + m._m10, _m11 + m._m11, _m12 + m._m12, _m13 + m._m13,
+        _m20 + m._m20, _m21 + m._m21, _m22 + m._m22, _m23 + m._m23,
+        _m30 + m._m30, _m31 + m._m31, _m32 + m._m32, _m33 + m._m33);
 }
 Matrix4x4 EngineMath::Matrix4x4::operator-(Matrix4x4 m)
 {
-    return Matrix4x4(GetRow(0) - m.GetRow(0), GetRow(1) - m.GetRow(1), GetRow(2) - m.GetRow(2), GetRow(3) - m.GetRow(3));
+    return Matrix4x4(
+        _m00 - m._m00, _m01 - m._m01, _m02 - m._m02, _m03 - m._m03,
+        _m10 - m._m10, _m11 - m._m11, _m12 - m._m12, _m13 - m._m13,
+        _m20 - m._m20, _m21 - m._m21, _m22 - m._m22, _m23 - m._m23,
+        _m30 - m._m30, _m31 - m._m31, _m32 - m._m32, _m33 - m._m33);
 
 }
 Matrix4x4 EngineMath::Matrix4x4::operator*(float c)
 {
-    return Matrix4x4(GetRow(0)* c, GetRow(2) * c, GetRow(3) * c, GetRow(4) * c);
+    return Matrix4x4(
+        _m00 * c, _m01 * c, _m02 * c, _m03 * c,
+        _m10 * c, _m11 * c, _m12 * c, _m13 * c,
+        _m20 * c, _m21 * c, _m22 * c, _m23 * c,
+        _m30 * c, _m31 * c, _m32 * c, _m33 * c);
 }
 Matrix4x4 EngineMath::Matrix4x4::operator/(float c)
 {
@@ -232,8 +272,25 @@ void EngineMath::Matrix4x4::operator/=(float c)
 }
 void EngineMath::Matrix4x4::operator=(Matrix4x4 m)
 {
-    for (int i = 0; i < 4; i++)    
-        SetRow(i, m.GetRow(i));
+    _m00 = m._m00;
+    _m01 = m._m01;
+    _m02 = m._m02;
+    _m03 = m._m03;
+
+    _m10 = m._m10;
+    _m11 = m._m11;
+    _m12 = m._m12;
+    _m13 = m._m13;
+
+    _m20 = m._m20;
+    _m21 = m._m21;
+    _m22 = m._m22;
+    _m23 = m._m23;
+
+    _m30 = m._m30;
+    _m31 = m._m31;
+    _m32 = m._m32;
+    _m33 = m._m33;
     return;
     
 }
@@ -248,14 +305,23 @@ Vector4 EngineMath::Matrix4x4::operator*(Vector4 v)
     return out;
 }
 
-EngineMath::Matrix4x4::operator DirectX::XMFLOAT4X4()
+bool EngineMath::Matrix4x4::operator==(Matrix4x4 m)
+{
+    return 
+        (_m00 == m._m00)&& (_m01 == m._m01)&& (_m02 == m._m02)&& (_m03 == m._m03)&&
+        (_m10 == m._m10)&& (_m11 == m._m11)&& (_m12 == m._m12)&& (_m13 == m._m13)&&
+        (_m20 == m._m20)&& (_m21 == m._m21)&& (_m22 == m._m22)&& (_m23 == m._m23)&& 
+        (_m30 == m._m30)&& (_m31 == m._m31)&& (_m32 == m._m32)&& (_m33 == m._m33);
+}
+
+/*/EngineMath::Matrix4x4::operator DirectX::XMFLOAT4X4()
 {
     return DirectX::XMFLOAT4X4(
         _m00, _m01, _m02, _m03,
         _m10, _m11, _m12, _m13,
         _m20, _m21, _m22, _m23,
         _m30, _m31, _m32, _m33);
-}
+}*/
 
 Vector4 EngineMath::Matrix4x4::operator[](int index)
 {

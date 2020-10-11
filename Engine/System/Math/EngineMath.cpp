@@ -95,6 +95,28 @@ Matrix4x4 EngineMath::RotationPitchYawRoll(float pitch, float yaw, float roll) /
     Matrix4x4 buff = (r.operator*(p));
     return buff.operator*(y);
 }
+Matrix4x4 EngineMath::RotationPitchYawRoll(Vector3 rpy)
+{
+    Matrix4x4 p, y, r;
+    y = Matrix4x4(
+        cos(rpy.y), 0, -sin(rpy.y), 0,
+        0, 1, 0, 0,
+        sin(rpy.y), 0, cos(rpy.y), 0,
+        0, 0, 0, 1);
+    r = Matrix4x4(
+        cos(rpy.z), sin(rpy.z), 0, 0,
+        -sin(rpy.z), cos(rpy.z), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1);
+    p = Matrix4x4(
+        1, 0, 0, 0,
+        0, cos(rpy.x), sin(rpy.x), 0,
+        0, -sin(rpy.x), cos(rpy.x), 0,
+        0, 0, 0, 1);
+
+    Matrix4x4 buff = (r.operator*(p));
+    return buff.operator*(y);
+}
 Matrix4x4 EngineMath::GetTramsformationMatrix(Vector3 posistion, Vector3 Rotation, Vector3 Scale)
 {
     Matrix4x4 scale, translation, rotation;

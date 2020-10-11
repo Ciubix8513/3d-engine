@@ -16,6 +16,7 @@ namespace EngineMath
 	extern Matrix4x4 Identity();
 	extern Matrix4x4 LookAtMatrix(Vector3 CameraPosition, Vector3 CameraForward, Vector3 cameraUp);
 	extern Matrix4x4 RotationPitchYawRoll(float pitch, float yaw, float roll);
+	extern Matrix4x4 RotationPitchYawRoll(Vector3 rpy);
 	extern Matrix4x4 GetTramsformationMatrix(Vector3 posistion, Vector3 Rotation, Vector3 Scale);
 #pragma region plain funcs
 	extern float PlaneDotCoord(Plane plane, Vector3 point);

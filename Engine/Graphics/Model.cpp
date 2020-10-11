@@ -378,6 +378,8 @@ bool Model::InitBuffers(ID3D11Device* device, char* file)
 		m_vertexCount = mesh->vertexCount;
 		vertices = mesh->vertices;
 		indices = mesh->indecies;
+		
+		mesh = 0;
 	}
 
 

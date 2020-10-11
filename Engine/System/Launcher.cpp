@@ -1,12 +1,13 @@
 #include "Launcher.h"
 #include "System.h"
-
-
+#include "Math/EngineMath.h"
+using namespace EngineMath;
 
 
 
 int main()
 	{
+
 		System* system;
 		bool result;
 		system = new System();

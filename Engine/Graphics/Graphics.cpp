@@ -6,6 +6,7 @@
 		m_camera = 0;
 		m_colorShader =0;
 		m_model = 0;
+		Axes = 0;
 		m_texShader = 0;
 		m_LightShader = 0;
 		m_Light = 0;
@@ -27,8 +28,10 @@
 
 	bool Graphics::Init(int scW, int scH, HWND hwnd)
 	{
+		scrW = scW;
+		scrH = scH;
 		bool result;
-		Matrix4x4 baseView;
+		
 		m_D3d = new D3d;
 		if (!m_D3d)
 			return false;
@@ -37,7 +40,7 @@
 			return false;
 		m_camera->SetPosition(0, 0, -1);
 		m_camera->Render();
-		baseView = m_camera->GetViewMatrix();
+		m_baseView = m_camera->GetViewMatrix();
 		
 
 
@@ -47,6 +50,9 @@
 	
 		m_colorShader = new ColorShader;
 		if (!m_colorShader)
+			return false;
+		Axes = new Model;
+		if (!Axes)
 			return false;
 		m_model = new Model;
 		if (!m_model)
@@ -69,6 +75,12 @@
 		if (!result)
 		{
 			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", 0x00000000L);
+			return false;
+		}
+		result = Axes->Init(m_D3d->getDevice(), m_D3d->getDeviceContext(), (char*)"../Engine/Testtex.tga", (char*)"../Engine/data/Sphere.obj");
+		if (!result)
+		{
+			MessageBox(hwnd, L"Could not initialize the axes object.", L"Error", 0x00000000L);
 			return false;
 		}
 		result = m_colorShader->Init(m_D3d->getDevice(),hwnd);
@@ -105,7 +117,7 @@
 
 
 
-		result = m_Text->Init(m_D3d->getDevice(), m_D3d->getDeviceContext(), hwnd, scW, scH, baseView);
+		result = m_Text->Init(m_D3d->getDevice(), m_D3d->getDeviceContext(), hwnd, scW, scH, m_baseView);
 		if (!result)
 		{
 			MessageBox(hwnd, L"Could not initialize the Text object.", L"Error", 0x00000000L);
@@ -172,6 +184,12 @@
 			delete m_model;
 			m_model = 0;
 		}	
+		if(Axes)
+		{
+			Axes->Shutdown();
+			delete Axes;
+			Axes = 0;
+		}
 		if (m_D3d)
 		{
 			m_D3d->ShutDown();
@@ -281,17 +299,14 @@
 				return false;
 
 		}
+		/* * RotationPitchYawRoll(m_camera->GetRotation()).Inversed()*/
+		//m_camera->GetPosition().x, m_camera->GetPosition().y, m_camera->GetPosition().z - 10
+		//Vector3((scrW / 2) * -1 + 20, (scrH / 2) - 40,10), Vector3(0, 0, 0), Vector3(1,1,1))
+		Axes->Render(m_D3d->getDeviceContext(), m_D3d->getDevice());
+		result = m_colorShader->Render(m_D3d->getDeviceContext(), Axes->GetIndexCount(), world,m_baseView, proj);
+		if (!result)
+			return false;
 	
-		
-		/*
-
-		result = m_Coursor->Render(m_D3d->getDeviceContext(), posX, -posY);
-		if (!result)
-			return false;
-		result = m_texShader->Render(m_D3d->getDeviceContext(), m_Coursor->GetIndexCount(), world, view, ortho, Identity(), m_Coursor->GetTexture());
-		if (!result)
-			return false;
-			*/
 
 		m_D3d->ToggleZBuffer(true);
 		m_D3d->ToggleAlphaBlend(false);

@@ -8,6 +8,10 @@ namespace EngineMath
 {
 	class Matrix4x4
 	{
+
+	private:
+		Matrix4x4 Identity();
+
 	public:
 #pragma region Creation + constants
 		Matrix4x4( float m00, float m01, float m02, float m03,
@@ -20,9 +24,14 @@ namespace EngineMath
 #pragma region Functions
 		Matrix4x4 Transposed();
 		void Transpose();
+		
 		float getDeterminant();
+		float trace();
+		
 		void SetRow(int row, Vector4 value);
 		Vector4 TransformVector(Vector4 v);
+		Matrix4x4 Inversed();
+			
 	
 #pragma endregion
 
@@ -40,7 +49,9 @@ namespace EngineMath
 		void operator= (Matrix4x4 m);
 		Vector4 operator[] (int index);
 		Vector4 operator* (Vector4 v);
-		operator DirectX::XMFLOAT4X4() ;
+		bool operator== (Matrix4x4);
+		//operator DirectX::XMFLOAT4X4() ;
+	
 #pragma endregion
 
 

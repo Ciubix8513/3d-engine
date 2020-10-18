@@ -187,17 +187,15 @@ bool ColorShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Ma
     MatrixBuffer* dataPtr;
     unsigned int bufferNum;
 
-    world.Transpose();
-    view.Transpose();
-    proj.Transpose();
+
 
     result = ctxt->Map(m_matBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
     if (FAILED(result))
         return false;
     dataPtr = (MatrixBuffer*)mappedSubresource.pData;
-    dataPtr->world = world;
-    dataPtr->view = view;
-    dataPtr->projection = proj;
+    dataPtr->world = world;//.Transposed();
+    dataPtr->view = view.Transposed();
+    dataPtr->projection = proj.Transposed();
 
     ctxt->Unmap(m_matBuffer, 0);
     bufferNum = 0;

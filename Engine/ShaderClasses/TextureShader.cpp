@@ -29,10 +29,10 @@ bool TextureShader::Init(ID3D11Device* device, HWND hwnd)
 	return result;
 }
 
-bool TextureShader::Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project, Matrix4x4 object, ID3D11ShaderResourceView* texture)
+bool TextureShader::Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project , ID3D11ShaderResourceView* texture)
 {
 	bool result;
-	result = SetShaderParams(ctxt, world, view, project,object, texture);
+	result = SetShaderParams(ctxt, world, view, project, texture);
 	if (!result)
 		return false;
 	RenderShader(ctxt, indexCount);
@@ -198,15 +198,16 @@ void TextureShader::OutputShaderErrorMsg(ID3D10Blob* msg, HWND hwnd, WCHAR* file
 	return;
 }
 
-bool TextureShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Matrix4x4 view, Matrix4x4 proj, Matrix4x4 object, ID3D11ShaderResourceView* texture)
+bool TextureShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Matrix4x4 view, Matrix4x4 proj,  ID3D11ShaderResourceView* texture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
 	MatrixBuffer* dataPtr;
 	unsigned int bufferNum;
 
-	object.Transpose();
-	world.Transpose();
+	
+
+	//world.Transpose();
 	view.Transpose();
 	proj.Transpose();
 
@@ -216,8 +217,7 @@ bool TextureShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, 
 	dataPtr = (MatrixBuffer*)mappedSubresource.pData;
 	dataPtr->world = world;
 	dataPtr->view = view;
-	dataPtr->projection = proj;
-	dataPtr->object = object;
+	dataPtr->projection = proj;	
 	ctxt->Unmap(m_matBuffer, 0);
 	bufferNum = 0;
 	ctxt->VSSetConstantBuffers(bufferNum, 1, &m_matBuffer);

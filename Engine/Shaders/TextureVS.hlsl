@@ -4,7 +4,7 @@ cbuffer MatrixBuffer
 	matrix worldMatrix;
 	matrix viewMatrix;
 	matrix projectionMatrix;
-	matrix objectMatrix;
+
 };
 //stucts
 struct Vertex
@@ -26,7 +26,7 @@ PixelInput TextureVertexShader(Vertex input)
 	
 	PixelInput output;
 	input.position.w = 1.0f;
-//	output.position = mul(input.position, objectMatrix);
+
 	output.position = mul(input.position, worldMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);

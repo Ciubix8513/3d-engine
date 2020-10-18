@@ -18,7 +18,8 @@ Model::~Model()
 Matrix4x4 Model::Getobjectmatrix()
 {
 	auto a =
-	 GetTramsformationMatrix(m_position, m_Rotaion, m_scale);
+		
+	TransformationMatrix(m_position, m_Rotaion, m_scale);
 	return a;
 }
 
@@ -222,9 +223,11 @@ bool Model::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext, char*
 	result = InitBuffers(device,file);
 	if (!result)
 		return false;
-	result = LoadTexture(device, deviceContext, textureFilename);\
-	if (!result)
-			return false;
+	result = LoadTexture(device, deviceContext, textureFilename);
+	if (!result) {
+		cout << "Could not load texture";
+		return false;
+	}
 	return true;
 }
 

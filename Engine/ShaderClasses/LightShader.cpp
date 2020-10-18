@@ -278,8 +278,8 @@ bool LightShader::SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Ma
     CameraBuffer* dataPtr2;
     unsigned int bufferNum;
 
-    object.Transpose();
-    world.Transpose();
+    //object.Transpose();
+    //world.Transpose();
     view.Transpose();
     proj.Transpose();
 

@@ -77,7 +77,7 @@
 			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", 0x00000000L);
 			return false;
 		}
-		result = Axes->Init(m_D3d->getDevice(), m_D3d->getDeviceContext(), (char*)"../Engine/Testtex.tga", (char*)"../Engine/data/Sphere.obj");
+		result = Axes->Init(m_D3d->getDevice(), m_D3d->getDeviceContext(), (char*)"../Engine/data/AxesTex.tga", (char*)"../Engine/data/Axes.obj");
 		if (!result)
 		{
 			MessageBox(hwnd, L"Could not initialize the axes object.", L"Error", 0x00000000L);
@@ -267,10 +267,10 @@
 
 	bool Graphics::Render(int posX, int posY)
 	{
-		Matrix4x4 view, proj, world ,ortho;
+		Matrix4x4 view, proj, world, ortho;
 		bool result;
 
-		
+
 
 		m_D3d->BeginScene(0, 0, 0, 0);
 		m_camera->Render();
@@ -278,14 +278,14 @@
 		world = m_D3d->GetWorldMat();
 		proj = m_D3d->GetProjectionMat();
 		ortho = m_D3d->GetOrthoMat();
-		
+
 
 
 
 
 		m_model->Render(m_D3d->getDeviceContext(), m_D3d->getDevice());
-	result = m_LightShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj, m_model->Getobjectmatrix(), m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_Light->GetAmbientColor(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower(), m_camera->GetPosition());
-	//	result = m_colorShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj);
+		result = m_LightShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj, m_model->Getobjectmatrix(), m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_Light->GetAmbientColor(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower(), m_camera->GetPosition());
+		//	result = m_colorShader->Render(m_D3d->getDeviceContext(), m_model->GetIndexCount(), world, view, proj);
 		if (!result)
 			return false;
 
@@ -302,15 +302,20 @@
 		/* * RotationPitchYawRoll(m_camera->GetRotation()).Inversed()*/
 		//m_camera->GetPosition().x, m_camera->GetPosition().y, m_camera->GetPosition().z - 10
 		//Vector3((scrW / 2) * -1 + 20, (scrH / 2) - 40,10), Vector3(0, 0, 0), Vector3(1,1,1))
+
 		Axes->Render(m_D3d->getDeviceContext(), m_D3d->getDevice());
-		result = m_colorShader->Render(m_D3d->getDeviceContext(), Axes->GetIndexCount(), world,m_baseView, proj);
+
+		//m_D3d->getDeviceContext(), Axes->GetIndexCount(), , m_baseView, , proj, Axes->GetTexture()
+		result = m_texShader->Render(m_D3d->getDeviceContext(),Axes->GetIndexCount(), TranslationScaleMatrix(Vector3(1.26f, 1, 1), .15f) * RotationPitchYawRoll(m_camera->GetRotation()).Inversed(),m_baseView,proj,Axes->GetTexture());
 		if (!result)
 			return false;
-	
+
+
+
 
 		m_D3d->ToggleZBuffer(true);
 		m_D3d->ToggleAlphaBlend(false);
-		
+
 		m_D3d->EndScene();
 		cout << "Rendered scene \n";
 

@@ -16,7 +16,7 @@ float4 TexturePixelShader(PixelInput input) : SV_TARGET
 
 
 	texColors = shaderTex.Sample(ss, input.UV);
-
+/*
     if (texColors.r > .8f)
     {
         texColors.a = 0.0f;
@@ -27,10 +27,11 @@ float4 TexturePixelShader(PixelInput input) : SV_TARGET
     {
         texColors.a = 1.0f;
     }
+	*/
 	
-	
-	
-    return texColors;
+    //texColors.a = 1.0f;
+    
+    return texColors;//    float4(1, 1, 1, 1);
  
 
 }

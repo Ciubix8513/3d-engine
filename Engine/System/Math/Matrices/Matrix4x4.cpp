@@ -85,22 +85,26 @@ void EngineMath::Matrix4x4::Transpose()
     for (int i = 0; i < 4; i++)    
         m.SetRow(i,GetRow(i));
     
-
+    _m00 = m._m00;
     _m01 = m._m10;
     _m02 = m._m20;
     _m03 = m._m30;
 
     _m10 = m._m01;
+    _m11 = m._m11;
     _m12 = m._m21;
     _m13 = m._m31;
 
     _m20 = m._m02;
     _m21 = m._m12;
+    _m22 = m._m22;
     _m23 = m._m32;
 
     _m31 = m._m13;
     _m32 = m._m23;
-    _m30 = m._m03;  
+    _m30 = m._m03;
+    _m33 = m._m33;
+
 }
 
 float EngineMath::Matrix4x4::getDeterminant()

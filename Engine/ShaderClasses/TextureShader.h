@@ -19,7 +19,7 @@ private:
 		Matrix4x4 world;
 		Matrix4x4 view;
 		Matrix4x4 projection;
-		Matrix4x4 object;
+	
 	};
 
 #pragma region public funcs
@@ -29,14 +29,14 @@ public:
 	TextureShader(const TextureShader&);
 	void ShutDown();
 	bool Init(ID3D11Device* device, HWND hwnd);
-	bool Render(ID3D11DeviceContext*, int, Matrix4x4, Matrix4x4, Matrix4x4, Matrix4x4,ID3D11ShaderResourceView*);
+	bool Render(ID3D11DeviceContext* ctxt, int indexCount, Matrix4x4 world, Matrix4x4 view, Matrix4x4 project, ID3D11ShaderResourceView* texture);
 #pragma endregion
 #pragma region  private Funcs
 private:
 	bool InitShader(ID3D11Device*, HWND, WCHAR*, WCHAR*);
 	void ShutdownShader();
 	void OutputShaderErrorMsg(ID3D10Blob*, HWND, WCHAR*);
-	bool SetShaderParams(ID3D11DeviceContext*, Matrix4x4, Matrix4x4, Matrix4x4, Matrix4x4, ID3D11ShaderResourceView*);
+	bool SetShaderParams(ID3D11DeviceContext* ctxt, Matrix4x4 world, Matrix4x4 view, Matrix4x4 proj, ID3D11ShaderResourceView* texture);
 	void RenderShader(ID3D11DeviceContext*, int);
 #pragma endregion
 #pragma region private Vars

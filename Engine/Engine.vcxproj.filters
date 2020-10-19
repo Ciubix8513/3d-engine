@@ -201,6 +201,9 @@
     <ClCompile Include="System\Math\Vectors\Plane.cpp">
       <Filter>Main System\Math\Vectors\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="System\Math\Vectors\Quarernion.cpp">
+      <Filter>Main System\Math\Vectors\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">
@@ -285,6 +288,9 @@
       <Filter>Main System\Math</Filter>
     </ClInclude>
     <ClInclude Include="System\Math\Vectors\Plane.h">
+      <Filter>Main System\Math\Vectors\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Math\Vectors\Quarernion.h">
       <Filter>Main System\Math\Vectors\Headers</Filter>
     </ClInclude>
   </ItemGroup>

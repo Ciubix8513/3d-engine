@@ -30,7 +30,7 @@ namespace EngineMath
 #pragma region plain funcs
 	float PlaneDotCoord(Plane plane, Vector3 point);
 	Vector3 Normalized(Vector3 v);
-
+	
 #pragma endregion
 
 }

@@ -25,7 +25,10 @@
         IDXGIFactory* factory;
         IDXGIAdapter* adapter;
         IDXGIOutput* adapterOutput;
-        unsigned int numModes, numerator, denominator, stringLength;
+        UINT numModes = 0;
+        UINT numerator = 0;
+        UINT denominator = 0;
+        UINT stringLength = 0;
 
         int error;
         DXGI_MODE_DESC* displayModelist;

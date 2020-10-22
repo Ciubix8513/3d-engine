@@ -19,7 +19,7 @@ class Font
 private:
 	struct FontType
 	{
-		double left, right;
+		float left, right;
 		int size;
 	};
 	struct Vertex

@@ -55,7 +55,7 @@ const bool FullScreen = false;
 		Text::Sentence* sentences[4];	
 		Model* Axes;
 		Matrix4x4 m_baseView;
-		float scrW, scrH;
+		int scrW, scrH;
 #pragma endregion
 #pragma region Public Vars
 	public:

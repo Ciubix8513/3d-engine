@@ -242,7 +242,7 @@
 		}
 		if (!result)
 			return false;
-		_itoa_s(((float)time / 1000), tempString, 10);//convert int to string
+		_itoa_s((int)(time / 1000), tempString, 10);//convert int to string
 		strcpy_s(Output, "Time: ");
 		strcat_s(Output, tempString);
 		result = m_Text->UpdateSentence(sentences[2], Output, 20, 20, 1.0f, 1.0f, 1.0f, m_D3d->getDeviceContext());
@@ -258,7 +258,7 @@
 
 
 
-		Vector3 a = Vector3(0.0f, 0, .2 * time);
+		Vector3 a = Vector3(0.0f, 0, .2f * time);
 		m_model->SetRotation(m_model->GetRotation() + a);
 
 		return Render(posX, posY);

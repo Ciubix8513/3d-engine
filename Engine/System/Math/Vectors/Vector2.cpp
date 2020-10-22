@@ -36,7 +36,7 @@ EngineMath::Vector2 EngineMath::Vector2::Zero()
 
 float EngineMath::Vector2::Length()
 {
-	return sqrt(x * x + y * y);
+	return (float)sqrt((float)(x * x + y * y));
 }
 float EngineMath::Vector2::Length(Vector2& v)
 {

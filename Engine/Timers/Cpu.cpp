@@ -59,7 +59,7 @@ void Cpu::Init()
 	if (err != ERROR_SUCCESS)
 			m_canReadcpu = false;
 	
-	m_lastsampleTime = GetTickCount();
+	m_lastsampleTime = GetTickCount64();
 
 	return;
 }
@@ -99,9 +99,9 @@ void Cpu::Frame()
 	PDH_FMT_COUNTERVALUE value;
 	if(m_canReadcpu)
 	{
-		if((m_lastsampleTime + 1000)<GetTickCount())
+		if((m_lastsampleTime + 1000)<GetTickCount64())
 		{
-			m_lastsampleTime = GetTickCount();
+			m_lastsampleTime = GetTickCount64();
 			PdhCollectQueryData(m_QueryHandle);
 			PdhGetFormattedCounterValue(m_CountHandler, PDH_FMT_LONG, NULL, &value);
 			m_CpuUsage = value.longValue;

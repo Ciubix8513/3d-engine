@@ -35,7 +35,7 @@ private:
 	bool m_canReadcpu;
 	HQUERY m_QueryHandle;
 	HCOUNTER m_CountHandler;
-	unsigned long m_lastsampleTime;
+	ULONG m_lastsampleTime;
 	long m_CpuUsage;
 #pragma endregion
 

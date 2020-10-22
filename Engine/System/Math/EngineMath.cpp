@@ -13,7 +13,7 @@ Vector4 EngineMath::TransformVector(Vector4 v, Matrix4x4 m)
 Matrix4x4 EngineMath::PerspectiveProjectionMatrix(float FOV, float screenAspect, float screenNear, float screenDepth)
 {
     float xScale, yScale, C,  D;
-    yScale = 1 / tan(FOV / 2);
+    yScale = 1 / (float)tan(FOV / 2);
     xScale = yScale / screenAspect;
 
 
@@ -79,19 +79,19 @@ Matrix4x4 EngineMath::RotationPitchYawRoll(float P, float Y, float R) // p = x Y
     float roll = R * Deg2Rad;
     Matrix4x4 p, y, r;
     y = Matrix4x4(
-        cos(yaw), 0, -sin(yaw), 0,
+       (float)cos(yaw), 0, (float)-sin(yaw), 0,
         0, 1, 0, 0,
-         sin(yaw), 0, cos(yaw), 0,
+        (float)sin(yaw), 0, (float)cos(yaw), 0,
         0, 0, 0, 1);
     r = Matrix4x4(
-        cos(roll), sin(roll), 0, 0,
-        -sin(roll), cos(roll), 0, 0,
+        (float)cos(roll), (float)sin(roll), 0, 0,
+        (float)-sin(roll), (float)cos(roll), 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1);
     p = Matrix4x4(
         1, 0, 0, 0,
-        0, cos(pitch), sin(pitch),0,
-        0, -sin(pitch), cos(pitch), 0,
+        0, (float)cos(pitch), (float)sin(pitch),0,
+        0, (float)-sin(pitch), (float)cos(pitch), 0,
         0, 0, 0, 1);
 
     Matrix4x4 buff = (r.operator*(p));
@@ -105,19 +105,19 @@ Matrix4x4 EngineMath::RotationPitchYawRoll(Vector3 rpy)
     float roll = rpy.z * Deg2Rad;
     Matrix4x4 p, y, r;
     y = Matrix4x4(
-        cos(yaw), 0, -sin(yaw), 0,
+        (float)cos(yaw), 0, (float)-sin(yaw), 0,
         0, 1, 0, 0,
-        sin(yaw), 0, cos(yaw), 0,
+        (float)sin(yaw), 0, (float)cos(yaw), 0,
         0, 0, 0, 1);
     r = Matrix4x4(
-        cos(roll), sin(roll), 0, 0,
-        -sin(roll), cos(roll), 0, 0,
+        (float)cos(roll), (float)sin(roll), 0, 0,
+        (float)-sin(roll), (float)cos(roll), 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1);
     p = Matrix4x4(
         1, 0, 0, 0,
-        0, cos(pitch), sin(pitch), 0,
-        0, -sin(pitch), cos(pitch), 0,
+        0, (float)cos(pitch), (float)sin(pitch), 0,
+        0, (float)-sin(pitch), (float)cos(pitch), 0,
         0, 0, 0, 1);
 
     Matrix4x4 buff = (r.operator*(p));

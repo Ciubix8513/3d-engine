@@ -43,12 +43,12 @@ Quaternion::Quaternion(Vector2 xy, Vector2 zw)
 Quaternion::Quaternion(Vector3 rotation)
 {
 	Vector3 rot = rotation * Deg2Rad;
-	double cy = cos(rot.y * 0.5);
-	double sy = sin(rot.y * 0.5);
-	double cp = cos(rot.x * 0.5);
-	double sp = sin(rot.x * 0.5);
-	double cr = cos(rot.z * 0.5);
-	double sr = sin(rot.z * 0.5);
+	float cy = (float)cos(rot.y * 0.5);
+	float sy = (float)sin(rot.y * 0.5);
+	float cp = (float)cos(rot.x * 0.5);
+	float sp = (float)sin(rot.x * 0.5);
+	float cr = (float)cos(rot.z * 0.5);
+	float sr = (float)sin(rot.z * 0.5);
 
 	
 	w = cr * cp * cy + sr * sp * sy;

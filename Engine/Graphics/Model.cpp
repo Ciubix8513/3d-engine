@@ -16,11 +16,9 @@ Model::~Model()
 }
 
 Matrix4x4 Model::Getobjectmatrix()
-{
-	auto a =
-		
-	TransformationMatrix(m_position, m_Rotaion, m_scale);
-	return a;
+{	
+	
+	return TransformationMatrix(m_position, m_Rotaion, m_scale);;
 }
 
 
@@ -41,7 +39,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	cout << "opened file"<<endl;
 	int vCount = 0 , vtCount = 0, vnCount = 0, fCount = 0;
 
-	vector<Vector2> a;
+	//vector<Vector2> a;
 	
 
 	vector<Vector3> Vertices, Normals;
@@ -63,14 +61,14 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 				else
 				{
 					if (XYZ == 0)
-						currentVec.x = atof(currentFloat.c_str());
+						currentVec.x = (float)atof(currentFloat.c_str());
 					if (XYZ == 1)
-						currentVec.y = atof(currentFloat.c_str());
+						currentVec.y = (float)atof(currentFloat.c_str());
 					XYZ++;
 					currentFloat = ' ';
 				}
 				if (XYZ == 2)
-					currentVec.z = atof(currentFloat.c_str());
+					currentVec.z = (float)atof(currentFloat.c_str());
 			}
 
 			Vertices.push_back(currentVec);
@@ -90,12 +88,12 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 				else
 				{
 					if (XY == 0)
-						currentVec.x = atof(currentFloat.c_str());
+						currentVec.x = (float)atof(currentFloat.c_str());
 					XY++;
 					currentFloat = ' ';
 				}
 				if (XY == 1)
-					currentVec.y = atof(currentFloat.c_str());
+					currentVec.y = (float)atof(currentFloat.c_str());
 			}
 
 			UVs.push_back(currentVec);
@@ -115,14 +113,14 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 				else
 				{
 					if (XYZ == 0)
-						currentVec.x = atof(currentFloat.c_str());
+						currentVec.x = (float)atof(currentFloat.c_str());
 					if (XYZ == 1)
-						currentVec.y = atof(currentFloat.c_str());
+						currentVec.y = (float)atof(currentFloat.c_str());
 					XYZ++;
 					currentFloat = ' ';
 				}
 				if (XYZ == 2)
-					currentVec.z = atof(currentFloat.c_str());
+					currentVec.z = (float)atof(currentFloat.c_str());
 			}
 
 			Normals.push_back(currentVec);
@@ -152,17 +150,17 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 					switch (Index)
 					{
 					case 0:
-						currentVertex.position = Vs[atof(curentIndex.c_str()) - 1];
+						currentVertex.position = Vs[(UINT)atof(curentIndex.c_str()) - 1];
 						Index++;
 						curentIndex = ' ';
 						break;
 					case 1:
-						currentVertex.UV = VTs[atof(curentIndex.c_str()) - 1];
+						currentVertex.UV = VTs[(UINT)atof(curentIndex.c_str()) - 1];
 						Index++;
 						curentIndex = ' ';
 						break;
 					case 2:
-						currentVertex.normal = VNs[atof(curentIndex.c_str()) - 1];
+						currentVertex.normal = VNs[(UINT)atof(curentIndex.c_str()) - 1];
 						Index++;
 						Index = 0;
 						Tris.push_back(currentVertex);
@@ -171,11 +169,12 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 					}
 				}
 			}
-			currentVertex.normal = VNs[atof(curentIndex.c_str()) - 1];
+			currentVertex.normal = VNs[(UINT)atof(curentIndex.c_str()) - 1];
 			Tris.push_back(currentVertex);
 		}
 	}
 	file.close();
+
 	auto Faces = Tris;
 	vector<vertex> FinalVertices;
 	vector<unsigned long> Indecies;
@@ -183,7 +182,8 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	{
 		for (int j = 0; j < Faces.size(); j++)
 		{
-			if (Faces[i] == Faces[j]) {
+			if (Faces[i] == Faces[j]) 
+			{
 				
 				Indecies.push_back(j);
 				FinalVertices.push_back(Faces[i]);
@@ -191,10 +191,14 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 			}
 		}
 	a:
-		cout << ' '<<endl;
+		cout << '\n';
 	}
+	Vertices.clear();
+	Normals.clear();
+	Tris.clear();
+	UVs.clear();
 
-	
+	/*
 	auto SetVertices = FinalVertices;
 	auto Setindecies = Indecies;
 
@@ -202,15 +206,22 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	mesh.vertexCount = SetVertices.size();
 	mesh.indecies = new unsigned long [Setindecies.size()];
 	mesh.vertices = new vertex[SetVertices.size()];
-	for (size_t i = 0; i < mesh.vertexCount; i++)
-	{
-		mesh.vertices[i] = SetVertices[i];
-	}
-	for (size_t i = 0; i < mesh.indexCount; i++)
-	{
+	for (size_t i = 0; i < mesh.vertexCount; i++)	
+		mesh.vertices[i] = SetVertices[i];	
+	for (size_t i = 0; i < mesh.indexCount; i++)	
 		mesh.indecies[i] = Setindecies[i];
-	}
-	return mesh;
+	*/
+	
+	mesh.indexCount = Indecies.size();
+	mesh.vertexCount = FinalVertices.size();
+	mesh.indecies = new unsigned long[Indecies.size()];
+	mesh.vertices = new vertex[FinalVertices.size()];
+	for (size_t i = 0; i < mesh.vertexCount; i++)
+		mesh.vertices[i] = FinalVertices[i];
+	for (size_t i = 0; i < mesh.indexCount; i++)
+		mesh.indecies[i] = Indecies[i];
+
+	return mesh;	
 }
 
 
@@ -373,15 +384,19 @@ bool Model::InitBuffers(ID3D11Device* device, char* file)
 		indices[1] = 1;
 		indices[2] = 2;
 	}
-	else {
+	else 
+	{
 		Mesh* mesh = &loadMeshFromFile(file);
-		if (mesh == &Mesh())
+		if (!mesh) 
+		{
+			cout << "Failed to load mesh " << file << " loading a triangle instead";
 			goto Default;
+		}
 		m_indexCount = mesh->indexCount;
 		m_vertexCount = mesh->vertexCount;
 		vertices = mesh->vertices;
 		indices = mesh->indecies;
-		
+
 		mesh = 0;
 	}
 

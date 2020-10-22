@@ -181,8 +181,8 @@ Matrix4x4 EngineMath::Matrix4x4::Inversed()
     Matrix4x4 Squared = This * This;
     Matrix4x4 Cubed = Squared * This;
     Matrix4x4 A, B, C, D;
-    A = Identity() * (0.16666666666666666666666666666667f * (pow(This.trace(), 3) - 3 * This.trace() * Squared.trace() + 2 * Cubed.trace()));
-    B = This * (0.5f * (pow(This.trace(), 2) - Squared.trace()));
+    A = Identity() * (0.16666666666666666666666666666667f * (float)(pow(This.trace(), 3) - 3 * (float)This.trace() * Squared.trace() + 2 * (float)Cubed.trace()));
+    B = This * (0.5f * (float)(pow(This.trace(), 2) - Squared.trace()));
     C = Squared * This.trace();
     D = (A - B + C - Cubed) * (1 / This.getDeterminant());
 

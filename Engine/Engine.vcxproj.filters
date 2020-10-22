@@ -118,6 +118,21 @@
     <Filter Include="Main System\ECS">
       <UniqueIdentifier>{768754f7-b49a-4ecb-83f4-8b16b7818618}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main System\ECS\Components">
+      <UniqueIdentifier>{cf4d5b82-3e81-4bbd-bd80-bed9536fa51d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\ECS\Components\Rendering">
+      <UniqueIdentifier>{ee3c1f8a-2524-46d2-a949-137e6f90b5f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\ECS\Components\General">
+      <UniqueIdentifier>{07d4194e-5141-4467-aa0f-4e2942902091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\ECS\Headers">
+      <UniqueIdentifier>{2b707903-6069-4f57-9d19-cad09197e8a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\ECS\Sources">
+      <UniqueIdentifier>{a75efe37-e095-48e1-99dd-4c5f924c61e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderClasses\LightShader.cpp">
@@ -207,6 +222,9 @@
     <ClCompile Include="System\Math\Vectors\Quarernion.cpp">
       <Filter>Main System\Math\Vectors\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Entity.cpp">
+      <Filter>Main System\ECS\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">
@@ -295,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="System\Math\Vectors\Quarernion.h">
       <Filter>Main System\Math\Vectors\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity.h">
+      <Filter>Main System\ECS\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

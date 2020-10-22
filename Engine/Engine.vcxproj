@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Entity.cpp" />
     <ClCompile Include="Graphics\Bitmap.cpp" />
     <ClCompile Include="Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Graphics\Camera\Frustum.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Timers\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Entity.h" />
     <ClInclude Include="Graphics\Bitmap.h" />
     <ClInclude Include="Graphics\Camera\Camera.h" />
     <ClInclude Include="Graphics\Camera\Frustum.h" />

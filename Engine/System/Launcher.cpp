@@ -7,7 +7,7 @@ using namespace EngineMath;
 
 int main()
 	{
-
+		
 		System* system;
 		bool result;
 		system = new System();

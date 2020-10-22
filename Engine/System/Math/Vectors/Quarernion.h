@@ -12,10 +12,12 @@ public:
 	Quaternion(Vector4 xyzw);
 	Quaternion(Vector3 xyz, float w);
 	Quaternion(Vector2 xy, Vector2 zw);
-	
+	Quaternion(Vector3 rotation);
+	Quaternion(float x, float y, float z);
+
 	
 	bool operator==(Quaternion other);
-
+	Quaternion operator*(Quaternion other);
 
 public:
 	float x, y, z, w;

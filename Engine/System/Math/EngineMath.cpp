@@ -74,9 +74,9 @@ Matrix4x4 EngineMath::LookAtMatrix(Vector3 Eye, Vector3 At, Vector3 up)
 
 Matrix4x4 EngineMath::RotationPitchYawRoll(float P, float Y, float R) // p = x Y = y r = z
 {
-    float pitch = P * 0.0174532925f;
-    float yaw = Y * 0.0174532925f;
-    float roll = R * 0.0174532925f;
+    float pitch = P * Deg2Rad;
+    float yaw = Y * Deg2Rad;
+    float roll = R * Deg2Rad;
     Matrix4x4 p, y, r;
     y = Matrix4x4(
         cos(yaw), 0, -sin(yaw), 0,
@@ -97,85 +97,63 @@ Matrix4x4 EngineMath::RotationPitchYawRoll(float P, float Y, float R) // p = x Y
     Matrix4x4 buff = (r.operator*(p));
     return buff.operator*(y);
 }
-Matrix4x4 EngineMath::RotationPitchYawRoll(Vector3 RPY)
-{
 
-    Vector3 rpy = RPY * 0.0174532925f;
+Matrix4x4 EngineMath::RotationPitchYawRoll(Vector3 rpy)
+{
+    float pitch = rpy.x * Deg2Rad;
+    float yaw = rpy.y * Deg2Rad;
+    float roll = rpy.z * Deg2Rad;
     Matrix4x4 p, y, r;
     y = Matrix4x4(
-        cos(rpy.y), 0, -sin(rpy.y), 0,
+        cos(yaw), 0, -sin(yaw), 0,
         0, 1, 0, 0,
-        sin(rpy.y), 0, cos(rpy.y), 0,
+        sin(yaw), 0, cos(yaw), 0,
         0, 0, 0, 1);
     r = Matrix4x4(
-        cos(rpy.z), sin(rpy.z), 0, 0,
-        -sin(rpy.z), cos(rpy.z), 0, 0,
+        cos(roll), sin(roll), 0, 0,
+        -sin(roll), cos(roll), 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1);
     p = Matrix4x4(
         1, 0, 0, 0,
-        0, cos(rpy.x), sin(rpy.x), 0,
-        0, -sin(rpy.x), cos(rpy.x), 0,
+        0, cos(pitch), sin(pitch), 0,
+        0, -sin(pitch), cos(pitch), 0,
         0, 0, 0, 1);
 
     Matrix4x4 buff = (r.operator*(p));
     return buff.operator*(y);
 }
+
+//----------------------------------------
 Matrix4x4 EngineMath::TransformationMatrix(Vector3 posistion, Vector3 Rotation, Vector3 Scale)
 {
     Matrix4x4 scale, translation, rotation;
-    scale = Matrix4x4(
-        Scale.x, 0, 0, 0,
-        0, Scale.y, 0, 0,
-        0, 0, Scale.z, 0,
-        0, 0, 0, 1);
-    translation = Matrix4x4(
-        1, 0, 0, posistion.x,
-        0, 1, 0, posistion.y,
-        0, 0, 1, posistion.z,
-        0, 0, 0, 1);
-    float yaw, pitch, roll;
-    pitch = Rotation.x * 0.0174532925f;
-    yaw = Rotation.y * 0.0174532925f;
-    roll = Rotation.z * 0.0174532925f;
-    rotation = RotationPitchYawRoll(pitch, yaw, roll);
-    auto a =   rotation * translation;
-    return (translation*scale)*rotation;
-}
-
-Matrix4x4 EngineMath::TransformationMatrix(Vector3 posistion, Vector3 Rotation, float Scale)
-{
-    Matrix4x4 scale, translation, rotation;
-    scale = Matrix4x4(
-        Scale, 0, 0, 0,
-        0, Scale, 0, 0,
-        0, 0, Scale, 0,
-        0, 0, 0, 1);
-    translation = Matrix4x4(
-        1, 0, 0, posistion.x,
-        0, 1, 0, posistion.y,
-        0, 0, 1, posistion.z,
-        0, 0, 0, 1);
-    float yaw, pitch, roll;
-    pitch = Rotation.x * 0.0174532925f;
-    yaw = Rotation.y * 0.0174532925f;
-    roll = Rotation.z * 0.0174532925f;
-    rotation = RotationPitchYawRoll(pitch, yaw, roll);
+    scale = ScaleMatrix(Scale);
+    translation = TranslationMatrix(posistion);
+    rotation = RotationPitchYawRoll(Rotation);
     auto a = rotation * translation;
     return (translation * scale) * rotation;
 }
-
+Matrix4x4 EngineMath::TransformationMatrix(Vector3 posistion, Vector3 Rotation, float Scale)
+{
+    Matrix4x4 scale, translation, rotation;
+    scale = ScaleMatrix(Scale);
+    translation = TranslationMatrix(posistion);
+    rotation = RotationPitchYawRoll(Rotation);
+    auto a = rotation * translation;
+    return (translation * scale) * rotation;
+}
+//----------------------------------------
 Matrix4x4 EngineMath::TranslationScaleMatrix(Vector3 translation, Vector3 scale)
 {
     return TranslationMatrix(translation) * ScaleMatrix(scale);
 }
-
 Matrix4x4 EngineMath::TranslationScaleMatrix(Vector3 translation, float scale)
 {
     return TranslationMatrix(translation) * ScaleMatrix(scale);
 
 }
-
+//----------------------------------------
 Matrix4x4 EngineMath::TranslationMatrix(Vector3 translation)
 {
     Matrix4x4 a = Identity();
@@ -185,7 +163,7 @@ Matrix4x4 EngineMath::TranslationMatrix(Vector3 translation)
 
     return a;
 }
-
+//----------------------------------------
 Matrix4x4 EngineMath::ScaleMatrix(Vector3 scale)
 {
     Matrix4x4 a = Identity();
@@ -195,7 +173,6 @@ Matrix4x4 EngineMath::ScaleMatrix(Vector3 scale)
 
     return a;
 }
-
 Matrix4x4 EngineMath::ScaleMatrix(float scale)
 {
     Matrix4x4 a = Identity();
@@ -204,6 +181,7 @@ Matrix4x4 EngineMath::ScaleMatrix(float scale)
     a._m22 = scale;
     return a;
 }
+//----------------------------------------
 
 float EngineMath::PlaneDotCoord(Plane plane, Vector3 point)
 {

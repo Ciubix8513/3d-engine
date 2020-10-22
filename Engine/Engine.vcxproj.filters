@@ -115,6 +115,9 @@
     <Filter Include="Main System\Math\Matrices\Sources">
       <UniqueIdentifier>{530f0680-6f29-4c17-b8d7-ffbfb5a4fccf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main System\ECS">
+      <UniqueIdentifier>{768754f7-b49a-4ecb-83f4-8b16b7818618}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderClasses\LightShader.cpp">

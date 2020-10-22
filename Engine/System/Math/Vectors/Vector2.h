@@ -8,6 +8,8 @@ using namespace std;
 
 namespace EngineMath
 {
+	#define Deg2Rad  0.0174532925f
+
 	using namespace EngineMath;
 	struct  Vector2
 	{

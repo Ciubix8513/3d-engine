@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #pragma endregion
+
 class Texture
 {
 private:

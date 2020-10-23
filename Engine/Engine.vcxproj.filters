@@ -127,11 +127,11 @@
     <Filter Include="Main System\ECS\Components\General">
       <UniqueIdentifier>{07d4194e-5141-4467-aa0f-4e2942902091}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main System\ECS\Headers">
-      <UniqueIdentifier>{2b707903-6069-4f57-9d19-cad09197e8a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main System\ECS\Sources">
       <UniqueIdentifier>{a75efe37-e095-48e1-99dd-4c5f924c61e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\ECS\Headers">
+      <UniqueIdentifier>{e1ce341c-582c-4053-83c3-19bd642ff19a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +225,12 @@
     <ClCompile Include="ECS\Entity.cpp">
       <Filter>Main System\ECS\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Component.cpp">
+      <Filter>Main System\ECS\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\General\Transform.cpp">
+      <Filter>Main System\ECS\Components\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">
@@ -314,8 +320,14 @@
     <ClInclude Include="System\Math\Vectors\Quarernion.h">
       <Filter>Main System\Math\Vectors\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Component.h">
+      <Filter>Main System\ECS\Headers</Filter>
+    </ClInclude>
     <ClInclude Include="ECS\Entity.h">
       <Filter>Main System\ECS\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\General\Transform.h">
+      <Filter>Main System\ECS\Components\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

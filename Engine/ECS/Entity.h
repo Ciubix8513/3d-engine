@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _ENTITY_H_
 #define _ENTITY_H_
 #include "General/Transform.h"
@@ -9,6 +10,7 @@
 
 namespace Engine
 {
+	using namespace Engine;
 	class Entity
 	{
 	public:
@@ -20,13 +22,16 @@ namespace Engine
 		template <typename T>
 		T* GetComponent();
 #pragma endregion
-
+		
 		void Destroy();
+	private:
+		void Update();
 		void A();
+		
 	public:
 		std::string Name;
 	private:
-		std::vector<Component> Components;	
+		std::vector<Engine::Component> Components;	
 		long UUID;
 		
 	};

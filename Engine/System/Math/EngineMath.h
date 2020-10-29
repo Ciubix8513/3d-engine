@@ -6,7 +6,7 @@ using namespace EngineMath;
 
 namespace EngineMath
 {
-#define PI (double)3.1415926535897932384626433832795f
+
 	Matrix4x4 Multiply(Matrix4x4 a, Matrix4x4 b);
 	Vector4 TransformVector(Vector4 v, Matrix4x4 m);
 	Matrix4x4 PerspectiveProjectionMatrix(float FOV, float  screenAspect, float  screenNear, float  screenDepth);

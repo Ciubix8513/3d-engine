@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="ECS\Component.cpp" />
     <ClCompile Include="ECS\Entity.cpp" />
+    <ClCompile Include="ECS\EntityContainer.cpp" />
     <ClCompile Include="ECS\General\Transform.cpp" />
     <ClCompile Include="Graphics\Bitmap.cpp" />
     <ClCompile Include="Graphics\Camera\Camera.cpp" />
@@ -179,6 +180,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Entity.h" />
+    <ClInclude Include="ECS\EntityContainer.h" />
     <ClInclude Include="ECS\General\Transform.h" />
     <ClInclude Include="Graphics\Bitmap.h" />
     <ClInclude Include="Graphics\Camera\Camera.h" />

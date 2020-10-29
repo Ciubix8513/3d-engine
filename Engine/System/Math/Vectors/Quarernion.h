@@ -2,6 +2,7 @@
 #ifndef  _QUATERNION_H_
 #define  _QUATERNION_H_
 #include "Vector4.h"
+#include <cmath>
 
 class Quaternion
 {
@@ -14,7 +15,8 @@ public:
 	Quaternion(Vector2 xy, Vector2 zw);
 	Quaternion(Vector3 rotation);
 	Quaternion(float x, float y, float z);
-
+	Vector3 Euler();
+	
 	
 	bool operator==(Quaternion other);
 	Quaternion operator*(Quaternion other);

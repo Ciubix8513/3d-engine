@@ -76,6 +76,29 @@ Quaternion::Quaternion(float x, float y, float z)
 	z = cr * cp * sy - sr * sp * cy;
 }
 
+Vector3 Quaternion::Euler()
+{
+	Vector3 angles;
+	double sinr_cosp = 2 * (w * x + y *z);
+	double cosr_cosp = 1 - 2 * (x * x + y * y);
+	angles.z = std::atan2(sinr_cosp, cosr_cosp);
+
+	// x (y-axis rotation)
+	double sinp = 2 * (w * y - z * x);
+	if (std::abs(sinp) >= 1)
+		angles.x = std::copysign(PI / 2, sinp); // use 90 degrees if out of range
+	else
+		angles.x = std::asin(sinp);
+
+	// y (z-axis rotation)
+	double siny_cosp = 2 * (w * z + x * y);
+	double cosy_cosp = 1 - 2 * (y * y + z * z);
+	angles.y = std::atan2(siny_cosp, cosy_cosp);
+
+	return angles;
+
+}
+
 bool Quaternion::operator==(Quaternion other)
 {
 	return x == other.x && y == other.y && z == other.z && w == other.w;

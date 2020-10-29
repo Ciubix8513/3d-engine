@@ -9,7 +9,7 @@ using namespace std;
 namespace EngineMath
 {
 	#define Deg2Rad  0.0174532925f
-
+#define PI (double)3.1415926535897932384626433832795f
 	using namespace EngineMath;
 	struct  Vector2
 	{

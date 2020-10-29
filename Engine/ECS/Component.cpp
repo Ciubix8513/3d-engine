@@ -9,3 +9,7 @@ void Engine::Component::Shutdown()
 {
 	return;
 }
+
+void Engine::Component::Update()
+{
+}

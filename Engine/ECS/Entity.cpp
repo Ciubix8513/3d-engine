@@ -9,6 +9,13 @@ void Engine::Entity::Destroy()
 	
 }
 
+void Engine::Entity::Update()
+{
+	for (int i = 0; i < Components.size(); i++)
+		Components[i].Update();
+	return;
+}
+
 void Engine::Entity::A()
 {
 	AddComponent<Transform>();

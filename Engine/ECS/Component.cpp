@@ -1,7 +1,13 @@
 #include "Component.h"
 
+Engine::Component::Component()
+{
+	
+}
+
 void Engine::Component::Initialise()
 {
+	std::cout << "A\n";
 	return;
 }
 

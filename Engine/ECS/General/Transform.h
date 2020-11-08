@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _TRANSFORM_H_
+#define _TRANSFORM_H_
 #include "../Component.h"
 #include "../../System/Math/EngineMath.h"
 
@@ -6,7 +7,7 @@ using namespace EngineMath;
 namespace Engine 
 {
 
-	class Transform:public Component
+	class Transform : public Component
 	{
 	public:
 		Transform();
@@ -22,6 +23,8 @@ namespace Engine
 		Vector3 Position;
 		Vector3 Scale;
 		Quaternion Rotation;
+		int stuff;
 	};
 
 }
+#endif

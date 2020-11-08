@@ -231,7 +231,10 @@
     <ClCompile Include="ECS\General\Transform.cpp">
       <Filter>Main System\ECS\Components\General</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\EntityContainer.cpp">
+    <ClCompile Include="ECS\Rendering\MeshComponent.cpp">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Scene.cpp">
       <Filter>Main System\ECS\Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -332,7 +335,10 @@
     <ClInclude Include="ECS\General\Transform.h">
       <Filter>Main System\ECS\Components\General</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\EntityContainer.h">
+    <ClInclude Include="ECS\Rendering\MeshComponent.h">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Scene.h">
       <Filter>Main System\ECS\Headers</Filter>
     </ClInclude>
   </ItemGroup>

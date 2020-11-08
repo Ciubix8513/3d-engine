@@ -1,13 +1,15 @@
 #include "Launcher.h"
 #include "System.h"
 #include "Math/EngineMath.h"
-using namespace EngineMath;
-
+#include "../ECS/Entity.h"
+using namespace EngineMath; 
+using namespace Engine;
 
 
 int main()
 	{
-		
+	
+
 		System* system;
 		bool result;
 		system = new System();

@@ -5,9 +5,10 @@
 #include "Rendering/MeshComponent.h"
 #include <vector>
 #include <string>
+#include <typeinfo>
 #include <type_traits>
 #include <exception>
-#include <typeinfo>
+
 
 namespace Engine
 {
@@ -32,6 +33,7 @@ namespace Engine
 
 
 	public:
+
 #pragma region Component functions
 		template <typename T>
 		void AddComponent()
@@ -42,11 +44,17 @@ namespace Engine
 				throw std::exception("Wrong component type");
 				return;
 			}
-			
+			//Check for required components
 			T *Comp = new T;
-			Comp->TypeID = typeid(T).hash_code();
-			Components.push_back(Comp);
-			(Components[Components.size() - 1])->Initialise();
+			Components.push_back((Component*)Comp);
+			Components[Components.size() - 1]->TypeID = typeid(T).hash_code();
+			vector<Component*> InitComp;
+			for (int i = 0; i < Components[Components.size() - 1]->RequieredComponents.size(); i++)
+			{
+				if (ContainComponent(Components[Components.size() - 1]->RequieredComponents[i]))
+					InitComp.push_back(GetComponent(Components[Components.size() - 1]->RequieredComponents[i]));
+			}
+			Components[Components.size() - 1]->Initialise(InitComp);
 		};
 
 		template <typename T>
@@ -69,7 +77,8 @@ namespace Engine
 
 		};
 		template <typename T>
-		T* GetComponent() {
+		T* GetComponent()
+		{
 			//Check if there's a component type T
 			if (!std::is_base_of<Component, T>::value)
 			{
@@ -81,6 +90,28 @@ namespace Engine
 					return (T*)Components[i];
 			return nullptr;
 		};
+
+		Component* GetComponent(const type_info* info);
+		
+		
+
+		template <typename T>
+		bool ContainComponent() 
+		{
+			typeid(int);
+			//Check if there's a component type T
+			if (!std::is_base_of<Component, T>::value)
+			{
+				throw std::exception("Wrong component type");
+
+			}
+			for (int i = 0; i < Components.size(); i++)
+				if (Components[i]->TypeID == typeid(T).hash_code())
+					return true;
+			return false;
+		};
+		bool ContainComponent(const type_info* info);
+
 
 #pragma endregion
 

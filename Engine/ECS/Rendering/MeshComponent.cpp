@@ -1,8 +1,14 @@
 #include "MeshComponent.h"
 
-Engine::MeshComponent::MeshComponent()
+void Engine::MeshComponent::Initialise()
 {
 	
+}
+
+Engine::MeshComponent::MeshComponent()
+{
+
+
 }
 
 
@@ -10,11 +16,11 @@ Engine::MeshComponent::MeshComponent()
 bool Engine::MeshComponent::loadMeshFromFile(string fileName)
 {
 	string path = (fileName + ".EngnMdl");
-	ifstream File(path);
-	if(File.is_open())
+
+	if(FILE* file = fopen((path + ".data").c_str(),"r"))
 	{
-		File.close();
-		Model = DeSerialiseMesh(path);
+		fclose(file);
+		m_Model = DeSerialiseMesh(path);
 		return true;
 	}
 
@@ -198,18 +204,65 @@ bool Engine::MeshComponent::loadMeshFromFile(string fileName)
 	for (size_t i = 0; i < mesh.indexCount; i++)
 		mesh.indecies[i] = Indecies[i];
 
-	Model = mesh;
+	m_Model = mesh;
+	SerialiseMesh(path);
 	return true;
 }
 
 void Engine::MeshComponent::SerialiseMesh(string path)
-{
+{	
+	FILE *file;
+	string Path = path + ".data";
+	Count count;
+	count.indexCount = m_Model.indexCount;
+	count.vertexCount = m_Model.vertexCount;
+
+	file = fopen(Path.c_str(), "w");
+	fwrite(&count, sizeof(count), 1, file);
+	fclose(file);
+
+	Path = path + ".vert";
+	file = fopen(Path.c_str(), "w");
+	fwrite(m_Model.vertices, sizeof(vertex), m_Model.vertexCount, file);
+	fclose(file);
+
+	Path = path + ".ind";
+	file = fopen(Path.c_str(), "w");
+	fwrite(m_Model.indecies, sizeof(unsigned long), m_Model.indexCount, file);
+	fclose(file);
+
+	return;
 }
 
 Engine::MeshComponent::Mesh Engine::MeshComponent::DeSerialiseMesh(string path)
 {
+	Mesh mesh;
+	FILE* file;
+	string Path = path + ".data";
+	Count count;
+	
+	file = fopen(Path.c_str(), "r");
+	fread(&count, sizeof(count), 1, file);	
+	fclose(file);
+	
+	mesh.indexCount = count.indexCount;
+	mesh.vertexCount = count.vertexCount;
 
-	return Mesh();
+	mesh.vertices = new vertex[count.vertexCount];
+	mesh.indecies = new unsigned long[count.indexCount];
+
+	Path = path + ".vert";
+	file = fopen(Path.c_str(), "r");
+	fread(mesh.vertices, sizeof(vertex), count.vertexCount, file);
+	fclose(file);
+
+	Path = path + ".ind";
+	file = fopen(Path.c_str(), "r");
+	fread(mesh.indecies, sizeof(unsigned long), count.indexCount, file);
+	fclose(file);
+
+
+	return mesh;
 }
 
 bool Engine::MeshComponent::vertex::operator==(vertex& b)

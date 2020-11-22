@@ -1,8 +1,10 @@
 #include "MeshComponent.h"
 
-void Engine::MeshComponent::Initialise()
+
+
+void Engine::MeshComponent::Shutdown()
 {
-	
+
 }
 
 Engine::MeshComponent::MeshComponent()
@@ -13,7 +15,7 @@ Engine::MeshComponent::MeshComponent()
 
 
 
-bool Engine::MeshComponent::loadMeshFromFile(string fileName)
+bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 {
 	string path = (fileName + ".EngnMdl");
 
@@ -263,6 +265,16 @@ Engine::MeshComponent::Mesh Engine::MeshComponent::DeSerialiseMesh(string path)
 
 
 	return mesh;
+}
+
+ID3D11Buffer** Engine::MeshComponent::GetVertexBufferPtr()
+{
+	return nullptr;
+}
+
+ID3D11Buffer** Engine::MeshComponent::GetIndexBufferPtr()
+{
+	return nullptr;
 }
 
 bool Engine::MeshComponent::vertex::operator==(vertex& b)

@@ -14,6 +14,7 @@ namespace Engine
 		void DeSerialiseScene(string Path);
 	private:
 		vector<Entity> Entitys;
+		D3d* m_D3d; 
 	};
 }
 

@@ -2,7 +2,7 @@
 
 void Engine::Scene::AddEntity()
 {
-	Entity A;
+	Entity A(m_D3d);
 	A.AddComponent<Transform>();
 	A.UUID = Entitys.size();
 	Entitys.insert(Entitys.begin(),A);

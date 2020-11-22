@@ -2,10 +2,12 @@
 
 
 
-Engine::Entity::Entity()
+
+Engine::Entity::Entity(D3d* D3d)
 {
 	Name = " ";
 	UUID = 1;
+	m_D3d = D3d;
 }
 
 void Engine::Entity::Destroy()

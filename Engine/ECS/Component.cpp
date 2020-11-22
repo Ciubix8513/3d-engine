@@ -1,14 +1,14 @@
 #include "Component.h"
 
+
 Engine::Component::Component()
 {
-	
 }
 
-void Engine::Component::Initialise()
+void Engine::Component::Initialise(D3d* directX)
 {
-	std::cout << "A\n";
-	
+	m_D3d = directX;	
+	cout << 113;	
 	return;
 }
 

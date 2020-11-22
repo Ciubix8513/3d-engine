@@ -10,12 +10,12 @@ int main()
 {
 
 	
-	Entity A;
-//	A.AddComponent<int>();
-	A.AddComponent<MeshComponent>();
-	MeshComponent* mesh = A.GetComponent<MeshComponent>();
-	mesh->loadMeshFromFile("../Engine/data/Sphere.obj");
-	cout << " ";
+//	Entity A;
+////	A.AddComponent<int>();
+//	A.AddComponent<MeshComponent>();
+//	MeshComponent* mesh = A.GetComponent<MeshComponent>();
+//	mesh->loadMeshFromObjFile("../Engine/data/Sphere.obj");
+//	cout << " ";
 	System* system;
 	bool result;
 	system = new System();

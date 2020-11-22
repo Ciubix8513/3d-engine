@@ -43,15 +43,21 @@ namespace Engine
 			int indexCount;
 		};
 
-	public:
-		void Initialise() override;
+	public:		
+		void Shutdown() override;
 		MeshComponent();
-		bool loadMeshFromFile(string path);
+		bool loadMeshFromObjFile(string path);
 		void SerialiseMesh(string path);
 		Mesh DeSerialiseMesh(string path);
+		void InitBuffers(ID3D11Device* device);
+		void ShutDownBuffers();
+		ID3D11Buffer** GetVertexBufferPtr();
+		ID3D11Buffer** GetIndexBufferPtr();
 	public:
 		Mesh m_Model;
 		vector<const type_info*>RequieredComponents = { &typeid(Transform) };
+	private:
+		ID3D11Buffer* m_VertexBuffer,* m_IndexBuffer;
 		
 	};
 }

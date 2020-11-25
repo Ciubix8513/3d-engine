@@ -6,6 +6,11 @@ Engine::Transform::Transform()
 {
 }
 
+void Engine::Transform::Shutdown()
+{
+    
+}
+
 Matrix4x4 Engine::Transform::GetTransformationMatrix()
 {
     return TransformationMatrix(Position,Rotation.Euler(),Scale);
@@ -114,6 +119,17 @@ Engine::Transform*** Engine::Transform::GetChildren(unsigned int* ChildrenIndeci
     return a;
 }
 
+Engine::Transform*** Engine::Transform::GetChildren(vector<unsigned int> ChildrenIndecies)
+{
+    auto a = new Transform * *[ChildrenIndecies.size()];
+    for (size_t i = 0; i < ChildrenIndecies.size(); i++)
+    {
+        a[i] = m_Children[ChildrenIndecies[i]];
+    }
+
+    return a;
+}
+
 
 
 bool Engine::Transform::HasParent()
@@ -129,5 +145,51 @@ bool Engine::Transform::HasChildren()
 unsigned int Engine::Transform::GetChildrenCount()
 {
     return m_Children.size();    
+}
+
+void Engine::Transform::RemoveParent()
+{
+    HasPar = false;
+    auto tmp = this;
+    (*m_Parent)->RemoveChild(&tmp);
+    m_Parent = nullptr;   
+}
+
+void Engine::Transform::RemoveChild(Transform** Child)
+{
+    for (auto i = m_Children.begin(); i != m_Children.end(); i++)
+    {
+        if ((*i) == Child)
+        {
+            (*Child)->HasPar = false;
+            m_Children.erase(i);
+            return;
+        }
+    }
+}
+
+
+void Engine::Transform::RemoveChildren(Transform*** Children, unsigned int ChildrenCount)
+{
+    for (size_t i = 0; i < ChildrenCount; i++)
+    {
+        a({ 1,2,3,4 });
+    }
+}
+
+void Engine::Transform::RemoveChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount)
+{
+}
+
+void Engine::Transform::RemoveChildren(unsigned int ChildIndex0, unsigned int ChildIndex1)
+{
+}
+
+void Engine::Transform::RemoveAllChildren()
+{
+    for (size_t i = 0; i < m_Children.size(); i++)
+    {
+        RemoveChild(m_Children[i]);
+    }
 }
 

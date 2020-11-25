@@ -11,6 +11,8 @@ namespace Engine
 	{
 	public:
 		Transform();
+		 void Shutdown() override;
+
 		Matrix4x4 GetTransformationMatrix();
 #pragma region  SetProperties
 		void SetChild(Transform** Child);
@@ -32,11 +34,16 @@ namespace Engine
 		Transform** GetChild(unsigned int ChildIndex);
 		Transform*** GetChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
 		Transform*** GetChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount);
+		Transform*** GetChildren(vector<unsigned int> ChildrenIndecies);
 		bool HasParent();
 		bool HasChildren();
 		unsigned int GetChildrenCount();
-
-
+		void RemoveParent();
+		void RemoveChild(Transform** Child);
+		void RemoveChildren(Transform*** Children, unsigned int ChildrenCount);
+		void RemoveChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount);
+		void RemoveChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
+		void RemoveAllChildren();
 	public:
 		Vector3 Position;
 		Vector3 Scale;

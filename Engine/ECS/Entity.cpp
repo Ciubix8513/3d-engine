@@ -10,6 +10,12 @@ Engine::Entity::Entity(D3d* D3d)
 	m_D3d = D3d;
 }
 
+Engine::Entity::Entity()
+{
+	Name = " ";
+	UUID = 1;
+}
+
 void Engine::Entity::Destroy()
 {
 	for (int i = 0; i < Components.size(); i++)
@@ -27,11 +33,11 @@ void Engine::Entity::Update()
 	return;
 }
 
-Engine::Component* Engine::Entity::GetComponent(const type_info* info)
+Engine::Component** Engine::Entity::GetComponent(const type_info* info)
 {
 	for (int i = 0; i < Components.size(); i++)
 		if (Components[i]->TypeID == info->hash_code())
-			return Components[i];
+			return &Components[i];
 	return nullptr;
 }
 

@@ -17,7 +17,7 @@ namespace Engine
 	{
 		friend class Scene;
 	public:
-		Entity(D3d* D3d);
+		Entity(D3d* D3d);Entity();
 
 		void Destroy();
 	private:
@@ -50,7 +50,7 @@ namespace Engine
 			for (int i = 0; i < Components[Components.size() - 1]->RequieredComponents.size(); i++)
 			{
 				if (ContainComponent(Components[Components.size() - 1]->RequieredComponents[i]))
-					InitComp.push_back(GetComponent(Components[Components.size() - 1]->RequieredComponents[i]));
+					InitComp.push_back(*GetComponent(Components[Components.size() - 1]->RequieredComponents[i]));
 				else
 					AddComponent< decltype(& Components[Components.size() - 1]->RequieredComponents[i])>();
 			}
@@ -80,7 +80,7 @@ namespace Engine
 
 		};
 		template <typename T>
-		T* GetComponent()
+		T** GetComponent()
 		{
 			//Check if there's a component type T
 			if (!std::is_base_of<Component, T>::value)
@@ -90,11 +90,11 @@ namespace Engine
 			}
 			for (int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
-					return (T*)Components[i];
+					return &(T*)Components[i];
 			return nullptr;
 		};
 
-		Component* GetComponent(const type_info* info);
+		Component** GetComponent(const type_info* info);
 		
 		
 

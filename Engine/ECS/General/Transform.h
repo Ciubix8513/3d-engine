@@ -11,7 +11,7 @@ namespace Engine
 	{
 	public:
 		Transform();
-		 void Shutdown() override;
+		 //void Shutdown() override;
 
 		Matrix4x4 GetTransformationMatrix();
 #pragma region  SetProperties
@@ -40,8 +40,11 @@ namespace Engine
 		unsigned int GetChildrenCount();
 		void RemoveParent();
 		void RemoveChild(Transform** Child);
+		void RemoveChild(unsigned int ChildIndex);
 		void RemoveChildren(Transform*** Children, unsigned int ChildrenCount);
+		void RemoveChildren(vector<Transform**> Children);
 		void RemoveChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount);
+		void RemoveChildren(vector<unsigned int> ChildrenIndecies);
 		void RemoveChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
 		void RemoveAllChildren();
 	public:

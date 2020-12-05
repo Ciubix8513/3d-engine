@@ -6,24 +6,7 @@ Engine::Transform::Transform()
 {
 }
 
-void Engine::Transform::Shutdown()
-{
-    
-}
-
-Matrix4x4 Engine::Transform::GetTransformationMatrix()
-{
-    return TransformationMatrix(Position,Rotation.Euler(),Scale);
-}
-void Engine::Transform::SetChild(Transform** Child)
-{
-    m_Children.push_back(Child);
-}
-void Engine::Transform::SetParrent(Transform** Parent)
-{
-    m_Parent = Parent;
-
-}
+#pragma region Set transformation funcs
 void Engine::Transform::SetPosition(Vector3 position)
 {
     Position = position;
@@ -49,8 +32,12 @@ void Engine::Transform::SetScale(float scale)
     Scale = Vector3(scale, scale, scale);
 
 }
-
-
+#pragma endregion
+#pragma region Get transformation funcs
+Matrix4x4 Engine::Transform::GetTransformationMatrix()
+{
+    return TransformationMatrix(Position, Rotation.Euler(), Scale);
+}
 Vector3 Engine::Transform::GetReletivePosition()
 {
     return Position;
@@ -84,22 +71,56 @@ Quaternion Engine::Transform::GetAbsoluteRotation()
         return (*m_Parent)->GetAbsoluteRotation() * Rotation;
     return Rotation;
 }
+#pragma endregion
 
+#pragma region ChildParentStuff
+void Engine::Transform::SetChild(Transform** Child)
+{
+    m_Children.push_back(Child);
+    auto a = this;
+    (*Child)->HasPar = true;
+    (*Child)->m_Parent = &a;
+}
+void Engine::Transform::SetParrent(Transform** Parent)
+{
+    auto a = this;
+    (*Parent)->SetChild(&a);
+}
 
 Engine::Transform** Engine::Transform::GetParent()
 {
     return m_Parent;
 }
-
 Engine::Transform** Engine::Transform::GetChild(unsigned int ChildIndex)
 {
-    return m_Children[ChildIndex];
-}
+    if (ChildIndex < m_Children.size())
+        return m_Children[ChildIndex];
+    else
+        throw exception("wrong child index");
+    return nullptr;
 
+
+}
 Engine::Transform*** Engine::Transform::GetChildren(unsigned int ChildIndex0, unsigned int ChildIndex1)
 {
-    if (ChildIndex0 > ChildIndex1)
+    if (ChildIndex0 > ChildIndex1) 
+    {    
         throw exception("ChildIndex0 must be less then ChildIndex1");
+        return nullptr;
+    }
+    if(ChildIndex0 >  m_Children.size())
+    {
+        throw exception("wrong child index 0");
+        return nullptr;
+    }
+    if (ChildIndex1 >= m_Children.size())
+    {
+        throw exception("wrong child index 1");
+        return nullptr;
+    }
+
+
+
     Transform*** a = new Transform * *[ChildIndex1 - ChildIndex0];
     for (size_t i = 0; i < ChildIndex1 - ChildIndex0; i++)
     {
@@ -107,54 +128,54 @@ Engine::Transform*** Engine::Transform::GetChildren(unsigned int ChildIndex0, un
     }
     return a;
 }
-
 Engine::Transform*** Engine::Transform::GetChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount)
 {
     auto a = new Transform * *[ChildrenCount];
     for (size_t i = 0; i < ChildrenCount; i++)
     {
+        if(ChildrenIndecies[i] >= m_Children.size())
+        {
+            throw exception("wrong child index " + i);
+            return nullptr;
+        }
         a[i] = m_Children[ChildrenIndecies[i]];
     }
 
     return a;
 }
-
 Engine::Transform*** Engine::Transform::GetChildren(vector<unsigned int> ChildrenIndecies)
 {
     auto a = new Transform * *[ChildrenIndecies.size()];
     for (size_t i = 0; i < ChildrenIndecies.size(); i++)
     {
+        if (ChildrenIndecies[i] >=m_Children.size())
+        {
+            throw exception("wrong child index " + i);
+            return nullptr;
+        }
         a[i] = m_Children[ChildrenIndecies[i]];
     }
 
     return a;
 }
-
-
-
 bool Engine::Transform::HasParent()
 {
     return HasPar;
 }
-
 bool Engine::Transform::HasChildren()
 {
     return m_Children.size() != 0;
 }
-
 unsigned int Engine::Transform::GetChildrenCount()
 {
     return m_Children.size();    
 }
-
 void Engine::Transform::RemoveParent()
-{
-    HasPar = false;
+{  
     auto tmp = this;
     (*m_Parent)->RemoveChild(&tmp);
     m_Parent = nullptr;   
 }
-
 void Engine::Transform::RemoveChild(Transform** Child)
 {
     for (auto i = m_Children.begin(); i != m_Children.end(); i++)
@@ -167,29 +188,51 @@ void Engine::Transform::RemoveChild(Transform** Child)
         }
     }
 }
-
-
+void Engine::Transform::RemoveChild(unsigned int ChildIndex)
+{
+    if(ChildIndex >= m_Children.size())
+    {
+        throw exception("wrong child index");
+        return ;
+    }
+    (*m_Children[ChildIndex])->HasPar = false;
+    auto i = m_Children.begin() + ChildIndex;
+    m_Children.erase(i);
+}
 void Engine::Transform::RemoveChildren(Transform*** Children, unsigned int ChildrenCount)
 {
-    for (size_t i = 0; i < ChildrenCount; i++)
-    {
-        a({ 1,2,3,4 });
-    }
+    for (size_t i = 0; i < ChildrenCount; i++)    
+        RemoveChild(Children[i]); // Should work, but may be slow    
 }
-
+void Engine::Transform::RemoveChildren(vector<Transform**> Children)
+{
+    for (size_t i = 0; i < Children.size(); i++)    
+        RemoveChild(Children[i]); // Should work, but may be slow    
+}
 void Engine::Transform::RemoveChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount)
 {
+    for (size_t i = 0; i < ChildrenCount; i++)
+        RemoveChild(ChildrenIndecies[i]);
 }
-
 void Engine::Transform::RemoveChildren(unsigned int ChildIndex0, unsigned int ChildIndex1)
 {
-}
-
-void Engine::Transform::RemoveAllChildren()
-{
-    for (size_t i = 0; i < m_Children.size(); i++)
+    if (ChildIndex0 > ChildIndex1)
     {
-        RemoveChild(m_Children[i]);
+        throw exception("ChildIndex0 must be less then ChildIndex1");
+        return;
     }
+    for (size_t i = 0; i < ChildIndex1 - ChildIndex0; i++)
+        RemoveChild(i);
 }
+void Engine::Transform::RemoveChildren(vector<unsigned int> ChildrenIndecies)
+{
+    for (size_t i = 0; i < ChildrenIndecies.size(); i++)
+        RemoveChild(ChildrenIndecies[i]);   
+}
+void Engine::Transform::RemoveAllChildren()
+{   
+    for (size_t i = 0; i < m_Children.size(); i++)    
+        RemoveChild(i);       
+}
+#pragma endregion
 

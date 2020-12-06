@@ -18,8 +18,9 @@ namespace Engine
 		virtual void Initialise(std::vector<Component*>);
 		virtual void Shutdown();
 		virtual void Update();
+		virtual std::vector<const type_info*> GetRequieredComponents();
 		size_t TypeID;
-		std::vector<const type_info*> RequieredComponents;
+	
 	private:
 		D3d* m_D3d;
 	};

@@ -24,3 +24,8 @@ void Engine::Component::Shutdown()
 void Engine::Component::Update()
 {
 }
+
+std::vector<const type_info*> Engine::Component::GetRequieredComponents()
+{
+	return {};
+}

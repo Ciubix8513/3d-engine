@@ -47,12 +47,13 @@ namespace Engine
 			Components.push_back((Component*)Comp);
 			Components[Components.size() - 1]->TypeID = typeid(T).hash_code();
 			vector<Component*> InitComp;
-			for (int i = 0; i < Components[Components.size() - 1]->RequieredComponents.size(); i++)
+			auto Comps = (Components[Components.size() - 1]->GetRequieredComponents());
+			for (int i = 0; i < (Comps).size(); i++)
 			{
-				if (ContainComponent(Components[Components.size() - 1]->RequieredComponents[i]))
-					InitComp.push_back(*GetComponent(Components[Components.size() - 1]->RequieredComponents[i]));
+				if (ContainComponent((Comps)[i]))
+					InitComp.push_back(*GetComponent((Comps)[i]));
 				else
-					AddComponent< decltype(& Components[Components.size() - 1]->RequieredComponents[i])>();
+					AddComponent< decltype(&Comps[i])>();
 			}
 			Components[Components.size() - 1]->Initialise(InitComp);
 		};

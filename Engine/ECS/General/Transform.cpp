@@ -1,11 +1,8 @@
 #include "Transform.h"
 
-
-
 Engine::Transform::Transform()
 {
 }
-
 #pragma region Set transformation funcs
 void Engine::Transform::SetPosition(Vector3 position)
 {
@@ -72,7 +69,6 @@ Quaternion Engine::Transform::GetAbsoluteRotation()
     return Rotation;
 }
 #pragma endregion
-
 #pragma region ChildParentStuff
 void Engine::Transform::SetChild(Transform** Child)
 {
@@ -86,7 +82,6 @@ void Engine::Transform::SetParrent(Transform** Parent)
     auto a = this;
     (*Parent)->SetChild(&a);
 }
-
 Engine::Transform** Engine::Transform::GetParent()
 {
     return m_Parent;

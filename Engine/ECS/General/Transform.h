@@ -51,8 +51,6 @@ namespace Engine
 		Vector3 Position;
 		Vector3 Scale;
 		Quaternion Rotation;
-		int stuff;
-
 	private:
 		vector<Transform**> m_Children;
 		Transform** m_Parent;

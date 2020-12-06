@@ -53,6 +53,8 @@ namespace Engine
 		void ShutDownBuffers();
 		ID3D11Buffer** GetVertexBufferPtr();
 		ID3D11Buffer** GetIndexBufferPtr();
+		std::vector<const type_info*> GetRequieredComponents() override;
+
 	public:
 		Mesh m_Model;
 		vector<const type_info*>RequieredComponents = { &typeid(Transform) };

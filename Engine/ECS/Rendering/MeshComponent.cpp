@@ -277,6 +277,12 @@ ID3D11Buffer** Engine::MeshComponent::GetIndexBufferPtr()
 	return nullptr;
 }
 
+std::vector<const type_info*> Engine::MeshComponent::GetRequieredComponents()
+{
+	std::cout << "TEST";
+	return { &typeid(Transform) };
+}
+
 bool Engine::MeshComponent::vertex::operator==(vertex& b)
 {
 	int e = 1;

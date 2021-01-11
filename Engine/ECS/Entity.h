@@ -18,62 +18,75 @@ namespace Engine
 		friend class Scene;
 	public:
 		Entity(D3d* D3d);Entity();
-
 		void Destroy();
 	private:
 		void Update();
-
-
 	public:
 		std::string Name;
 	private:
 		std::vector<Component*> Components;
 		long UUID;
-
-
 	public:
 		#pragma region Component functions
 		template <typename T>
 		void AddComponent()
 		{
-			//Check if there's a component type T
-			if (!std::is_base_of<Component, T>::value)
+			try
 			{
-				throw std::exception("Wrong component type");
-				return;
+				//Check if there's a component type T
+				if (!std::is_base_of<Component, T>::value)
+				{
+					throw std::exception("Wrong component type");
+					return;
+				}
+				//Check for required components
+				T* Comp = new T;
+				Components.push_back((Component*)Comp);
+				Components[Components.size() - 1]->TypeID = typeid(T).hash_code();
+				vector<Component**> InitComp;
+
+				vector<const type_info*> Comps = Components[Components.size() - 1]->GetRequieredComponents();
+
+				for (int i = 0; i < Comps.size(); i++)
+				{
+					InitComp.push_back(GetComponent(Comps[i]));
+					if (InitComp[i] == nullptr)
+					{
+						string str = "Failed to add \"";
+						str += (*Comps[i]).name();
+						str += "\" to the list, component is not added";
+						throw exception(str.c_str());
+						RemoveComponent<T>();
+						return;
+					}
+				}
+				Components[Components.size() - 1]->Initialise(InitComp);
 			}
-			//Check for required components
-			auto *Comp = new T;			
-			Components.push_back((Component*)Comp);
-			Components[Components.size() - 1]->TypeID = typeid(T).hash_code();
-			vector<Component*> InitComp;
-			auto Comps = (Components[Components.size() - 1]->GetRequieredComponents());
-			for (int i = 0; i < (Comps).size(); i++)
+			catch (exception& e)
 			{
-				if (ContainComponent((Comps)[i]))
-					InitComp.push_back(*GetComponent((Comps)[i]));
-				else
-					AddComponent< decltype(&Comps[i])>();
+				cerr << "Got exception: " << e.what() << endl; //TODO: send to internal erorr handling system;			
 			}
-			Components[Components.size() - 1]->Initialise(InitComp);
 		};
-
-
-
-
 		template <typename T>
 		void RemoveComponent()
 		{
 			//Check if there's a component type T
-			if (!std::is_base_of<Component, T>::value)
+			try
 			{
-				throw std::exception("Wrong component type");
-				return;
+				if (!std::is_base_of<Component, T>::value)
+				{
+					throw std::exception("Wrong component type");
+					return;
+				}
+			}
+			catch (exception& e)
+			{
+				cerr << "Got exceprion: " << e.what() << endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
 				{
-					Components[i].Shutdown(); // .Shutdown();
+					Components[i]->Shutdown();
 					delete Components[i];
 					Components.erase(Components.begin() + i);
 					return;
@@ -84,49 +97,50 @@ namespace Engine
 		T** GetComponent()
 		{
 			//Check if there's a component type T
-			if (!std::is_base_of<Component, T>::value)
+			try
 			{
-				throw std::exception("Wrong component type");
-
+				if (!std::is_base_of<Component, T>::value)
+				{
+					throw std::exception("Wrong component type");					
+				}
+			}
+			catch (exception& e)
+			{
+				cerr << "Got exceprion: " << e.what() << endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
-					return &(T*)Components[i];
+					return (T**)&Components[i];
 			return nullptr;
 		};
-
 		Component** GetComponent(const type_info* info);
-		
-		
-
-
 		template <typename T>
 		bool ContainComponent() 
 		{
-			typeid(int);
+			auto a = typeid(T).name();
 			//Check if there's a component type T
-			if (!std::is_base_of<Component, T>::value)
+			try
 			{
-				throw std::exception("Wrong component type");
-
+				if (!std::is_base_of<Component, T>::value)
+				{
+					throw std::exception("Wrong component type");
+					return false;
+				}
 			}
-			for (int i = 0; i < Components.size(); i++)
+			catch (exception& e)
+			{
+				cerr << "Got exceprion: " << e.what() << endl; //TODO: send to internal erorr handling system;			
+			}
+			for (unsigned int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
 					return true;
 			return false;
 		};
 		bool ContainComponent(const type_info* info);
-
-
-#pragma endregion
-	private:
-		D3d* m_D3d;
+		#pragma endregion	
 
 	};
-
-
-
-}
+};
 
 
 #endif

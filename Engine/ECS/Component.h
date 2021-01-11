@@ -15,10 +15,10 @@ namespace Engine
 	public:
 		Component();
 		virtual void Initialise(D3d* directX);
-		virtual void Initialise(std::vector<Component*>);
+		virtual void Initialise(std::vector<Component**>);
 		virtual void Shutdown();
 		virtual void Update();
-		virtual std::vector<const type_info*> GetRequieredComponents();
+		virtual std::vector< const type_info*> GetRequieredComponents();
 		size_t TypeID;
 	
 	private:

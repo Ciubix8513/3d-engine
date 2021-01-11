@@ -12,7 +12,7 @@ void Engine::Component::Initialise(D3d* directX)
 	return;
 }
 
-void Engine::Component::Initialise(std::vector<Component*>)
+void Engine::Component::Initialise(std::vector<Component**>)
 {
 }
 

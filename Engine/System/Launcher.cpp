@@ -8,9 +8,13 @@ using namespace Engine;
 
 int main()
 {
-	auto d = std::is_base_of<Component, Transform>::value;
-	Entity a;
+	Entity a = Entity();
+	a.AddComponent<Transform>();
+	(*a.GetComponent<Transform>())->testData = "This is a test";
 	a.AddComponent<MeshComponent>();
+
+
+
 	auto b = a.ContainComponent<MeshComponent>();
 	auto C = a.ContainComponent<Transform>();
 	cout << " ";

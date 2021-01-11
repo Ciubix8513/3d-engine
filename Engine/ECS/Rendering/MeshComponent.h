@@ -54,10 +54,10 @@ namespace Engine
 		ID3D11Buffer** GetVertexBufferPtr();
 		ID3D11Buffer** GetIndexBufferPtr();
 		std::vector<const type_info*> GetRequieredComponents() override;
-
+		void Initialise(std::vector<Component**>) override;
 	public:
 		Mesh m_Model;
-		vector<const type_info*>RequieredComponents = { &typeid(Transform) };
+		
 	private:
 		ID3D11Buffer* m_VertexBuffer,* m_IndexBuffer;
 		

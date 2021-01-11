@@ -51,10 +51,12 @@ namespace Engine
 		Vector3 Position;
 		Vector3 Scale;
 		Quaternion Rotation;
+		string testData;
 	private:
 		vector<Transform**> m_Children;
 		Transform** m_Parent;
 		bool HasPar;
+		
 		
 	};
 

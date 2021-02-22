@@ -31,7 +31,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	string fstChar = "01";
 
 	vector<string> wipVec;
-	if (!file.is_open()) 
+	if (!file.is_open())  
 	{
 		cout << "Failed to open file";
 		return Mesh();

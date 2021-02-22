@@ -9,18 +9,30 @@ void Engine::Scene::AddEntity()
 }
 
 void Engine::Scene::DeleteEntity(Entity* entity)
-{
-	auto it = Entitys.begin() + entity->UUID;
-	entity->Destroy();
-	Entitys.erase(it);
+{	
+	entity->Destroy(); //Might not work
+	Entitys.erase(Entitys.find(*entity));
 }
 
 void Engine::Scene::SerialiseScene(string Path)
 {
+
 }
 
 void Engine::Scene::DeSerialiseScene(string Path)
 {
+
+}
+
+bool Engine::Scene::GetActiveState()
+{
+	return Active;
+}
+
+void Engine::Scene::SetActiveState(bool state)
+{
+	Active = state;
+	return;
 }
 
 

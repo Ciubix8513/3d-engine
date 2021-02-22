@@ -21,6 +21,8 @@ namespace Engine
 		void Destroy();
 	private:
 		void Update();
+		bool change;
+		long UpdateOrder;
 	public:
 		std::string Name;
 	private:
@@ -138,6 +140,12 @@ namespace Engine
 		};
 		bool ContainComponent(const type_info* info);
 		#pragma endregion	
+		bool GetChagedState();
+		void SetChangedState(bool state);
+		bool operator<( const Entity& other) const;
+		bool operator>=(Entity other);
+		bool operator()(const Entity& _Left, const Entity& _Right) const;
+		
 
 	};
 };

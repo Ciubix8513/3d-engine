@@ -49,3 +49,32 @@ bool Engine::Entity::ContainComponent(const type_info* info)
 	return false;
 }
 
+bool Engine::Entity::GetChagedState()
+{
+	return change;
+}
+
+void Engine::Entity::SetChangedState(bool state)
+{
+	change = state;
+	return;
+
+	
+}
+
+bool Engine::Entity::operator<(const Entity& other) const
+{
+	
+	return UpdateOrder <  other.UpdateOrder;
+}
+
+bool Engine::Entity::operator>=(const Entity other)
+{
+	return UpdateOrder < other.UpdateOrder;
+}
+
+bool Engine::Entity::operator()(const Entity& _Left, const Entity& _Right) const
+{
+	return _Left.UpdateOrder < _Right.UpdateOrder;
+}
+

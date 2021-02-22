@@ -237,6 +237,9 @@
     <ClCompile Include="ECS\Scene.cpp">
       <Filter>Main System\ECS\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Rendering\MaterialComponent.cpp">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">
@@ -340,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="ECS\Scene.h">
       <Filter>Main System\ECS\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Rendering\MaterialComponent.h">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

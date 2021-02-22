@@ -12,9 +12,12 @@ namespace Engine
 		void DeleteEntity(Entity* entity);
 		void SerialiseScene(string Path);
 		void DeSerialiseScene(string Path);
+		bool GetActiveState();
+		void SetActiveState(bool state);
 	private:
-		vector<Entity> Entitys;
+		set<Entity> Entitys;
 		D3d* m_D3d; 
+		bool Active;
 	};
 }
 

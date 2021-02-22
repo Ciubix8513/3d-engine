@@ -14,6 +14,13 @@ namespace Engine
 		void DeSerialiseScene(string Path);
 		bool GetActiveState();
 		void SetActiveState(bool state);
+#pragma region Get entity functions
+		const Engine::Entity& GetEntityByName(string Name);
+		 const Engine::Entity& GetEntityByUUID(unsigned long UUID);
+		 const Engine::Entity& GetEntityByTag(string Tag);
+		 const Engine::Entity& GetEntityByName_Tag(string Name,string Tag);
+#pragma endregion
+
 	private:
 		set<Entity> Entitys;
 		D3d* m_D3d; 

@@ -1,23 +1,19 @@
 #include "Launcher.h"
 #include "System.h"
 #include "Math/EngineMath.h"
-#include "../ECS/Entity.h"
+#include "../ECS/Scene.h"
 using namespace EngineMath; 
 using namespace Engine;
 
 
 int main()
 {
-	Entity a = Entity();
-	a.AddComponent<Transform>();
-	(*a.GetComponent<Transform>())->testData = "This is a test";
-	a.AddComponent<MeshComponent>();
+	Scene scene;
+	scene.AddEntity();
+	scene.AddEntity();
+	
 
-
-
-	auto b = a.ContainComponent<MeshComponent>();
-	auto C = a.ContainComponent<Transform>();
-	cout << " ";
+	cout << ' ';
 	System* system;
 	bool result;
 	system = new System();

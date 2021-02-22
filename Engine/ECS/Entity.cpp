@@ -26,6 +26,22 @@ void Engine::Entity::Destroy()
 	throw "Destroy object" + UUID ;
 }
 
+void Engine::Entity::SetTag(string Tag)
+{
+	EntityTag = Tag;
+	return;
+}
+
+string Engine::Entity::GetTag()
+{
+	return EntityTag;
+}
+
+bool Engine::Entity::CompareTag(string other)
+{
+	return EntityTag == other;
+}
+
 void Engine::Entity::Update()
 {
 	for (int i = 0; i < Components.size(); i++)

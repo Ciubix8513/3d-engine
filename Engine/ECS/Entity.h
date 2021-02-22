@@ -19,6 +19,12 @@ namespace Engine
 	public:
 		Entity(D3d* D3d);Entity();
 		void Destroy();
+#pragma region Tag funcs
+		void SetTag(string Tag);
+		string GetTag();
+		bool CompareTag(string other);
+#pragma endregion
+
 	private:
 		void Update();
 		bool change;
@@ -27,7 +33,8 @@ namespace Engine
 		std::string Name;
 	private:
 		std::vector<Component*> Components;
-		long UUID;
+		unsigned long UUID;
+		string EntityTag;
 	public:
 		#pragma region Component functions
 		template <typename T>

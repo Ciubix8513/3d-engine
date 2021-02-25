@@ -4,21 +4,29 @@ void Engine::Scene::AddEntity()
 {
 	Entity A(m_D3d);
 	A.AddComponent<Transform>();
-	A.UUID = Entitys.size();
-	Entitys.insert(Entitys.begin(),A);
+	Entitys.push_back(A);	
+	if (UUIDcounter == 0)
+		ResetUUIDs();
+	else
+	{
+		Entitys[Entitys.size()].UUID = UUIDcounter;
+		UUIDcounter++;
+	}
+	return;
 }
-
 void Engine::Scene::DeleteEntity(Entity* entity)
 {	
 	entity->Destroy(); //Might not work
-	Entitys.erase(Entitys.find(*entity));
+	for (auto i = Entitys.begin(); i != Entitys.end(); i++)	
+		if ((*i).UUID == entity->UUID)		
+			Entitys.erase(i);
+	return;	
 }
 
 void Engine::Scene::SerialiseScene(string Path)
 {
 
 }
-
 void Engine::Scene::DeSerialiseScene(string Path)
 {
 
@@ -28,45 +36,47 @@ bool Engine::Scene::GetActiveState()
 {
 	return Active;
 }
-
 void Engine::Scene::SetActiveState(bool state)
 {
 	Active = state;
 	return;
 }
 
-const Engine::Entity& Engine::Scene::GetEntityByName(string Name)
-{
-	for (set<Entity>::iterator i = Entitys.begin(); i != Entitys.end(); i++) {
-		const Entity& A =  (*i);
-		if (A.Name == Name)
-			return A;
-	}
-	return nullptr;
+//Just A quick function to reset UUIDs just in case
+void Engine::Scene::ResetUUIDs()
+{	
+	for (UUIDcounter = 0; UUIDcounter < Entitys.size(); UUIDcounter++)	
+		Entitys[UUIDcounter].UUID = UUIDcounter;
+	
 }
 
-const Engine::Entity& Engine::Scene::GetEntityByUUID(unsigned long UUID)
+
+Engine::Entity* Engine::Scene::GetEntityByName(string Name)
 {
-	for (set<Entity>::iterator i = Entitys.begin(); i != Entitys.end(); i++) {
-		const Entity& A = (*i);
-		if (A.UUID == UUID)
-			return A;
-	}
+	for (size_t i = 0; i < Entitys.size(); i++)
+		if (Entitys[i].Name == Name)
+			return &Entitys[i];
 	return nullptr;
 }
-
-const Engine::Entity& Engine::Scene::GetEntityByTag(string Tag)
+Engine::Entity* Engine::Scene::GetEntityByUUID(unsigned long UUID)
 {
-	for (set<Entity>::iterator i = Entitys.begin(); i != Entitys.end(); i++) {
-		const Entity& A = (*i);
-		if (A.CompareTag(Tag))
-			return A;
-	}
+	for (size_t i = 0; i < Entitys.size(); i++)
+		if (Entitys[i].UUID == UUID)
+			return &Entitys[i];
 	return nullptr;
 }
-
-const Engine::Entity& Engine::Scene::GetEntityByName_Tag(string Name, string Tag)
+Engine::Entity* Engine::Scene::GetEntityByTag(string Tag)
 {
+	for (size_t i = 0; i < Entitys.size(); i++)
+		if (Entitys[i].CompareTag(Tag))
+			return &Entitys[i];
+	return nullptr;
+}
+Engine::Entity* Engine::Scene::GetEntityByName_Tag(string Name, string Tag)
+{
+	for (size_t i = 0; i < Entitys.size(); i++)
+		if (Entitys[i].Name == Name && Entitys[i].CompareTag(Tag))
+			return &Entitys[i];
 	return nullptr;
 }
 

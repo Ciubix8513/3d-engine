@@ -17,26 +17,14 @@ namespace Engine
 	{
 		friend class Scene;
 	public:
-		Entity(D3d* D3d);Entity();
+		Entity(D3d* D3d); Entity();
 		void Destroy();
 #pragma region Tag funcs
 		void SetTag(string Tag);
 		string GetTag();
 		bool CompareTag(string other);
 #pragma endregion
-
-	private:
-		void Update();
-		bool change;
-		long UpdateOrder;
-	public:
-		std::string Name;
-	private:
-		std::vector<Component*> Components;
-		unsigned long UUID;
-		string EntityTag;
-	public:
-		#pragma region Component functions
+#pragma region Component functions
 		template <typename T>
 		void AddComponent()
 		{
@@ -110,7 +98,7 @@ namespace Engine
 			{
 				if (!std::is_base_of<Component, T>::value)
 				{
-					throw std::exception("Wrong component type");					
+					throw std::exception("Wrong component type");
 				}
 			}
 			catch (exception& e)
@@ -124,7 +112,7 @@ namespace Engine
 		};
 		Component** GetComponent(const type_info* info);
 		template <typename T>
-		bool ContainComponent() 
+		bool ContainComponent()
 		{
 			auto a = typeid(T).name();
 			//Check if there's a component type T
@@ -146,13 +134,15 @@ namespace Engine
 			return false;
 		};
 		bool ContainComponent(const type_info* info);
-		#pragma endregion	
-		bool GetChagedState();
-		void SetChangedState(bool state);
-		bool operator<( const Entity& other) const;
-		bool operator>=(Entity other);
-		bool operator()(const Entity& _Left, const Entity& _Right) const;
-		
+#pragma endregion		
+	private:
+		void Update();
+		bool change;
+		std::string Name;
+		std::vector<Component*> Components;
+		unsigned long UUID;
+		string EntityTag;
+
 
 	};
 };

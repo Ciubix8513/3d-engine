@@ -14,17 +14,21 @@ namespace Engine
 		void DeSerialiseScene(string Path);
 		bool GetActiveState();
 		void SetActiveState(bool state);
+		void ResetUUIDs();
+
 #pragma region Get entity functions
-		const Engine::Entity& GetEntityByName(string Name);
-		 const Engine::Entity& GetEntityByUUID(unsigned long UUID);
-		 const Engine::Entity& GetEntityByTag(string Tag);
-		 const Engine::Entity& GetEntityByName_Tag(string Name,string Tag);
+		 Engine::Entity* GetEntityByName(string Name);
+		 Engine::Entity* GetEntityByUUID(unsigned long UUID);
+		 Engine::Entity* GetEntityByTag(string Tag);
+		 Engine::Entity* GetEntityByName_Tag(string Name,string Tag);
 #pragma endregion
 
 	private:
-		set<Entity> Entitys;
+		vector<Entity> Entitys;
 		D3d* m_D3d; 
 		bool Active;
+		//Quick and dirty, but should work
+		unsigned long int UUIDcounter = 1;
 	};
 }
 

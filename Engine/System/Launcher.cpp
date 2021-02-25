@@ -8,6 +8,13 @@ using namespace Engine;
 
 int main()
 {
+	unsigned long i;
+	for ( i = 1; i != 0; i++)
+	{
+		
+	}
+
+
 	Scene scene;
 	scene.AddEntity();
 	scene.AddEntity();

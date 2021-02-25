@@ -136,11 +136,12 @@ namespace Engine
 		bool ContainComponent(const type_info* info);
 #pragma endregion		
 	private:
+		void SetUUID(ULONG NewUUID);
 		void Update();
 		bool change;
 		std::string Name;
 		std::vector<Component*> Components;
-		unsigned long UUID;
+		ULONG UUID;
 		string EntityTag;
 
 

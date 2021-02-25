@@ -42,6 +42,11 @@ bool Engine::Entity::CompareTag(string other)
 	return EntityTag == other;
 }
 
+void Engine::Entity::SetUUID(ULONG NewUUID)
+{
+	UUID = NewUUID;
+}
+
 void Engine::Entity::Update()
 {
 	for (int i = 0; i < Components.size(); i++)

@@ -8,8 +8,13 @@ namespace Engine
 	class Scene
 	{
 	public:
-		void AddEntity();
-		void DeleteEntity(Entity* entity);
+		void AddEntity(string name = "");
+
+#pragma region Delete Entity
+		void DeleteEntityByPointer(Entity* entity);
+		void DeleteEntityByUUID(ULONG UUID);
+#pragma endregion
+
 		void SerialiseScene(string Path);
 		void DeSerialiseScene(string Path);
 		bool GetActiveState();
@@ -28,7 +33,7 @@ namespace Engine
 		D3d* m_D3d; 
 		bool Active;
 		//Quick and dirty, but should work
-		unsigned long int UUIDcounter = 1;
+		ULONG UUIDcounter = 1;
 	};
 }
 

@@ -29,7 +29,7 @@ namespace Engine
 #pragma endregion
 
 #pragma region Rendering
-		 bool RenderScene();
+		 bool RenderSceneFromCameraPtr(CameraComponent** Camera);
 #pragma endregion
 
 	private:
@@ -38,6 +38,7 @@ namespace Engine
 		bool Active;
 		//Quick and dirty, but should work
 		ULONG UUIDcounter = 1;
+		const vector <const type_info*> RenderingComponents = { &typeid(MaterialComponent) }; // For expandability probably won't work but I'll still add this
 	};
 }
 

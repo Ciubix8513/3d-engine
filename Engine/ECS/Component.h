@@ -14,7 +14,7 @@ namespace Engine
 
 	public:
 		Component();
-		virtual void Initialise(D3d* directX);
+		//virtual void Initialise(D3d* directX);
 		virtual void Initialise(std::vector<Component**>);
 		virtual void Shutdown();
 		virtual void Update();

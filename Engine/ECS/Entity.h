@@ -3,6 +3,7 @@
 #define _ENTITY_H_
 #include "General/Transform.h"
 #include "Rendering/MeshComponent.h"
+#include "Rendering/CameraComponent.h"
 #include <vector>
 #include <string>
 #include <typeinfo>
@@ -23,6 +24,7 @@ namespace Engine
 		void SetTag(string Tag);
 		string GetTag();
 		bool CompareTag(string other);
+
 #pragma endregion
 #pragma region Component functions
 		template <typename T>
@@ -143,7 +145,8 @@ namespace Engine
 		std::vector<Component*> Components;
 		ULONG UUID;
 		string EntityTag;
-
+	public:
+		Engine::Transform** Transform;
 
 	};
 };

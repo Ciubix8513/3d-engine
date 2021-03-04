@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="ECS\Component.cpp" />
     <ClCompile Include="ECS\Entity.cpp" />
+    <ClCompile Include="ECS\Rendering\CameraComponent.cpp" />
     <ClCompile Include="ECS\Rendering\MaterialComponent.cpp" />
     <ClCompile Include="ECS\Scene.cpp" />
     <ClCompile Include="ECS\General\Transform.cpp" />
@@ -182,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Entity.h" />
+    <ClInclude Include="ECS\Rendering\CameraComponent.h" />
     <ClInclude Include="ECS\Rendering\MaterialComponent.h" />
     <ClInclude Include="ECS\Scene.h" />
     <ClInclude Include="ECS\General\Transform.h" />

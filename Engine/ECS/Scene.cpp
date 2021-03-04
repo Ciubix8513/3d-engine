@@ -5,6 +5,7 @@ void Engine::Scene::AddEntity(string name)
 	Entity A(m_D3d);
 	A.AddComponent<Transform>();
 	A.Name = name;
+	A.Transform = A.GetComponent<Transform>();
 	Entities.push_back(A);	
 	if (UUIDcounter == 0)
 		ResetUUIDs();
@@ -93,13 +94,83 @@ Engine::Entity* Engine::Scene::GetEntityByName_Tag(string Name, string Tag)
 	return nullptr;
 }
 
-bool Engine::Scene::RenderScene()
+bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 {
-	vector<Entity*> Objects;
+	vector<Entity*> Objects; //Vector of all entities that need to be rendered
 	for (size_t i = 0; i < Entities.size(); i++)//Getting all objects to render
-		if (Entities[i].ContainComponent<Engine::MaterialComponent>())
-			Objects.push_back(&Entities[i]);
-	
+		for (size_t j = 0; j < RenderingComponents.size(); j++) 
+			if (Entities[i].ContainComponent(RenderingComponents[j]))
+			{
+				Objects.push_back(&Entities[i]);
+				break;
+			}
+	Entity** OrderedObjects = Objects.data();
+	MaterialComponent*** MatComps = new MaterialComponent* * [Objects.size()]; // Ah yes triple pointers
+	//Getting all components
+	for (size_t i = 0; i < Objects.size(); i++)
+		MatComps[i] = OrderedObjects[i]->GetComponent<MaterialComponent>();
+	//Sorting
+	bool sorted = false;
+	Entity* EntityBuffer;
+	MaterialComponent** MaterialComponentBuffer;
+	while (!sorted)
+	{
+		for (size_t i = 0; i < Objects.size(); i++)
+		{
+			if (
+				//Check rendering order
+				(
+					(*MatComps[i])->GetRenderingOrder()
+		>
+					(*MatComps[i + 1])->GetRenderingOrder()
+					)
+				||
+				//Check which object is closer
+				(
+					((*OrderedObjects[i]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+	>
+					((*OrderedObjects[i + 1]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+					)
+				) 
+			{
+				sorted = false;
+				goto Sorting;
+			}
+		}
+
+		sorted = true;
+		goto Sorted;
+		Sorting:
+		for (size_t i = 0; i < Objects.size() - 1; i++)
+		{
+			if (
+				//Check rendering order
+				(
+					(*MatComps[i])->GetRenderingOrder()
+		>
+					(*MatComps[i + 1])->GetRenderingOrder()
+					)
+				||
+				//Check which object is closer
+				(
+					((*OrderedObjects[i]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+	>
+					((*OrderedObjects[i + 1]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+					)
+				)
+			{
+				EntityBuffer = OrderedObjects[i + 1];
+				MaterialComponentBuffer = MatComps[i + 1];
+				OrderedObjects[i + 1] = OrderedObjects[i];
+				MatComps[i + 1] = MatComps[i];
+				OrderedObjects[i] = EntityBuffer;
+				MatComps[i] = MaterialComponentBuffer;
+			}
+		}
+		Sorted:
+	}
+
+
 
 	return true;
 }

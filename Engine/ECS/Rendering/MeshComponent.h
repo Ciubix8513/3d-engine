@@ -7,6 +7,7 @@
 #include <string>
 #include <d3d11.h>
 #include <fstream>
+#include "MaterialComponent.h"
 using namespace EngineMath;
 using namespace std;
 

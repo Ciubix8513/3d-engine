@@ -28,8 +28,12 @@ namespace Engine
 		 Engine::Entity* GetEntityByName_Tag(string Name,string Tag);
 #pragma endregion
 
+#pragma region Rendering
+		 bool RenderScene();
+#pragma endregion
+
 	private:
-		vector<Entity> Entitys;
+		vector<Entity> Entities;
 		D3d* m_D3d; 
 		bool Active;
 		//Quick and dirty, but should work

@@ -222,7 +222,7 @@
 		char tempString[16];
 		char Output[16];
 		bool result;
-		_itoa_s(fps, tempString, 10);//convert int to string
+		_itoa_s(fps, tempString, 10);//convert int to std::string
 		strcpy_s(Output, "Fps: ");
 		strcat_s(Output, tempString);
 
@@ -230,7 +230,7 @@
 		if (!result)
 			return false;
 		if (cpu != -1) {
-			_itoa_s(cpu, tempString, 10);//convert int to string
+			_itoa_s(cpu, tempString, 10);//convert int to std::string
 			strcpy_s(Output, "Cpu: ");
 			strcat_s(Output, tempString);
 			result = m_Text->UpdateSentence(sentences[1], Output, 20, 40, 1.0f, 1.0f, 1.0f, m_D3d->getDeviceContext());
@@ -242,7 +242,7 @@
 		}
 		if (!result)
 			return false;
-		_itoa_s((int)(time / 1000), tempString, 10);//convert int to string
+		_itoa_s((int)(time / 1000), tempString, 10);//convert int to std::string
 		strcpy_s(Output, "Time: ");
 		strcat_s(Output, tempString);
 		result = m_Text->UpdateSentence(sentences[2], Output, 20, 20, 1.0f, 1.0f, 1.0f, m_D3d->getDeviceContext());
@@ -317,7 +317,7 @@
 		m_D3d->ToggleAlphaBlend(false);
 
 		m_D3d->EndScene();
-		cout << "Rendered scene \n";
+		std::cout << "Rendered scene \n";
 
 		return true;
 	}

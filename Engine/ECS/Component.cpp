@@ -8,7 +8,7 @@ Engine::Component::Component()
 /*void Engine::Component::Initialise(D3d* directX)
 {
 	m_D3d = directX;	
-	cout << 113;	
+	std::cout << 113;	
 	return;
 }*/
 

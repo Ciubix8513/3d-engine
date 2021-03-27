@@ -26,18 +26,18 @@ void Engine::Entity::Destroy()
 	throw "Destroy object" + UUID ;
 }
 
-void Engine::Entity::SetTag(string Tag)
+void Engine::Entity::SetTag(std::string Tag)
 {
 	EntityTag = Tag;
 	return;
 }
 
-string Engine::Entity::GetTag()
+std::string Engine::Entity::GetTag()
 {
 	return EntityTag;
 }
 
-bool Engine::Entity::CompareTag(string other)
+bool Engine::Entity::CompareTag(std::string other)
 {
 	return EntityTag == other;
 }

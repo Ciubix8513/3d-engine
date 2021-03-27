@@ -15,8 +15,21 @@ void Engine::MaterialComponent::SetRenderingOrder(size_t NewRenderingOrder)
 	RenderingOrder = NewRenderingOrder;
 	return;
 }
-
-bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS, UINT FLAGS2)
+std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* fileName)
+{
+	std::ifstream f(fileName);
+	std::string tmp1;
+	std::vector<std::string> Words;
+	while (f.good())
+	{	
+		f >> tmp1;
+		Words.push_back( tmp1);		
+	}
+	f.close();
+	return Words;
+}
+// = D3D10_SHADER_ENABLE_STRICTNESS
+bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
 {
 	HRESULT result;
 	ID3D10Blob* errorMsg;
@@ -36,9 +49,9 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	if(FAILED(result))
 	{
 		if (errorMsg)
-			throw exception(GetShaderErrorMsg(errorMsg).c_str());
+			throw std::exception(GetShaderErrorMsg(errorMsg).c_str());
 		else
-			throw exception(((char*)vsFilename + (string)" does not exist").c_str());
+			throw std::exception(((char*)vsFilename + (std::string)" does not exist").c_str());
 		return false;
 	}
 	//Compiling pixel shader
@@ -46,9 +59,9 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	if (FAILED(result))
 	{
 		if (errorMsg)
-			throw exception(GetShaderErrorMsg(errorMsg).c_str());
+			throw std::exception(GetShaderErrorMsg(errorMsg).c_str());
 		else
-			throw exception(((char*)psFilename + (string)" does not exist").c_str());
+			throw std::exception(((char*)psFilename + (std::string)" does not exist").c_str());
 		return false;
 	}
 
@@ -56,7 +69,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	result = device->CreateVertexShader(vertexshaderBuff->GetBufferPointer(), vertexshaderBuff->GetBufferSize(), NULL, &m_vertexShader);
 	if(FAILED(result))
 	{
-		throw exception("Could not create vertex shader");
+		throw std::exception("Could not create vertex shader");
 		return false;
 	}
 
@@ -64,7 +77,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	result = device->CreatePixelShader(pixelShaderBuff->GetBufferPointer(), pixelShaderBuff->GetBufferSize(), NULL, &m_pixelShader);
 	if (FAILED(result))
 	{
-		throw exception("Could not create pixel shader");
+		throw std::exception("Could not create pixel shader");
 		return false;
 	}
 	
@@ -107,7 +120,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	result = device->CreateInputLayout(polygonLayout, numElements, vertexshaderBuff->GetBufferPointer(), vertexshaderBuff->GetBufferSize(), &m_layout);
 	if (FAILED(result))
 	{
-		throw exception("Failed to create input layout");
+		throw std::exception("Failed to create input layout");
 		return false;
 	}
 
@@ -117,12 +130,29 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	vertexshaderBuff = 0;
 	pixelShaderBuff = 0;
 
+ID3D11SamplerState
+	//Getting buffer data 
+	std::vector<std::string> Words = GetWordsFromFile(vsFilename);
+
+	for (size_t i = 0; i < Words.size(); i++)
+	{
+		if(Words[i] == "cbuffer")// Finding all buffers
+		{
+			if(Words[i + 1 ] == "MatrixBuffer")
+		}
+	}
+
+
+
+
 	return true;
 }
 
+
+
 std::string Engine::MaterialComponent::GetShaderErrorMsg(ID3D10Blob* msg)
 {
-	string compileErrors;
+	std::string compileErrors;
 	compileErrors = (char*)(msg->GetBufferPointer());
 	msg->Release();
 	msg = 0;

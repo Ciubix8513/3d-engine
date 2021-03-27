@@ -23,35 +23,35 @@ Matrix4x4 Model::Getobjectmatrix()
 
 
 
-Model::Mesh Model::loadMeshFromFile(char* fileName)
+Model::Mesh* Model::loadMeshFromFile(char* fileName)
 {
 	Mesh mesh = Mesh();	
 	ifstream file(fileName);
-	string line;
-	string fstChar = "01";
+	std::string line;
+	std::string fstChar = "01";
 
-	vector<string> wipVec;
+	std::vector<std::string> wipVec;
 	if (!file.is_open())  
 	{
-		cout << "Failed to open file";
-		return Mesh();
+		std::cout << "Failed to open file";
+		return nullptr;
 	}
-	cout << "opened file"<<endl;
+	std::cout << "opened file"<<std::endl;
 	int vCount = 0 , vtCount = 0, vnCount = 0, fCount = 0;
 
-	//vector<Vector2> a;
+	//std::vector<Vector2> a;
 	
 
-	vector<Vector3> Vertices, Normals;
-	vector<vertex> Tris;
-	vector<Vector2> UVs;
+	std::vector<Vector3> Vertices, Normals;
+	std::vector<vertex> Tris;
+	std::vector<Vector2> UVs;
 	while (getline(file, line))
 	{
 
 		if (line[0] == 'v' && line[1] == ' ')
 		{
 
-			string currentFloat;
+			std::string currentFloat;
 			int XYZ = 0;
 			Vector3 currentVec;
 			for (int i = 2; i < line.length(); i++)
@@ -78,7 +78,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 		if (line[0] == 'v' && line[1] == 't')
 		{
 
-			string currentFloat;
+			std::string currentFloat;
 			int XY = 0;
 			Vector2 currentVec;
 			for (int i = 3; i < line.length(); i++)
@@ -103,7 +103,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 		if (line[0] == 'v' && line[1] == 'n')
 		{
 		
-			string currentFloat;
+			std::string currentFloat;
 			int XYZ = 0;
 			Vector3 currentVec;
 			for (int i = 3; i < line.length(); i++)
@@ -136,7 +136,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 		{
 
 			vertex currentVertex;
-			string curentIndex;
+			std::string curentIndex;
 			int Index = 0;
 
 			for (int i = 2; i < line.length(); i++)
@@ -176,8 +176,8 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	file.close();
 
 	auto Faces = Tris;
-	vector<vertex> FinalVertices;
-	vector<unsigned long> Indecies;
+	std::vector<vertex> FinalVertices;
+	std::vector<unsigned long> Indecies;
 	for (int i = 0; i < Faces.size(); i++)
 	{
 		for (int j = 0; j < Faces.size(); j++)
@@ -191,7 +191,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 			}
 		}
 	a:
-		cout << '\n';
+		std::cout << '\n';
 	}
 	Vertices.clear();
 	Normals.clear();
@@ -221,7 +221,7 @@ Model::Mesh Model::loadMeshFromFile(char* fileName)
 	for (size_t i = 0; i < mesh.indexCount; i++)
 		mesh.indecies[i] = Indecies[i];
 
-	return mesh;	
+	return &mesh;	
 }
 
 
@@ -236,7 +236,7 @@ bool Model::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext, char*
 		return false;
 	result = LoadTexture(device, deviceContext, textureFilename);
 	if (!result) {
-		cout << "Could not load texture";
+		std::cout << "Could not load texture";
 		return false;
 	}
 	return true;
@@ -386,10 +386,10 @@ bool Model::InitBuffers(ID3D11Device* device, char* file)
 	}
 	else 
 	{
-		Mesh* mesh = &loadMeshFromFile(file);
+		Mesh* mesh = loadMeshFromFile(file);
 		if (!mesh) 
 		{
-			cout << "Failed to load mesh " << file << " loading a triangle instead";
+			std::cout << "Failed to load mesh " << file << " loading a triangle instead";
 			goto Default;
 		}
 		m_indexCount = mesh->indexCount;
@@ -477,14 +477,14 @@ void Model::RenderBuffers(ID3D11DeviceContext* ctxt)
 	
 }
 
-bool Model::SerialiseMesh(string FileName, Mesh mesh)
+bool Model::SerialiseMesh(std::string FileName, Mesh mesh)
 {
 	FILE* F;
 	int result;
 	Count c;
 	c.indexCount = mesh.indexCount;
 	c.vertexCount = mesh.vertexCount;
-	string location = FileName;
+	std::string location = FileName;
 	location[location.length()] = ' ';
 	location[location.length() -1] = ' ';
 	location[location.length()- 2] = ' ';
@@ -514,12 +514,12 @@ bool Model::SerialiseMesh(string FileName, Mesh mesh)
 
 }
 
-bool Model::UnSerialiseMesh(string FileName, Mesh& mesh)
+bool Model::UnSerialiseMesh(std::string FileName, Mesh& mesh)
 {
 	FILE* F;
 	int result;
 	Count c;
-	string location = FileName;
+	std::string location = FileName;
 	location[location.length()] = ' ';
 	location[location.length() - 1] = ' ';
 	location[location.length() - 2] = ' ';

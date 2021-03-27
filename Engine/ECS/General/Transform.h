@@ -34,7 +34,7 @@ namespace Engine
 		Transform** GetChild(unsigned int ChildIndex);
 		Transform*** GetChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
 		Transform*** GetChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount);
-		Transform*** GetChildren(vector<unsigned int> ChildrenIndecies);
+		Transform*** GetChildren(std::vector<unsigned int> ChildrenIndecies);
 		bool HasParent();
 		bool HasChildren();
 		unsigned int GetChildrenCount();
@@ -42,18 +42,18 @@ namespace Engine
 		void RemoveChild(Transform** Child);
 		void RemoveChild(unsigned int ChildIndex);
 		void RemoveChildren(Transform*** Children, unsigned int ChildrenCount);
-		void RemoveChildren(vector<Transform**> Children);
+		void RemoveChildren(std::vector<Transform**> Children);
 		void RemoveChildren(unsigned int* ChildrenIndecies, unsigned int ChildrenCount);
-		void RemoveChildren(vector<unsigned int> ChildrenIndecies);
+		void RemoveChildren(std::vector<unsigned int> ChildrenIndecies);
 		void RemoveChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
 		void RemoveAllChildren();
 	public:
 		Vector3 Position;
 		Vector3 Scale;
 		Quaternion Rotation;
-		string testData;
+		std::string testData;
 	private:
-		vector<Transform**> m_Children;
+		std::vector<Transform**> m_Children;
 		Transform** m_Parent;
 		bool HasPar;
 		

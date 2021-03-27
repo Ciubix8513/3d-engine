@@ -1,6 +1,8 @@
 SamplerState ss;
 Texture2D shaderTex;
 
+[DynamicWriteBuffer]
+    
 cbuffer LightBuffer
 {
     float4 AmbientColor;
@@ -9,6 +11,9 @@ cbuffer LightBuffer
     float specularPower;
     float4 specularColor;
 };
+
+[WriteVar]
+float4 colorA;
 
 struct PixelInput
 {
@@ -27,7 +32,7 @@ float4 LightPixelShader(PixelInput input) : SV_TARGET
     float4 color;
     float3 reflection;
     float4 specular;
-
+   
 	
 	textureColor = shaderTex.Sample(ss, input.UV);
     color = AmbientColor;

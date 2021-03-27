@@ -21,7 +21,7 @@ bool Font::Init(ID3D11Device* device,ID3D11DeviceContext* ctxt, char* fontFile, 
     result = LoadFontData(fontFile);
     if (!result) 
     {
-        cout << "Could not load font file" << endl;
+        std::cout << "Could not load font file" << std::endl;
 
         return false;
     }
@@ -29,7 +29,7 @@ bool Font::Init(ID3D11Device* device,ID3D11DeviceContext* ctxt, char* fontFile, 
     result = LoadTexture(device, ctxt, fontTexture);
     if (!result) 
     {
-        cout << "Could not load font texture" << endl;
+        std::cout << "Could not load font texture" << std::endl;
 
         return false;
     }

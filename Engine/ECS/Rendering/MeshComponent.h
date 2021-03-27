@@ -9,7 +9,7 @@
 #include <fstream>
 #include "MaterialComponent.h"
 using namespace EngineMath;
-using namespace std;
+//using namespace std;
 
 namespace Engine
 {
@@ -47,9 +47,9 @@ namespace Engine
 	public:		
 		void Shutdown() override;
 		MeshComponent();
-		bool loadMeshFromObjFile(string path);
-		void SerialiseMesh(string path);
-		Mesh DeSerialiseMesh(string path);
+		bool loadMeshFromObjFile(std::string path);
+		void SerialiseMesh(std::string path);
+		Mesh DeSerialiseMesh(std::string path);
 		void InitBuffers(ID3D11Device* device);
 		void ShutDownBuffers();
 		ID3D11Buffer** GetVertexBufferPtr();

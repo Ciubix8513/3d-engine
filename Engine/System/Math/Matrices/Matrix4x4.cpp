@@ -158,7 +158,7 @@ void EngineMath::Matrix4x4::SetRow(int row, Vector4 value)
         _m33 = value.w;
         break;
     default:
-        throw exception("Wrong row index");
+        throw std::exception("Wrong row index");
         break;
     }
     return;
@@ -349,7 +349,7 @@ Vector4 EngineMath::Matrix4x4::GetRow(int index)
         return Vector4(_m30, _m31, _m32, _m33);
         break;
     default:
-        throw exception("Wrong row index");
+        throw std::exception("Wrong row index");
         break;
     }
 }

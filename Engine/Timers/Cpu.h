@@ -27,7 +27,7 @@ public:
 	void Frame();
 	int GetCpuPercentage();
 private:
-	string getLocalizedPerfName(const map<string, string>& perfNames, const string& name);
+	std::string getLocalizedPerfName(const map<std::string, std::string>& perfNames, const std::string& name);
 
 #pragma endregion
 #pragma region Private Vars

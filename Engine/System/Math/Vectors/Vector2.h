@@ -4,7 +4,7 @@
 #include <math.h>
 #include <exception>
 #include <DirectXMath.h>
-using namespace std;
+//using namespace std;
 
 namespace EngineMath
 {

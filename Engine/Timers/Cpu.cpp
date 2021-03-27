@@ -19,7 +19,7 @@ void Cpu::Init()
 	err = PdhOpenQuery(NULL, 0, &m_QueryHandle);
 	if (err != ERROR_SUCCESS)
 		m_canReadcpu = false;
-	vector<unsigned char> buffer;
+	std::vector<unsigned char> buffer;
 	unsigned long size = 32768;
 	buffer.resize(size);
 	while (RegQueryValueEx(HKEY_PERFORMANCE_DATA, TEXT("Counter 09"), 0, 0, &buffer[0], &size) == ERROR_MORE_DATA)
@@ -27,20 +27,20 @@ void Cpu::Init()
 		size += 8192;
 		buffer.resize(size);
 	}
-	map<string, string> perfNames;
+	map<std::string, std::string> perfNames;
 	const char* buf = reinterpret_cast<const char*>(&buffer[0]);
 
 
 	int i = 0;
 	while (i < buffer.size() && buf[i])
 	{
-		string index(&buf[i]);
+		std::string index(&buf[i]);
 		i += static_cast<int>(index.size()) + 1;
 		if (i >= buffer.size())
 		{
 			break;
 		}
-		string name(&buf[i]);
+		std::string name(&buf[i]);
 		i += static_cast<int>(name.size()) + 1;
 		perfNames.insert(make_pair(name, index));
 	}
@@ -48,13 +48,13 @@ void Cpu::Init()
 	//
 	// Get the localized version of "Processor" and "%Processor Time"
 	//
-	string proc = getLocalizedPerfName(perfNames, "Processor");
-	string proctime = getLocalizedPerfName(perfNames, "% Processor Time");
+	std::string proc = getLocalizedPerfName(perfNames, "Processor");
+	std::string proctime = getLocalizedPerfName(perfNames, "% Processor Time");
 
 	//
 	// Add the counter
 	//
-	const string name = '\\' + proc + "(_Total)\\" + proctime;
+	const std::string name = '\\' + proc + "(_Total)\\" + proctime;
 		err = PdhAddCounter(m_QueryHandle,(LPCWSTR)name.c_str(), 0, &m_CountHandler);
 	if (err != ERROR_SUCCESS)
 			m_canReadcpu = false;
@@ -65,18 +65,18 @@ void Cpu::Init()
 }
 
 
-/*string getLocalizedPerfName(const map<string, string>& perfNames, const string& name)
+/*std::string getLocalizedPerfName(const map<std::string, std::string>& perfNames, const std::string& name)
 {
 	unsigned long idx;
-	map<string, string>::const_iterator p = perfNames.find(name);
+	map<std::string, std::string>::const_iterator p = perfNames.find(name);
 	if (p == perfNames.end())
 	{
 		return "";
 	}
-	istringstream is(p->second);
+	istd::stringstream is(p->second);
 	is >> idx;
 
-	vector<char> localized;
+	std::vector<char> localized;
 	unsigned long size = 256;
 	localized.resize(size);
 	while (PdhLookupPerfNameByIndex(0, idx, (LPWSTR)localized[0], &size) == PDH_MORE_DATA)
@@ -84,7 +84,7 @@ void Cpu::Init()
 		size += 256;
 		localized.resize(size);
 	}
-	return string(&localized[0]);
+	return std::string(&localized[0]);
 }*/
 
 void Cpu::ShutDown()
@@ -124,10 +124,10 @@ int Cpu::GetCpuPercentage()
 	return usage;
 }
 
-string Cpu::getLocalizedPerfName(const map<string, string>& perfNames, const string& name)
+std::string Cpu::getLocalizedPerfName(const map<std::string, std::string>& perfNames, const std::string& name)
 {
 	unsigned long idx;
-	map<string, string>::const_iterator p = perfNames.find(name);
+	map<std::string, std::string>::const_iterator p = perfNames.find(name);
 	if (p == perfNames.end())
 	{
 		return "";
@@ -135,7 +135,7 @@ string Cpu::getLocalizedPerfName(const map<string, string>& perfNames, const str
 	istringstream is(p->second);
 	is >> idx;
 
-	vector<char> localized;
+	std::vector<char> localized;
 	unsigned long size = 256;
 	localized.resize(size);
 	while (PdhLookupPerfNameByIndex(0, idx, (LPWSTR)localized[0], &size) == PDH_MORE_DATA)
@@ -143,5 +143,5 @@ string Cpu::getLocalizedPerfName(const map<string, string>& perfNames, const str
 		size += 256;
 		localized.resize(size);
 	}
-	return string(&localized[0]);
+	return std::string(&localized[0]);
 }

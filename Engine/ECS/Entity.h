@@ -2,7 +2,8 @@
 #ifndef _ENTITY_H_
 #define _ENTITY_H_
 #include "General/Transform.h"
-#include "Rendering/MeshComponent.h"
+#include "Rendering/MaterialComponent.h"
+
 #include "Rendering/CameraComponent.h"
 #include <vector>
 #include <string>
@@ -21,9 +22,9 @@ namespace Engine
 		Entity(D3d* D3d); Entity();
 		void Destroy();
 #pragma region Tag funcs
-		void SetTag(string Tag);
-		string GetTag();
-		bool CompareTag(string other);
+		void SetTag(std::string Tag);
+		std::string GetTag();
+		bool CompareTag(std::string other);
 
 #pragma endregion
 #pragma region Component functions
@@ -42,28 +43,28 @@ namespace Engine
 				T* Comp = new T;
 				Components.push_back((Component*)Comp);
 				Components[Components.size() - 1]->TypeID = typeid(T).hash_code();
-				vector<Component**> InitComp;
+				std::vector<Component**> InitComp;
 
-				vector<const type_info*> Comps = Components[Components.size() - 1]->GetRequieredComponents();
+				std::vector<const type_info*> Comps = Components[Components.size() - 1]->GetRequieredComponents();
 
 				for (int i = 0; i < Comps.size(); i++)
 				{
 					InitComp.push_back(GetComponent(Comps[i]));
 					if (InitComp[i] == nullptr)
 					{
-						string str = "Failed to add \"";
+						std::string str = "Failed to add \"";
 						str += (*Comps[i]).name();
 						str += "\" to the list, component is not added";
-						throw exception(str.c_str());
+						throw std::exception(str.c_str());
 						RemoveComponent<T>();
 						return;
 					}
 				}
 				Components[Components.size() - 1]->Initialise(InitComp);
 			}
-			catch (exception& e)
+			catch (std::exception& e)
 			{
-				cerr << "Got exception: " << e.what() << endl; //TODO: send to internal erorr handling system;			
+				std::cerr << "Got std::exception: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 		};
 		template <typename T>
@@ -78,9 +79,9 @@ namespace Engine
 					return;
 				}
 			}
-			catch (exception& e)
+			catch (std::exception& e)
 			{
-				cerr << "Got exceprion: " << e.what() << endl; //TODO: send to internal erorr handling system;			
+				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
@@ -103,9 +104,9 @@ namespace Engine
 					throw std::exception("Wrong component type");
 				}
 			}
-			catch (exception& e)
+			catch (std::exception& e)
 			{
-				cerr << "Got exceprion: " << e.what() << endl; //TODO: send to internal erorr handling system;			
+				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
@@ -126,9 +127,9 @@ namespace Engine
 					return false;
 				}
 			}
-			catch (exception& e)
+			catch (std::exception& e)
 			{
-				cerr << "Got exceprion: " << e.what() << endl; //TODO: send to internal erorr handling system;			
+				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (unsigned int i = 0; i < Components.size(); i++)
 				if (Components[i]->TypeID == typeid(T).hash_code())
@@ -144,7 +145,7 @@ namespace Engine
 		std::string Name;
 		std::vector<Component*> Components;
 		ULONG UUID;
-		string EntityTag;
+		std::string EntityTag;
 	public:
 		Engine::Transform** Transform;
 

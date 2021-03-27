@@ -91,7 +91,7 @@ Engine::Transform** Engine::Transform::GetChild(unsigned int ChildIndex)
     if (ChildIndex < m_Children.size())
         return m_Children[ChildIndex];
     else
-        throw exception("wrong child index");
+        throw std::exception("wrong child index");
     return nullptr;
 
 
@@ -100,17 +100,17 @@ Engine::Transform*** Engine::Transform::GetChildren(unsigned int ChildIndex0, un
 {
     if (ChildIndex0 > ChildIndex1) 
     {    
-        throw exception("ChildIndex0 must be less then ChildIndex1");
+        throw std::exception("ChildIndex0 must be less then ChildIndex1");
         return nullptr;
     }
     if(ChildIndex0 >  m_Children.size())
     {
-        throw exception("wrong child index 0");
+        throw std::exception("wrong child index 0");
         return nullptr;
     }
     if (ChildIndex1 >= m_Children.size())
     {
-        throw exception("wrong child index 1");
+        throw std::exception("wrong child index 1");
         return nullptr;
     }
 
@@ -130,7 +130,7 @@ Engine::Transform*** Engine::Transform::GetChildren(unsigned int* ChildrenIndeci
     {
         if(ChildrenIndecies[i] >= m_Children.size())
         {
-            throw exception("wrong child index " + i);
+            throw std::exception("wrong child index " + i);
             return nullptr;
         }
         a[i] = m_Children[ChildrenIndecies[i]];
@@ -138,14 +138,14 @@ Engine::Transform*** Engine::Transform::GetChildren(unsigned int* ChildrenIndeci
 
     return a;
 }
-Engine::Transform*** Engine::Transform::GetChildren(vector<unsigned int> ChildrenIndecies)
+Engine::Transform*** Engine::Transform::GetChildren(std::vector<unsigned int> ChildrenIndecies)
 {
     auto a = new Transform * *[ChildrenIndecies.size()];
     for (size_t i = 0; i < ChildrenIndecies.size(); i++)
     {
         if (ChildrenIndecies[i] >=m_Children.size())
         {
-            throw exception("wrong child index " + i);
+            throw std::exception("wrong child index " + i);
             return nullptr;
         }
         a[i] = m_Children[ChildrenIndecies[i]];
@@ -187,7 +187,7 @@ void Engine::Transform::RemoveChild(unsigned int ChildIndex)
 {
     if(ChildIndex >= m_Children.size())
     {
-        throw exception("wrong child index");
+        throw std::exception("wrong child index");
         return ;
     }
     (*m_Children[ChildIndex])->HasPar = false;
@@ -199,7 +199,7 @@ void Engine::Transform::RemoveChildren(Transform*** Children, unsigned int Child
     for (size_t i = 0; i < ChildrenCount; i++)    
         RemoveChild(Children[i]); // Should work, but may be slow    
 }
-void Engine::Transform::RemoveChildren(vector<Transform**> Children)
+void Engine::Transform::RemoveChildren(std::vector<Transform**> Children)
 {
     for (size_t i = 0; i < Children.size(); i++)    
         RemoveChild(Children[i]); // Should work, but may be slow    
@@ -213,13 +213,13 @@ void Engine::Transform::RemoveChildren(unsigned int ChildIndex0, unsigned int Ch
 {
     if (ChildIndex0 > ChildIndex1)
     {
-        throw exception("ChildIndex0 must be less then ChildIndex1");
+        throw std::exception("ChildIndex0 must be less then ChildIndex1");
         return;
     }
     for (size_t i = 0; i < ChildIndex1 - ChildIndex0; i++)
         RemoveChild(i);
 }
-void Engine::Transform::RemoveChildren(vector<unsigned int> ChildrenIndecies)
+void Engine::Transform::RemoveChildren(std::vector<unsigned int> ChildrenIndecies)
 {
     for (size_t i = 0; i < ChildrenIndecies.size(); i++)
         RemoveChild(ChildrenIndecies[i]);   

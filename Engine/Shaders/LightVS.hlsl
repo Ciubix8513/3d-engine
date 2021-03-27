@@ -5,7 +5,9 @@ cbuffer MatrixBuffer
 	matrix viewMatrix;
 	matrix projectionMatrix;
 	matrix objectMat;
+	
 };
+
 cbuffer CamBuffer
 {
     float3 camPosition;

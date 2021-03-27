@@ -178,7 +178,7 @@ float EngineMath::Vector4::operator[](int index)
 	case 3:
 		return w;
 	default:
-		throw exception("wrong index value");
+		throw std::exception("wrong index value");
 		break;
 	}
 	return -10000000000000000000.0f;

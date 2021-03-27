@@ -52,7 +52,7 @@ using namespace std;
 		Model(Model&);
 		~Model();
 		Matrix4x4 Getobjectmatrix();
-		Mesh loadMeshFromFile(char*);
+		Mesh* loadMeshFromFile(char*);
 		void Shutdown();
 		bool Init(ID3D11Device*, ID3D11DeviceContext*, char*, char*);
 		void SetRotation(float, float, float);
@@ -69,8 +69,8 @@ using namespace std;
 		void ShutDownBuffers();
 		void SetDefaultTransform();
 		void RenderBuffers(ID3D11DeviceContext*);
-		bool SerialiseMesh(string fileLocation, Mesh mesh);
-		bool UnSerialiseMesh(string fileLocation , Mesh& mesh);
+		bool SerialiseMesh(std::string fileLocation, Mesh mesh);
+		bool UnSerialiseMesh(std::string fileLocation , Mesh& mesh);
 #pragma endregion
 #pragma region Private vars
 	private:

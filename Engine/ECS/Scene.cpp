@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-void Engine::Scene::AddEntity(string name)
+void Engine::Scene::AddEntity(std::string name)
 {
 	Entity A(m_D3d);
 	A.AddComponent<Transform>();
@@ -37,11 +37,11 @@ void Engine::Scene::DeleteEntityByUUID(ULONG UUID)
 	return;
 }
 
-void Engine::Scene::SerialiseScene(string Path)
+void Engine::Scene::SerialiseScene(std::string Path)
 {
 
 }
-void Engine::Scene::DeSerialiseScene(string Path)
+void Engine::Scene::DeSerialiseScene(std::string Path)
 {
 
 }
@@ -65,7 +65,7 @@ void Engine::Scene::ResetUUIDs()
 }
 
 
-Engine::Entity* Engine::Scene::GetEntityByName(string Name)
+Engine::Entity* Engine::Scene::GetEntityByName(std::string Name)
 {
 	for (size_t i = 0; i < Entities.size(); i++)
 		if (Entities[i].Name == Name)
@@ -79,14 +79,14 @@ Engine::Entity* Engine::Scene::GetEntityByUUID(unsigned long UUID)
 			return &Entities[i];
 	return nullptr;
 }
-Engine::Entity* Engine::Scene::GetEntityByTag(string Tag)
+Engine::Entity* Engine::Scene::GetEntityByTag(std::string Tag)
 {
 	for (size_t i = 0; i < Entities.size(); i++)
 		if (Entities[i].CompareTag(Tag))
 			return &Entities[i];
 	return nullptr;
 }
-Engine::Entity* Engine::Scene::GetEntityByName_Tag(string Name, string Tag)
+Engine::Entity* Engine::Scene::GetEntityByName_Tag(std::string Name, std::string Tag)
 {
 	for (size_t i = 0; i < Entities.size(); i++)
 		if (Entities[i].Name == Name && Entities[i].CompareTag(Tag))
@@ -96,7 +96,7 @@ Engine::Entity* Engine::Scene::GetEntityByName_Tag(string Name, string Tag)
 
 bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 {
-	vector<Entity*> Objects; //Vector of all entities that need to be rendered
+	std::vector<Entity*> Objects; //Vector of all entities that need to be rendered
 	for (size_t i = 0; i < Entities.size(); i++)//Getting all objects to render
 		for (size_t j = 0; j < RenderingComponents.size(); j++) 
 			if (Entities[i].ContainComponent(RenderingComponents[j]))
@@ -167,7 +167,8 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 				MatComps[i] = MaterialComponentBuffer;
 			}
 		}
-		Sorted:
+	Sorted: 
+		break;
 	}
 
 

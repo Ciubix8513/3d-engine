@@ -15,9 +15,9 @@ Engine::MeshComponent::MeshComponent()
 
 
 
-bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
+bool Engine::MeshComponent::loadMeshFromObjFile(std::string fileName)
 {
-	string path = (fileName + ".EngnMdl");
+	std::string path = (fileName + ".EngnMdl");
 
 	if(FILE* file = fopen((path + ".data").c_str(),"r"))
 	{
@@ -27,30 +27,30 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 	}
 
 	Mesh mesh = Mesh();
-	ifstream file(fileName);
-	string line;
-	string fstChar = "01";
+	std::ifstream file(fileName);
+	std::string line;
+	std::string fstChar = "01";
 
-	vector<string> wipVec;
+	std::vector<std::string> wipVec;
 	if (!file.is_open())
 	{
-		cout << "Failed to open file";
-		throw exception("Failed to open the file");
+		std::cout << "Failed to open file";
+		throw std::exception("Failed to open the file");
 		return false;
 	}
-	cout << "opened file" << endl;
+	std::cout << "opened file" << std::endl;
 	int vCount = 0, vtCount = 0, vnCount = 0, fCount = 0;
 	
-	vector<Vector3> Vertices, Normals;
-	vector<vertex> Tris;
-	vector<Vector2> UVs;
+	std::vector<Vector3> Vertices, Normals;
+	std::vector<vertex> Tris;
+	std::vector<Vector2> UVs;
 	while (getline(file, line))
 	{
 
 		if (line[0] == 'v' && line[1] == ' ')
 		{
 
-			string currentFloat;
+			std::string currentFloat;
 			int XYZ = 0;
 			Vector3 currentVec;
 			for (int i = 2; i < line.length(); i++)
@@ -77,7 +77,7 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 		if (line[0] == 'v' && line[1] == 't')
 		{
 
-			string currentFloat;
+			std::string currentFloat;
 			int XY = 0;
 			Vector2 currentVec;
 			for (int i = 3; i < line.length(); i++)
@@ -102,7 +102,7 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 		if (line[0] == 'v' && line[1] == 'n')
 		{
 
-			string currentFloat;
+			std::string currentFloat;
 			int XYZ = 0;
 			Vector3 currentVec;
 			for (int i = 3; i < line.length(); i++)
@@ -135,7 +135,7 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 		{
 
 			vertex currentVertex;
-			string curentIndex;
+			std::string curentIndex;
 			int Index = 0;
 
 			for (int i = 2; i < line.length(); i++)
@@ -175,8 +175,8 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 	file.close();
 
 	auto Faces = Tris;
-	vector<vertex> FinalVertices;
-	vector<unsigned long> Indecies;
+	std::vector<vertex> FinalVertices;
+	std::vector<unsigned long> Indecies;
 	for (int i = 0; i < Faces.size(); i++)
 	{
 		for (int j = 0; j < Faces.size(); j++)
@@ -190,7 +190,7 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 			}
 		}
 	a:
-		cout << '\n';
+		std::cout << '\n';
 	}
 	Vertices.clear();
 	Normals.clear();
@@ -211,10 +211,10 @@ bool Engine::MeshComponent::loadMeshFromObjFile(string fileName)
 	return true;
 }
 
-void Engine::MeshComponent::SerialiseMesh(string path)
+void Engine::MeshComponent::SerialiseMesh(std::string path)
 {	
 	FILE *file;
-	string Path = path + ".data";
+	std::string Path = path + ".data";
 	Count count;
 	count.indexCount = m_Model.indexCount;
 	count.vertexCount = m_Model.vertexCount;
@@ -236,11 +236,11 @@ void Engine::MeshComponent::SerialiseMesh(string path)
 	return;
 }
 
-Engine::MeshComponent::Mesh Engine::MeshComponent::DeSerialiseMesh(string path)
+Engine::MeshComponent::Mesh Engine::MeshComponent::DeSerialiseMesh(std::string path)
 {
 	Mesh mesh;
 	FILE* file;
-	string Path = path + ".data";
+	std::string Path = path + ".data";
 	Count count;
 	
 	file = fopen(Path.c_str(), "r");
@@ -279,14 +279,14 @@ ID3D11Buffer** Engine::MeshComponent::GetIndexBufferPtr()
 
 std::vector<const type_info*> Engine::MeshComponent::GetRequieredComponents()
 {
-	vector<const type_info*> a = { &typeid(Transform) };
+	std::vector<const type_info*> a = { &typeid(Transform) };
 	return a;
 }
 
 void Engine::MeshComponent::Initialise(std::vector<Component**> c)
 {
 	Transform* a = (Transform*)*c[0];
-	cout << "\n\n" << a->testData << "\n\n";
+	std::cout << "\n\n" << a->testData << "\n\n";
 }
 
 bool Engine::MeshComponent::vertex::operator==(vertex& b)

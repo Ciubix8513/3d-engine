@@ -18,6 +18,8 @@ void Engine::MaterialComponent::SetRenderingOrder(size_t NewRenderingOrder)
 std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* fileName)
 {
 	std::ifstream f(fileName);
+	if (!f.is_open())
+		throw std::exception("Shader file does not exist");
 	std::string tmp1;
 	std::vector<std::string> Words;
 	while (f.good())
@@ -27,6 +29,33 @@ std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* file
 	}
 	f.close();
 	return Words;
+}
+bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
+{
+	std::vector <std::string> Words;
+	try
+	{
+		Words = GetWordsFromFile(fileName);
+
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "Caught exception: " + (std::string)( e.what() )+ "\n"; //TODO: implement internal error handling
+	}
+	for (auto i = Words.begin(); i != Words.end(); i++)
+	{
+		if((*i)[0] == '[')
+		{
+			std::cout << ' ';
+		}
+	}
+
+	std::ofstream f(((std::wstring)fileName + (std::wstring)L".proceced"));
+	for (size_t i = 0; i < Words.size(); i++)
+			f << Words[i];
+	
+
+	return true;
 }
 // = D3D10_SHADER_ENABLE_STRICTNESS
 bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
@@ -43,9 +72,13 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 
 	vertexshaderBuff = 0;
 	pixelShaderBuff = 0;
+	//Preprocessing shaders
+	PreProcessShader(vsFilename);
+	PreProcessShader(psFilename);
+
 
 	//Compiling vertex shader
-	result = D3DCompileFromFile(vsFilename, NULL, NULL,(( ShaderName + "VertexShader").c_str()), "vs_5_0", FLAGS1, FLAGS2, &vertexshaderBuff, &errorMsg);
+	result = D3DCompileFromFile((((std::wstring)vsFilename + (std::wstring)L".proceced")).c_str(), NULL, NULL,(( ShaderName + "VertexShader").c_str()), "vs_5_0", FLAGS1, FLAGS2, &vertexshaderBuff, &errorMsg);
 	if(FAILED(result))
 	{
 		if (errorMsg)
@@ -55,7 +88,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 		return false;
 	}
 	//Compiling pixel shader
-	result = D3DCompileFromFile(psFilename, NULL, NULL, ((ShaderName + "PixelShader").c_str()), "ps_5_0", FLAGS1, FLAGS2, &pixelShaderBuff, &errorMsg);
+	result = D3DCompileFromFile((((std::wstring)psFilename + (std::wstring)L".proceced")).c_str(), NULL, NULL, ((ShaderName + "PixelShader").c_str()), "ps_5_0", FLAGS1, FLAGS2, &pixelShaderBuff, &errorMsg);
 	if (FAILED(result))
 	{
 		if (errorMsg)

@@ -14,10 +14,7 @@ cbuffer LightBuffer
 
 [WriteVar("_Color0")]
 float4 colorA;
-//cbuffer _Color0
-//{
-  //  float4 colorA;
-//};
+
 
 struct PixelInput
 {

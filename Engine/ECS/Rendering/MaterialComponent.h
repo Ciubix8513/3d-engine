@@ -54,13 +54,14 @@ namespace Engine
 	public:
 		size_t GetRenderingOrder();
 		void SetRenderingOrder(size_t NewRenderingOrder);
+		 static bool PreProcessShader(WCHAR* fileName);
+
 
 
 	private:
 		bool InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS,UINT FLAGS2 = 0);
 		std::string GetShaderErrorMsg(ID3D10Blob* msg);
-		std::vector<std::string> GetWordsFromFile(WCHAR* fileName);
-		bool PreProcessShader(WCHAR* fileName);
+		static std::vector<std::string> GetWordsFromFile(WCHAR* fileName);
 
 	private: 
 		size_t RenderingOrder;

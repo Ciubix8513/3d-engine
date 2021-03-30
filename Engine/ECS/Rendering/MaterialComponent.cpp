@@ -24,7 +24,9 @@ std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* file
 	std::vector<std::string> Words;
 	while (f.good())
 	{	
-		f >> tmp1;
+		//f >> tmp1;
+		std::getline(f, tmp1);
+		tmp1 += '\n';
 		Words.push_back( tmp1);		
 	}
 	f.close();
@@ -40,20 +42,38 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "Caught exception: " + (std::string)( e.what() )+ "\n"; //TODO: implement internal error handling
+		std::cout << "Caught exception: " + (std::string)(e.what()) + "\n"; //TODO: implement internal error handling
 	}
+
+	std::vector<std::vector<std::string>::iterator> iterators;
+	//Getting list of iterators
 	for (auto i = Words.begin(); i != Words.end(); i++)
+		if ((*i)[0] == '[') //Check if the word starts with a [
+			if ((*i).substr(1, 9) == "WriteVar(")
+				iterators.push_back(i);
+
+
+
+
+	for (size_t i = 0; i < iterators.size(); i++)
 	{
-		if((*i)[0] == '[')
-		{
-			std::cout << ' ';
-		}
+		std::string tmp = (*iterators[i]).substr(11, (*iterators[i]).find_last_of('\"') - 11); //Geting the name of a variable
+		iterators[i]++;
+		iterators[i]++;
+		Words.insert(iterators[i], "}\n");
+		iterators[i]--;
+		Words.erase(iterators[i]);
+		iterators[i]--;
+		Words.insert(iterators[i], "cbuffer " + tmp + "\n{\n");
+
 	}
+
+
 
 	std::ofstream f(((std::wstring)fileName + (std::wstring)L".proceced"));
 	for (size_t i = 0; i < Words.size(); i++)
-			f << Words[i];
-	
+		f << Words[i];
+
 
 	return true;
 }
@@ -163,7 +183,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	vertexshaderBuff = 0;
 	pixelShaderBuff = 0;
 
-ID3D11SamplerState
+
 	//Getting buffer data 
 	std::vector<std::string> Words = GetWordsFromFile(vsFilename);
 
@@ -171,7 +191,7 @@ ID3D11SamplerState
 	{
 		if(Words[i] == "cbuffer")// Finding all buffers
 		{
-			if(Words[i + 1 ] == "MatrixBuffer")
+			if (Words[i + 1] == "MatrixBuffer") {}
 		}
 	}
 

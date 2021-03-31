@@ -52,27 +52,17 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 			if ((*i).substr(1, 9) == "WriteVar(")
 				iterators.push_back(i);
 
-
-
-
 	for (size_t i = 0; i < iterators.size(); i++)
 	{
 		std::string tmp = (*iterators[i]).substr(11, (*iterators[i]).find_last_of('\"') - 11); //Geting the name of a variable
-		iterators[i]++;
-		iterators[i]++;
-		Words.insert(iterators[i], "}\n");
-		iterators[i]--;
-		Words.erase(iterators[i]);
-		iterators[i]--;
-		Words.insert(iterators[i], "cbuffer " + tmp + "\n{\n");
+		(*iterators[i]) = "cbuffer " + tmp + "\n{\n\t";
+		(*(iterators[i] + 1)) = (*(iterators[i] + 1)) + "};\n";
 
 	}
-
-
-
-	std::ofstream f(((std::wstring)fileName + (std::wstring)L".proceced"));
+	std::ofstream f(((std::wstring)fileName + (std::wstring)L".processed"));
 	for (size_t i = 0; i < Words.size(); i++)
 		f << Words[i];
+	f.close();
 
 
 	return true;

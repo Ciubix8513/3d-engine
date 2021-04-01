@@ -5,6 +5,41 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 	return {&typeid(Engine::MeshComponent)};
 }
 
+//Initialisation function
+void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps)
+{
+	m_layout = 0;
+	m_vertexShader = 0;
+	m_pixelShader = 0;
+}
+
+//Cleanup function
+void Engine::MaterialComponent::Shutdown()
+{
+	if (m_layout)
+	{
+		m_layout->Release();
+		m_layout = 0;
+	}
+	if (m_pixelShader)
+	{
+		m_pixelShader->Release();
+		m_pixelShader = 0;
+	}
+	if (m_vertexShader)
+	{
+		m_vertexShader->Release();
+		m_vertexShader = 0;
+	}
+	for (size_t i = 0; i < m_buffers.size(); i++)	
+		if(m_buffers[i].Buffer)
+		{
+			m_buffers[i].Buffer->Release();
+			m_buffers[i].Buffer = 0;
+		}
+	
+}
+
 size_t Engine::MaterialComponent::GetRenderingOrder()
 {
 	return RenderingOrder;
@@ -32,6 +67,20 @@ std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* file
 	f.close();
 	return Words;
 }
+
+//Getting the byte width
+//size_t ByteWidth = 0;
+//if ((*(iterators[i] + 1)).substr(0, 6) == "float ")
+//ByteWidth = 4;
+//else if ((*(iterators[i] + 1)).substr(0, 6) == "float2")
+//ByteWidth = 8;
+//else if ((*(iterators[i] + 1)).substr(0, 6) == "float3")
+//ByteWidth = 12;
+//else if ((*(iterators[i] + 1)).substr(0, 6) == "float4")
+//ByteWidth = 16;
+//else if ((*(iterators[i] + 1)).substr(0, 6) == "matrix")
+//ByteWidth = 64;
+
 bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 {
 	std::vector <std::string> Words;
@@ -67,6 +116,7 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 				throw std::exception("Variable names must be unique\n");
 				return false;
 			}
+		
 		VarNames.push_back(tmp);
 		(*iterators[i]) = "cbuffer " + tmp + "\n{\n\t";
 		(*(iterators[i] + 1)) = (*(iterators[i] + 1)) + "};\n";
@@ -79,9 +129,53 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 		f << Words[i];
 	f.close();
 
+	//this might be dumb but
+	Words = GetWordsFromFile((WCHAR*)((std::wstring)fileName + (std::wstring)L".processed").c_str());
+
+	iterators.clear();
+	//finding all cbuffers
+	for (auto i = Words.begin(); i != Words.end(); i++)
+		if ((*i).substr(0,7) == "cbuffer")			
+				iterators.push_back(i);
+
+	size_t ByteWidth = 0;
+	int NumVars = 0;
+
+	for (auto i = iterators.begin(); i != iterators.end(); i++)
+	{
+		while ((**(i) != "};\n"))
+		{
+			if ((**(i)).substr(0, 6) == "float ")
+				ByteWidth += 4;
+			else if (((**(i)).substr(0, 6)) == "float2")
+				ByteWidth += 8;
+			else if (((**(i)).substr(0, 6)) == "float3")
+				ByteWidth += 12;
+			else if (((**(i)).substr(0, 6)) == "float4")
+				ByteWidth += 16;
+			else if (((**(i)).substr(0, 6)) == "matrix")
+				ByteWidth += 64;
+			(*(i)) ++;
+			NumVars++;
+			if (NumVars == 1000000000000000)
+			{
+				std::cout << "I fucked up\n";
+			}
+		}
+
+		(*(i)) -= NumVars;
+		(**(i)) = (std::string)(**(i)+"//" + std::to_string(ByteWidth) + "\n");
+	}
+
+	std::ofstream f1(((std::wstring)fileName + (std::wstring)L".processed"));
+	for (size_t i = 0; i < Words.size(); i++)
+		f1 << Words[i];
+	f1.close();
+
 	return true;
 }
-// = D3D10_SHADER_ENABLE_STRICTNESS
+
+
 bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
 {
 	HRESULT result;
@@ -162,7 +256,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[2].InstanceDataStepRate = 0;
-
+	
 	polygonLayout[3].SemanticName = "NORMAL";
 	polygonLayout[3].SemanticIndex = 0;
 	polygonLayout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -190,12 +284,21 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 
 	//Getting buffer data 
 	std::vector<std::string> Words = GetWordsFromFile(vsFilename);
+	std::string name;
+	size_t count = 0;
 
 	for (size_t i = 0; i < Words.size(); i++)
 	{
-		if(Words[i] == "cbuffer")// Finding all buffers
+		if(Words[i].substr(0,7) == "cbuffer")// Finding all buffers
 		{
-			if (Words[i + 1] == "MatrixBuffer") {}
+			name = Words[i].substr(8);
+			Buffer b;
+			b.Buffer = 0;
+			b.BufferName = name;
+			b.type = VertexShader;
+			b.bufferNum = count;
+	//		b.CreateBuffer(device)
+		//	count++;
 		}
 	}
 
@@ -247,5 +350,43 @@ bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device, size_
 	auto result = device->CreateBuffer(&Desc, InitialData, &this->Buffer);
 	if (FAILED(result))
 		return false;
+	return true;
+}
+
+
+// I am very unsure about this function
+bool Engine::MaterialComponent::SetFloat(ID3D11DeviceContext* ctxt, std::string name, float data)
+{
+	//Finding the buffer
+	size_t BufferID = -1;
+	for (size_t i = 0; i < m_buffers.size(); i++)
+		if (m_buffers[i].BufferName == name) 
+		{
+			BufferID = i;
+			break;
+		}
+	if(BufferID == -1)
+	{
+		if (m_buffers.size() == 0)
+			throw std::exception("No buffers exist in this shader");
+		else
+			throw std::exception(((std::string)("No buffers with name = " + name + " exis in this shader")).c_str());
+		return false;
+	}
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
+	result = ctxt->Map(m_buffers[BufferID].Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+	if (FAILED(result))
+		return false;
+
+	*(float*)mappedSubresource.pData = data;
+	ctxt->Unmap(m_buffers[BufferID].Buffer, 0);
+
+
+	if (m_buffers[BufferID].type == VertexShader)
+		ctxt->VSSetConstantBuffers(m_buffers[BufferID].bufferNum, 0, &m_buffers[BufferID].Buffer);
+	else
+		ctxt->PSSetConstantBuffers(m_buffers[BufferID].bufferNum, 0, &m_buffers[BufferID].Buffer);
 	return true;
 }

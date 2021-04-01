@@ -3,7 +3,7 @@ Texture2D shaderTex;
 
 [DynamicWriteBuffer]
     
-cbuffer LightBuffer
+cbuffer LightBuffer //
 {
     float4 AmbientColor;
     float4 diffusecolor;

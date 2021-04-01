@@ -3,11 +3,14 @@ Texture2D shaderTex;
 
 [DynamicWriteBuffer]
     
-cbuffer LightBuffer
+cbuffer LightBuffer //
+//0
 {
     float4 AmbientColor;
+//0
     float4 diffusecolor;
     float3 lightDirection;
+//0
     float specularPower;
     float4 specularColor;
 };
@@ -67,3 +70,4 @@ float4 LightPixelShader(PixelInput input) : SV_TARGET
 
     return color;
 }
+

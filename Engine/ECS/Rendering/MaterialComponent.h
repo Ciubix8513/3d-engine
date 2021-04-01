@@ -23,6 +23,16 @@ namespace Engine
 			Matrix4x4 Matrix;
 		};
 #pragma region Structs
+
+		struct Buffer
+		{
+			ID3D11Buffer* Buffer;
+			std::string BufferName;
+			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth);
+			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,D3D11_SUBRESOURCE_DATA* InitialData);
+		};
+
+
 		//List of predefined buffers
 
 		struct MatrixBuffer

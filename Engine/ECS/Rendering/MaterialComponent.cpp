@@ -43,27 +43,41 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 	catch (const std::exception& e)
 	{
 		std::cout << "Caught exception: " + (std::string)(e.what()) + "\n"; //TODO: implement internal error handling
+		return false;
 	}
 
 	std::vector<std::vector<std::string>::iterator> iterators;
+	//Processing single variables
 	//Getting list of iterators
 	for (auto i = Words.begin(); i != Words.end(); i++)
 		if ((*i)[0] == '[') //Check if the word starts with a [
 			if ((*i).substr(1, 9) == "WriteVar(")
 				iterators.push_back(i);
 
+	//List of all variable names
+	std::vector<std::string> VarNames;
+
 	for (size_t i = 0; i < iterators.size(); i++)
 	{
 		std::string tmp = (*iterators[i]).substr(11, (*iterators[i]).find_last_of('\"') - 11); //Geting the name of a variable
+		//Probably very stupid but
+		for (auto j = VarNames.begin(); j != VarNames.end(); j++)
+			if ((*j) == tmp)
+			{
+				throw std::exception("Variable names must be unique\n");
+				return false;
+			}
+		VarNames.push_back(tmp);
 		(*iterators[i]) = "cbuffer " + tmp + "\n{\n\t";
 		(*(iterators[i] + 1)) = (*(iterators[i] + 1)) + "};\n";
 
 	}
+
+	//Creating processed file
 	std::ofstream f(((std::wstring)fileName + (std::wstring)L".processed"));
 	for (size_t i = 0; i < Words.size(); i++)
 		f << Words[i];
 	f.close();
-
 
 	return true;
 }
@@ -200,4 +214,38 @@ std::string Engine::MaterialComponent::GetShaderErrorMsg(ID3D10Blob* msg)
 	msg->Release();
 	msg = 0;
 	return compileErrors;
+}
+
+
+
+bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device,size_t ByteWidth)
+{
+	D3D11_BUFFER_DESC Desc;
+	Desc.ByteWidth = ByteWidth;
+	Desc.Usage = D3D11_USAGE_DYNAMIC;
+	Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	Desc.MiscFlags = 0;
+	Desc.StructureByteStride = 0;
+
+	auto result = device->CreateBuffer(&Desc, NULL, &this->Buffer);
+	if (FAILED(result))
+		return false;
+	return true;
+}
+
+bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device, size_t ByteWidth, D3D11_SUBRESOURCE_DATA* InitialData)
+{
+	D3D11_BUFFER_DESC Desc;
+	Desc.ByteWidth = ByteWidth;
+	Desc.Usage = D3D11_USAGE_DYNAMIC;
+	Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	Desc.MiscFlags = 0;
+	Desc.StructureByteStride = 0;
+
+	auto result = device->CreateBuffer(&Desc, InitialData, &this->Buffer);
+	if (FAILED(result))
+		return false;
+	return true;
 }

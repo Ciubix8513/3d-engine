@@ -118,7 +118,7 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 			}
 		
 		VarNames.push_back(tmp);
-		(*iterators[i]) = "cbuffer " + tmp + "\n{\n\t";
+		(*iterators[i]) = "cbuffer " + tmp + "\n{\n    ";
 		(*(iterators[i] + 1)) = (*(iterators[i] + 1)) + "};\n";
 
 	}
@@ -139,23 +139,25 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 				iterators.push_back(i);
 
 	size_t ByteWidth = 0;
+	std::string tmp;
 	int NumVars = 0;
 
 	for (auto i = iterators.begin(); i != iterators.end(); i++)
 	{
 		while ((**(i) != "};\n"))
 		{
-			if ((**(i)).substr(0, 6) == "float ")
+			tmp = (**(i)).substr(0, 10);
+			if (tmp == "    float")
 				ByteWidth += 4;
-			else if (((**(i)).substr(0, 6)) == "float2")
+			else if (tmp == "    float2")
 				ByteWidth += 8;
-			else if (((**(i)).substr(0, 6)) == "float3")
+			else if (tmp == "    float3")
 				ByteWidth += 12;
-			else if (((**(i)).substr(0, 6)) == "float4")
-				ByteWidth += 16;
-			else if (((**(i)).substr(0, 6)) == "matrix")
+			else if (tmp == "    float4")
+				ByteWidth += 16;	
+			else if (tmp == "    matrix")
 				ByteWidth += 64;
-			(*(i)) ++;
+			(*i) ++;
 			NumVars++;
 			if (NumVars == 1000000000000000)
 			{
@@ -165,6 +167,8 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 
 		(*(i)) -= NumVars;
 		(**(i)) = (std::string)(**(i)+"//" + std::to_string(ByteWidth) + "\n");
+		NumVars = 0;
+		ByteWidth = 0;
 	}
 
 	std::ofstream f1(((std::wstring)fileName + (std::wstring)L".processed"));
@@ -291,19 +295,17 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 	{
 		if(Words[i].substr(0,7) == "cbuffer")// Finding all buffers
 		{
+			//Creating buffer
 			name = Words[i].substr(8);
 			Buffer b;
 			b.Buffer = 0;
 			b.BufferName = name;
 			b.type = VertexShader;
 			b.bufferNum = count;
-	//		b.CreateBuffer(device)
-		//	count++;
+			b.CreateBuffer(device,atoi( Words[i + 1].substr(2).c_str()));
+			count++;
 		}
 	}
-
-
-
 
 	return true;
 }

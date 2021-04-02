@@ -4,25 +4,25 @@ Texture2D shaderTex;
 [DynamicWriteBuffer]
     
 cbuffer LightBuffer //
-//0
+//60
 {
     float4 AmbientColor;
-//0
     float4 diffusecolor;
     float3 lightDirection;
-//0
     float specularPower;
     float4 specularColor;
 };
 
 cbuffer _Color0
+//16
 {
-	float4 colorA;
+    float4 colorA;
 };
 
 cbuffer _Matrix0
+//64
 {
-	matrix matrix0;
+    matrix matrix0;
 };
 
 struct PixelInput

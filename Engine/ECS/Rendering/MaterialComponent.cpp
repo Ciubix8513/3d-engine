@@ -287,25 +287,59 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 
 
 	//Getting buffer data 
-	std::vector<std::string> Words = GetWordsFromFile(vsFilename);
-	std::string name;
-	size_t count = 0;
+	std::vector<std::string> Words = GetWordsFromFile((WCHAR*)((std::wstring)vsFilename + (std::wstring)L".proceced").c_str());
 
-	for (size_t i = 0; i < Words.size(); i++)
-	{
+	std::string name;	
+	size_t count = 0;
+	
+	//Vertex shader buffer creation
+	for (size_t i = 0; i < Words.size(); i++)	
 		if(Words[i].substr(0,7) == "cbuffer")// Finding all buffers
 		{
 			//Creating buffer
 			name = Words[i].substr(8);
-			Buffer b;
-			b.Buffer = 0;
-			b.BufferName = name;
-			b.type = VertexShader;
-			b.bufferNum = count;
-			b.CreateBuffer(device,atoi( Words[i + 1].substr(2).c_str()));
+			Buffer *b;
+			BufferBuffer b1(name);
+
+			b->Buffer = 0;
+			b->type = VertexShader;
+			b->bufferNum = count;
+			if (!b->CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
+			{
+				throw std::exception(("Failed to create " + name + " buffer").c_str());
+				return false;
+			}
+			m_buffersBuffer.push_back(b1);
+			m_buffers.push_back(*b);
 			count++;
 		}
-	}
+
+	count = 0;
+	Words = GetWordsFromFile((WCHAR*)((std::wstring)psFilename + (std::wstring)L".proceced").c_str());
+
+	//Pixel shader buffer creation
+	for (size_t i = 0; i < Words.size(); i++)	
+		if (Words[i].substr(0, 7) == "cbuffer")// Finding all buffers
+		{
+			//Creating buffer
+			name = Words[i].substr(8);
+			Buffer *b = new Buffer;
+			BufferBuffer b1(name);
+			
+			
+			b->Buffer = 0;
+			b->type = PixelShader;
+			b->bufferNum = count;
+		
+			if (!b->CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
+			{
+				throw std::exception(("Failed to create " + name + " buffer").c_str());
+				return false;
+			}
+			m_buffersBuffer.push_back(b1);
+			m_buffers.push_back(*b);
+			count++;
+		}	
 
 	return true;
 }
@@ -355,14 +389,37 @@ bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device, size_
 	return true;
 }
 
+void Engine::MaterialComponent::SetFloat(std::string name, float data)
+{
 
-// I am very unsure about this function
+}
+
+void Engine::MaterialComponent::SetVector2(std::string name, Vector2 data)
+{
+}
+
+void Engine::MaterialComponent::SerVector3(std::string name, Vector3 data)
+{
+	
+}
+
+void Engine::MaterialComponent::SetVector4(std::string name, Vector4 data)
+{
+	
+}
+
+void Engine::MaterialComponent::SetMatrix(std::string name, Matrix4x4 data)
+{
+	
+}
+
+/*// I am very unsure about this function
 bool Engine::MaterialComponent::SetFloat(ID3D11DeviceContext* ctxt, std::string name, float data)
 {
 	//Finding the buffer
 	size_t BufferID = -1;
 	for (size_t i = 0; i < m_buffers.size(); i++)
-		if (m_buffers[i].BufferName == name) 
+		if (m_buffers[i].BufferName == name)
 		{
 			BufferID = i;
 			break;
@@ -391,4 +448,18 @@ bool Engine::MaterialComponent::SetFloat(ID3D11DeviceContext* ctxt, std::string 
 	else
 		ctxt->PSSetConstantBuffers(m_buffers[BufferID].bufferNum, 0, &m_buffers[BufferID].Buffer);
 	return true;
+}*/
+
+Engine::MaterialComponent::BufferBuffer::BufferBuffer(std::string name)
+{
+	name = name;
+}
+
+Engine::MaterialComponent::ShaderBufferType::ShaderBufferType()
+{
+	Float = 0;
+	Vector2 = EngineMath::Vector2(0, 0);
+	Vector3 = EngineMath::Vector3(0, 0,0);
+	Vector4 = EngineMath::Vector4(0, 0,0,0);
+	Matrix = EngineMath::Matrix4x4();
 }

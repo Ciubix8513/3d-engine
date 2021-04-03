@@ -8,7 +8,7 @@ using namespace Engine;
 
 int main()
 {
-	MaterialComponent::PreProcessShader((WCHAR*)TEXT("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Light.hlsl"));
+	
 	
 	return 1;
 	std::cout << ' ';

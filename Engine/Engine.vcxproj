@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Entity.h" />
+    <ClInclude Include="ECS\Rendering\BufferStructs.h" />
     <ClInclude Include="ECS\Rendering\CameraComponent.h" />
     <ClInclude Include="ECS\Rendering\MaterialComponent.h" />
     <ClInclude Include="ECS\Scene.h" />

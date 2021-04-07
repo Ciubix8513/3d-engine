@@ -171,7 +171,7 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 		break;
 	}
 
-
+	
 
 	return true;
 }

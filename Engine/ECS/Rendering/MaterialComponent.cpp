@@ -8,9 +8,11 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 //Initialisation function
 void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps)
 {
+	mesh = (MeshComponent**)&Comps[0];
 	m_layout = 0;
 	m_vertexShader = 0;
 	m_pixelShader = 0;
+	return;
 }
 
 //Cleanup function
@@ -165,10 +167,9 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 
 			(*i) ++;
 			NumVars++;
-			if (NumVars == 1000000000000000)
-			{
+			if (NumVars == 1000000000000000)			
 				std::cout << "I fucked up\n";
-			}
+			
 		}
 
 		(*(i)) -= NumVars;
@@ -245,7 +246,6 @@ bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount
 
 	return true;
 }
-
 
 bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
 {
@@ -368,19 +368,19 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 		{
 			//Creating buffer
 			name = Words[i].substr(8);
-			Buffer* b;
+			Buffer b;
 			BufferBuffer b1(name);
 
-			b->Buffer = 0;
-			b->type = VertexShader;
-			b->bufferNum = count;
-			if (!b->CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
+			b.Buffer = 0;
+			b.type = VertexShader;
+			b.bufferNum = count;
+			if (!b.CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
 			{
 				throw std::exception(("Failed to create " + name + " buffer").c_str());
 				return false;
 			}
 			m_buffersBuffer.push_back(b1);
-			m_buffers.push_back(*b);
+			m_buffers.push_back(b);
 			count++;
 		}
 		else if(tmp == "sampler") // Check if it's a sampler
@@ -409,21 +409,21 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 		{
 			//Creating buffer
 			name = Words[i].substr(8);
-			Buffer* b = new Buffer;
+			Buffer b;
 			BufferBuffer b1(name);
 
 
-			b->Buffer = 0;
-			b->type = PixelShader;
-			b->bufferNum = count;
+			b.Buffer = 0;
+			b.type = PixelShader;
+			b.bufferNum = count;
 
-			if (!b->CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
+			if (!b.CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
 			{
 				throw std::exception(("Failed to create " + name + " buffer").c_str());
 				return false;
 			}
 			m_buffersBuffer.push_back(b1);
-			m_buffers.push_back(*b);
+			m_buffers.push_back(b);
 			count++;
 		}
 		else if (tmp == "sampler") // Check if it's a sampler
@@ -440,8 +440,6 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHA
 
 	return true;
 }
-
-
 
 std::string Engine::MaterialComponent::GetShaderErrorMsg(ID3D10Blob* msg)
 {
@@ -540,6 +538,9 @@ void Engine::MaterialComponent::SetSampler(std::string name, ID3D11SamplerState*
 			m_samplerBuffer[i].sampler = data;			
 		}
 }
+void Engine::MaterialComponent::SetStruct(std::string name, BufferClass data, std::type_info bufferType)
+{
+}
 #pragma endregion
 
 /*// I am very unsure about this function
@@ -583,7 +584,6 @@ Engine::MaterialComponent::BufferBuffer::BufferBuffer(std::string name)
 {
 	name = name;
 }
-
 Engine::MaterialComponent::ShaderBufferType::ShaderBufferType()
 {
 	Float = 0;
@@ -592,7 +592,6 @@ Engine::MaterialComponent::ShaderBufferType::ShaderBufferType()
 	Vector4 = EngineMath::Vector4(0, 0,0,0);
 	Matrix = EngineMath::Matrix4x4();
 }
-
 bool Engine::MaterialComponent::Sampler::CreateSampler(ID3D11Device* device)
 {
 	HRESULT result;

@@ -8,6 +8,7 @@ cbuffer MatrixBuffer
 	
 };
 
+
 cbuffer CamBuffer
 {
     float3 camPosition;

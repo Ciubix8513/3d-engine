@@ -353,6 +353,9 @@
     <ClInclude Include="ECS\Rendering\CameraComponent.h">
       <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Rendering\BufferStructs.h">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TextureVS.hlsl">

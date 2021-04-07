@@ -7,7 +7,6 @@
 #include <string>
 #include <d3d11.h>
 #include <fstream>
-#include "MaterialComponent.h"
 using namespace EngineMath;
 //using namespace std;
 
@@ -16,23 +15,14 @@ namespace Engine
 
 	class MeshComponent : public Component
 	{ 
-	private:
 		
-		struct Count
-		{
-			int vertexCount;
-			int indexCount;
-		};
 	public:
-
-
 		struct vertex
 		{
 			Vector3 position;
 			Vector4 color;
 			Vector2 UV;
 			Vector3 normal;
-
 			bool operator==(vertex& other);
 
 		};
@@ -46,22 +36,19 @@ namespace Engine
 
 	public:		
 		void Shutdown() override;
-		MeshComponent();
-		bool loadMeshFromObjFile(std::string path);
-		void SerialiseMesh(std::string path);
-		Mesh DeSerialiseMesh(std::string path);
+		MeshComponent();		
 		void InitBuffers(ID3D11Device* device);
 		void ShutDownBuffers();
 		ID3D11Buffer** GetVertexBufferPtr();
 		ID3D11Buffer** GetIndexBufferPtr();
 		std::vector<const type_info*> GetRequieredComponents() override;
 		void Initialise(std::vector<Component**>) override;
-	public:
-		Mesh m_Model;
-		
+	
 	private:
 		ID3D11Buffer* m_VertexBuffer,* m_IndexBuffer;
-		
+		Mesh m_Model;
+		Transform** transform;
+
 	};
 }
 #endif

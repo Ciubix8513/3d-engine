@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <d3dcompiler.h>
+#include "BufferStructs.h"
 using namespace Engine;
 using namespace EngineMath;
 
@@ -21,6 +22,7 @@ namespace Engine
 			Vector4 Vector4;
 			Matrix4x4 Matrix;			
 			ShaderBufferType();
+
 		};
 #pragma region Structs
 	private:
@@ -55,10 +57,10 @@ namespace Engine
 			DataType type;
 			BufferBuffer(std::string name);
 		};
+		
 	public:
-
 		//List of predefined buffers
-		struct MatrixBuffer
+		/*struct MatrixBuffer
 		{
 			Matrix4x4
 				worldMatrix,
@@ -66,6 +68,11 @@ namespace Engine
 				projectionMatrix,
 				objectMat;
 		};
+		struct CameraBuffer
+		{
+			Vector3 postion;
+			float padding;
+		};*/
 #pragma endregion
 #pragma region Set shader params functions
 		void SetFloat( std::string name, float data);
@@ -74,9 +81,9 @@ namespace Engine
 		void SetVector4(std::string name, Vector4 data);
 		void SetMatrix(std::string name, Matrix4x4 data);
 		void SetSampler(std::string name, ID3D11SamplerState* data); //TODO: add sampler
-		bool SetTexture(std::string name, float data);//TODO: add texture
-		
-		bool SetStruct();
+		//bool SetTexture(std::string name, float data);//TODO: add texture		
+		void SetStruct(std::string name, BufferClass data, std::type_info bufferType);
+
 #pragma endregion
 	public:
 		std::vector<const type_info*> GetRequieredComponents() override;
@@ -99,5 +106,7 @@ namespace Engine
 		std::vector<Buffer> m_buffers;
 		std::vector<BufferBuffer> m_buffersBuffer;
 		std::vector<Sampler> m_samplerBuffer;
+
+		MeshComponent** mesh; //To get the data
 	};
 }

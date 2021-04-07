@@ -19,15 +19,27 @@ namespace Engine
 			Vector2 Vector2;
 			Vector3 Vector3;
 			Vector4 Vector4;
-			Matrix4x4 Matrix;
+			Matrix4x4 Matrix;			
 			ShaderBufferType();
 		};
 #pragma region Structs
+	private:
 		enum ShaderType
 		{
 			VertexShader, PixelShader
 		};
-
+		enum DataType
+		{
+			Float, vector2, vector3, vector4, Matrix
+		};		
+		struct Sampler
+		{
+			ID3D11SamplerState* sampler;
+			std::string name;
+			ShaderType type;
+			size_t samplerNum;
+			bool CreateSampler(ID3D11Device* device);
+		};
 		struct Buffer
 		{
 			ID3D11Buffer* Buffer;
@@ -40,9 +52,10 @@ namespace Engine
 		{
 			std::string name;
 			ShaderBufferType data;
+			DataType type;
 			BufferBuffer(std::string name);
 		};
-
+	public:
 
 		//List of predefined buffers
 		struct MatrixBuffer
@@ -60,7 +73,7 @@ namespace Engine
 		void SerVector3(std::string name, Vector3 data);
 		void SetVector4(std::string name, Vector4 data);
 		void SetMatrix(std::string name, Matrix4x4 data);
-		bool SetSampler(std::string name, ID3D11SamplerState data); //TODO: add sampler
+		void SetSampler(std::string name, ID3D11SamplerState* data); //TODO: add sampler
 		bool SetTexture(std::string name, float data);//TODO: add texture
 		
 		bool SetStruct();
@@ -77,6 +90,7 @@ namespace Engine
 		std::string GetShaderErrorMsg(ID3D10Blob* msg);
 		std::vector<std::string> GetWordsFromFile(WCHAR* fileName);
 		bool PreProcessShader(WCHAR* fileName);
+		bool Render(ID3D11DeviceContext* ctxt, int IndexCount);
 	private: 
 		size_t RenderingOrder;
 		ID3D11VertexShader* m_vertexShader;
@@ -84,5 +98,6 @@ namespace Engine
 		ID3D11InputLayout* m_layout;
 		std::vector<Buffer> m_buffers;
 		std::vector<BufferBuffer> m_buffersBuffer;
+		std::vector<Sampler> m_samplerBuffer;
 	};
 }

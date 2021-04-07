@@ -18,6 +18,8 @@ float4 colorA;
 [WriteVar("_Matrix0")]
 matrix matrix0;
 
+sampler sampler0;
+
 struct PixelInput
 {
 

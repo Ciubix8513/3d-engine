@@ -218,6 +218,9 @@ bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount
 		case Matrix:
 			*((Matrix4x4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Matrix;
 			break;
+		case Struct:
+			*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer;
+			break;
 
 		}
 		ctxt->Unmap(m_buffers[i].Buffer, 0);
@@ -538,8 +541,16 @@ void Engine::MaterialComponent::SetSampler(std::string name, ID3D11SamplerState*
 			m_samplerBuffer[i].sampler = data;			
 		}
 }
-void Engine::MaterialComponent::SetStruct(std::string name, BufferClass data, std::type_info bufferType)
+void Engine::MaterialComponent::SetStruct(std::string name, BufferClass* data, const type_info* bufferType)
 {
+	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
+		if (m_buffersBuffer[i].name == name)
+		{
+			m_buffersBuffer[i].data.Buffer.Buffer = data;
+			m_buffersBuffer[i].data.Buffer.type = bufferType;
+			m_buffersBuffer[i].type = Struct;
+		}
+	
 }
 #pragma endregion
 

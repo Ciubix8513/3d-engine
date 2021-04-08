@@ -14,17 +14,24 @@ namespace Engine
 		
 		friend class Launcher;
 	public:
+		struct StructBuffer
+		{
+			BufferClass* Buffer;
+			const std::type_info* type;
+		};
 		union ShaderBufferType
 		{			
 			float Float;
 			Vector2 Vector2;
 			Vector3 Vector3;
 			Vector4 Vector4;
-			Matrix4x4 Matrix;			
+			Matrix4x4 Matrix;
+			StructBuffer Buffer;
 			ShaderBufferType();
 
 		};
 #pragma region Structs
+		
 	private:
 		enum ShaderType
 		{
@@ -32,7 +39,7 @@ namespace Engine
 		};
 		enum DataType
 		{
-			Float, vector2, vector3, vector4, Matrix
+			Float, vector2, vector3, vector4, Matrix,Struct
 		};		
 		struct Sampler
 		{
@@ -82,7 +89,7 @@ namespace Engine
 		void SetMatrix(std::string name, Matrix4x4 data);
 		void SetSampler(std::string name, ID3D11SamplerState* data); //TODO: add sampler
 		//bool SetTexture(std::string name, float data);//TODO: add texture		
-		void SetStruct(std::string name, BufferClass data, std::type_info bufferType);
+		void SetStruct(std::string name, BufferClass* data,const std::type_info* bufferType);
 
 #pragma endregion
 	public:

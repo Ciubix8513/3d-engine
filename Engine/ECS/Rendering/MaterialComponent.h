@@ -87,20 +87,20 @@ namespace Engine
 		void SerVector3(std::string name, Vector3 data);
 		void SetVector4(std::string name, Vector4 data);
 		void SetMatrix(std::string name, Matrix4x4 data);
-		void SetSampler(std::string name, ID3D11SamplerState* data); //TODO: add sampler
+		void SetSampler(std::string name, ID3D11SamplerState* data); 
 		//bool SetTexture(std::string name, float data);//TODO: add texture		
 		void SetStruct(std::string name, BufferClass* data,const std::type_info* bufferType);
 
 #pragma endregion
 	public:
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component**> Comps) override;
+		void Initialise(std::vector<Component**> Comps, D3d* d3d) override;
 		void Shutdown() override;
 		size_t GetRenderingOrder();
 		void SetRenderingOrder(size_t NewRenderingOrder);
 
 	private:
-		bool InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS,UINT FLAGS2 = 0);
+		bool InitShader(ID3D11Device* device,  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS,UINT FLAGS2 = 0);
 		std::string GetShaderErrorMsg(ID3D10Blob* msg);
 		std::vector<std::string> GetWordsFromFile(WCHAR* fileName);
 		bool PreProcessShader(WCHAR* fileName);
@@ -114,6 +114,7 @@ namespace Engine
 		std::vector<BufferBuffer> m_buffersBuffer;
 		std::vector<Sampler> m_samplerBuffer;
 
+		
 		MeshComponent** mesh; //To get the data
 	};
 }

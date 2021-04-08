@@ -4,23 +4,101 @@
 
 void Engine::MeshComponent::Shutdown()
 {
-
+	ShutDownBuffers();
+	return;
 }
 Engine::MeshComponent::MeshComponent()
 {
+	m_vertexBuffer = 0;
+	m_indexBuffer = 0;
+}
+
+void Engine::MeshComponent::ShutDownBuffers()
+{
+	if (m_vertexBuffer)
+	{
+		m_vertexBuffer->Release();
+		m_vertexBuffer = 0;
+	}
+	if (m_indexBuffer)
+	{
+		m_indexBuffer->Release();
+		m_indexBuffer = 0;
+	}
+	return;
 }
 
 
+void Engine::MeshComponent::InitBuffers(ID3D11Device* device)
+{
+	
+	D3D11_BUFFER_DESC  indexBuffDesc;
+	D3D11_BUFFER_DESC vertexBuffDesc;
+	D3D11_SUBRESOURCE_DATA vertexData;
+	D3D11_SUBRESOURCE_DATA  indexData;
+	HRESULT result;
+	
+
+
+	vertexBuffDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBuffDesc.ByteWidth = sizeof(vertex) * m_Model.vertexCount;
+	vertexBuffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBuffDesc.CPUAccessFlags = 0;
+	vertexBuffDesc.MiscFlags = 0;
+	vertexBuffDesc.StructureByteStride = 0;
+
+	if(type == Dynamic) // If dynamic type override some params
+	{
+		vertexBuffDesc.Usage = D3D11_USAGE_DYNAMIC;
+		vertexBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
+
+	vertexData.pSysMem = m_Model.vertices;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	result = device->CreateBuffer(&vertexBuffDesc, &vertexData, &m_vertexBuffer);
+	if (FAILED(result)) 
+	{
+		throw std::exception("Failed to create vertex buffer");
+		return;
+	}
+
+	indexBuffDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBuffDesc.ByteWidth = sizeof(unsigned long) * m_Model.indexCount;
+	indexBuffDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBuffDesc.CPUAccessFlags = 0;
+	indexBuffDesc.MiscFlags = 0;
+	indexBuffDesc.StructureByteStride = 0;
+
+	indexData.pSysMem = m_Model.indecies;
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	if (type == Dynamic) // If dynamic type override some params
+	{
+		indexBuffDesc.Usage = D3D11_USAGE_DYNAMIC;
+		indexBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
+
+	result = device->CreateBuffer(&indexBuffDesc, &indexData, &m_indexBuffer);
+	if (FAILED(result))
+	{
+		throw std::exception("Failed to create index buffer");
+		return;
+	}
+	return;
+}
 
 
 ID3D11Buffer** Engine::MeshComponent::GetVertexBufferPtr()
 {
-	return nullptr;
+	return &m_vertexBuffer;
 }
 
 ID3D11Buffer** Engine::MeshComponent::GetIndexBufferPtr()
 {
-	return nullptr;
+	return &m_indexBuffer;
 }
 
 std::vector<const type_info*> Engine::MeshComponent::GetRequieredComponents()
@@ -29,9 +107,39 @@ std::vector<const type_info*> Engine::MeshComponent::GetRequieredComponents()
 	return a;
 }
 
-void Engine::MeshComponent::Initialise(std::vector<Component**> c)
+void Engine::MeshComponent::Initialise(std::vector<Component**> c, D3d* d3d)
 {
+	m_D3dPtr = &d3d;
 	transform = (Transform**)&c[0];
+	
+	return;
+}
+
+Engine::MeshComponent::MeshType Engine::MeshComponent::GetMeshType()
+{
+	return type;
+}
+
+void Engine::MeshComponent::SetMeshType(MeshType type1)
+{
+	if (type == type1)
+		return;
+	type = type1;
+	ShutDownBuffers();
+	InitBuffers((*m_D3dPtr)->getDevice()); //if changing mesh type reinitialise buffers
+	return;
+}
+
+void Engine::MeshComponent::SetMesh(Mesh mesh)
+{
+	m_Model = mesh;
+	if (type == Static) //If mesh is static  create new buffers
+	{	
+		ShutDownBuffers();
+		InitBuffers((*m_D3dPtr)->getDevice());
+		return;
+	}
+	m_changedMesh = true;
 	return;
 }
 

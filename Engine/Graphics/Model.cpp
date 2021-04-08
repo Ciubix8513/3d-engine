@@ -347,13 +347,7 @@ bool Model::InitBuffers(ID3D11Device* device, char* file)
 	D3D11_SUBRESOURCE_DATA vertexData;
 	D3D11_SUBRESOURCE_DATA  indexData;
 	HRESULT result;
-	vertex* vertices;
-
-	
-
-
-
-	if (file == (char*)"No U")
+	vertex* vertices;if (file == (char*)"No U")
 	{
 		Default:
 		m_vertexCount = 3;

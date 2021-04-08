@@ -6,12 +6,14 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 }
 
 //Initialisation function
-void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps)
+void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps, D3d* d3d)
 {
+	m_D3dPtr = &d3d;
 	mesh = (MeshComponent**)&Comps[0];
 	m_layout = 0;
 	m_vertexShader = 0;
 	m_pixelShader = 0;
+
 	return;
 }
 
@@ -188,6 +190,10 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 
 bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount)
 {
+
+
+
+
 	//Seting shader parameters	
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
@@ -219,7 +225,7 @@ bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount
 			*((Matrix4x4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Matrix;
 			break;
 		case Struct:
-			*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer;
+			*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer; //Most likely won't work
 			break;
 
 		}
@@ -250,7 +256,7 @@ bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount
 	return true;
 }
 
-bool Engine::MaterialComponent::InitShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
+bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
 {
 	HRESULT result;
 	ID3D10Blob* errorMsg;

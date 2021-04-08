@@ -17,6 +17,10 @@ namespace Engine
 	{ 
 		
 	public:
+		enum MeshType
+		{
+			Dynamic,Static
+		};
 		struct vertex
 		{
 			Vector3 position;
@@ -42,13 +46,17 @@ namespace Engine
 		ID3D11Buffer** GetVertexBufferPtr();
 		ID3D11Buffer** GetIndexBufferPtr();
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component**>) override;
-	
+		void Initialise(std::vector<Component**>, D3d* d3d) override;
+		MeshType GetMeshType();
+		void SetMeshType(MeshType type);
+		void SetMesh(Mesh mesh);
+
 	private:
-		ID3D11Buffer* m_VertexBuffer,* m_IndexBuffer;
+		ID3D11Buffer* m_vertexBuffer,* m_indexBuffer;
 		Mesh m_Model;
 		Transform** transform;
-
+		MeshType type;
+		bool m_changedMesh;
 	};
 }
 #endif

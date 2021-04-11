@@ -2,6 +2,7 @@
 
 	System::System()
 	{
+		/*
 		m_Input = 0;
 		m_Graphics = 0;
 		m_sound = 0;
@@ -9,6 +10,8 @@
 		m_Fps = 0;
 		m_Time = 0;
 		m_movement = 0;
+		*/
+		m_D3d = 0;
 	}
 
 	System::System(System&)
@@ -21,11 +24,18 @@
 
 	bool System::Init()
 	{
-		int ScreenWidth = 0,
-			ScreenHeight = 0;
+		
 		bool result;
-		InitWindows(ScreenWidth, ScreenHeight);
+		InitWindows(m_ScreenWidth, m_ScreenHeight);
 
+		m_D3d = new D3d;
+		if (!m_D3d)
+			return false;
+		return m_D3d->Init(m_ScreenWidth,m_ScreenHeight,vsync,m_hwnd,fullScreen);
+		
+		
+		
+		/*
 		m_Input = new Input;
 		if (!m_Input)
 			return false;
@@ -69,12 +79,14 @@
 		if (!m_movement)
 			return false;
 		m_movement->Init();
+		*/
 
-		return true;
+		//return true;
 	}
 
 	void System::ShutDown()
 	{
+		/*
 		if(m_Fps)
 		{
 			delete m_Fps;
@@ -114,6 +126,12 @@
 			m_sound->Shutdown();
 			delete m_sound;
 			m_sound = 0;
+		}*/
+		if (m_D3d)
+		{
+			m_D3d->ShutDown();
+			delete m_D3d;
+			m_D3d = 0;
 		}
 		ShutDownWindows();
 		return;
@@ -152,7 +170,7 @@
 
 	bool System::Frame()
 	{
-		bool result;
+		/*bool result;
 		int mouseX, mouseY;
 
 		m_Fps->Frame();
@@ -168,8 +186,9 @@
 			return false;	
 
 		m_movement->MoveCamera(m_Graphics->m_camera, m_Input, m_Time->GetDeltaTime());
-
-		return m_Graphics->Frame(mouseX,mouseY,m_Cpu->GetCpuPercentage(),m_Fps->GetFps(),m_Time->GetDeltaTime());
+		
+		return m_Graphics->Frame(mouseX,mouseY,m_Cpu->GetCpuPercentage(),m_Fps->GetFps(),m_Time->GetDeltaTime());*/
+		return true;
 	}
 
 	void System::InitWindows(int& screenWidth, int& screenHeight)

@@ -21,7 +21,7 @@ using namespace EngineMath;
 		D3d();
 		D3d(D3d&);
 		~D3d();
-		bool Init(int, int, bool, HWND, bool, float, float);
+		bool Init(int screenWidth, int screenHeight, bool Vsync, HWND hwnd, bool fullScreen);//, float screenDepth, float screenNear);
 		void ShutDown();
 		void BeginScene(float, float, float, float);
 		void EndScene();

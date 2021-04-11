@@ -9,7 +9,7 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps, D3d* d3d)
 {
 	m_D3dPtr = &d3d;
-	mesh = (MeshComponent**)&Comps[0];
+	m_mesh = (MeshComponent**)&Comps[0];
 	m_layout = 0;
 	m_vertexShader = 0;
 	m_pixelShader = 0;
@@ -188,11 +188,10 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 	return true;
 }
 
-bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount)
+void Engine::MaterialComponent::Render()
 {
-
-
-
+	//Setting index and vertex buffers
+	(*m_mesh)->Render();
 
 	//Seting shader parameters	
 	HRESULT result;
@@ -201,7 +200,7 @@ bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount
 	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
 	{
 		result = ctxt->Map(m_buffers[i].Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-		if(FAILED(result))		
+		if (FAILED(result))
 			throw std::exception(("Failed to map " + m_buffersBuffer[i].name).c_str());
 		switch (m_buffersBuffer[i].type)
 		{
@@ -231,29 +230,30 @@ bool Engine::MaterialComponent::Render(ID3D11DeviceContext* ctxt, int IndexCount
 		}
 		ctxt->Unmap(m_buffers[i].Buffer, 0);
 		if (m_buffers[i].type == VertexShader)
-			ctxt->VSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer); 
-		else	
-			ctxt->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);	
+			ctxt->VSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
+		else
+			ctxt->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
 	}
+
 	//Setting input layout
-	ctxt->IASetInputLayout(m_layout);
+	(*m_D3dPtr)->getDeviceContext()->IASetInputLayout(m_layout);
 	//Setting shaders
-	ctxt->VSSetShader(m_vertexShader, 0, 0);
-	ctxt->PSSetShader(m_pixelShader, 0, 0);
+	(*m_D3dPtr)->getDeviceContext()->VSSetShader(m_vertexShader, 0, 0);
+	(*m_D3dPtr)->getDeviceContext()->PSSetShader(m_pixelShader, 0, 0);
 	//Setting samplers
 	for (size_t i = 0; i < m_samplerBuffer.size(); i++)
 	{
 		if (m_samplerBuffer[i].type == VertexShader)
-			ctxt->VSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
+			(*m_D3dPtr)->getDeviceContext()->VSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
 		else
-			ctxt->PSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
+			(*m_D3dPtr)->getDeviceContext()->PSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
 	}
 
 	//Drawing the mesh!
-	ctxt->DrawIndexed(IndexCount, 0, 0);
+	(*m_D3dPtr)->getDeviceContext()->DrawIndexed((*m_mesh)->m_Model.indexCount, 0, 0);
 
 
-	return true;
+	return;
 }
 
 bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)

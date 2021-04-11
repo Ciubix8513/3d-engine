@@ -19,7 +19,7 @@
     D3d::~D3d()
     {
     }
-    bool D3d::Init(int screenWidth, int screenHeight, bool Vsync, HWND hwnd, bool fullScreen, float screenDepth, float screenNear)
+    bool D3d::Init(int screenWidth, int screenHeight, bool Vsync, HWND hwnd, bool fullScreen)//, float screenDepth, float screenNear)
     {
         HRESULT result;
         IDXGIFactory* factory;
@@ -270,10 +270,10 @@
         screenAspect = (float)screenWidth / (float)screenHeight;
         Matrix4x4 a;
      
-        m_projectionMat =  PerspectiveProjectionMatrix(FOV, screenAspect, screenNear, screenDepth);
-        m_worldMat = Identity();
+       // m_projectionMat =  PerspectiveProjectionMatrix(FOV, screenAspect, screenNear, screenDepth);
+      //  m_worldMat = Identity();
 
-        m_orthomat = OrthographicProjectionMatrix((float)screenWidth, (float) screenHeight, screenNear, screenDepth);
+       // m_orthomat = OrthographicProjectionMatrix((float)screenWidth, (float) screenHeight, screenNear, screenDepth);
 
         ZeroMemory(&depthDisableStateDesc, sizeof(depthDisableStateDesc));
 

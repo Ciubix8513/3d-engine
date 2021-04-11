@@ -2,7 +2,7 @@
 
 void Engine::Scene::AddEntity(std::string name)
 {
-	Entity A(m_D3d);
+	Entity A(*m_D3d);
 	A.AddComponent<Transform>();
 	A.Name = name;
 	A.Transform = A.GetComponent<Transform>();
@@ -37,14 +37,13 @@ void Engine::Scene::DeleteEntityByUUID(ULONG UUID)
 	return;
 }
 
-void Engine::Scene::SerialiseScene(std::string Path)
+Engine::Scene::Scene(D3d* d3d)
 {
-
+	m_D3d = &d3d;
+	Active = true;
 }
-void Engine::Scene::DeSerialiseScene(std::string Path)
-{
 
-}
+
 
 bool Engine::Scene::GetActiveState()
 {
@@ -96,14 +95,18 @@ Engine::Entity* Engine::Scene::GetEntityByName_Tag(std::string Name, std::string
 
 bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 {
-	std::vector<Entity*> Objects; //Vector of all entities that need to be rendered
-	for (size_t i = 0; i < Entities.size(); i++)//Getting all objects to render
+	//Vector of all entities that need to be rendered
+	std::vector<Entity*> Objects; 
+
+	//Getting all objects to render
+	for (size_t i = 0; i < Entities.size(); i++)
 		for (size_t j = 0; j < RenderingComponents.size(); j++) 
 			if (Entities[i].ContainComponent(RenderingComponents[j]))
 			{
 				Objects.push_back(&Entities[i]);
 				break;
 			}
+
 	Entity** OrderedObjects = Objects.data();
 	MaterialComponent*** MatComps = new MaterialComponent* * [Objects.size()]; // Ah yes triple pointers
 	//Getting all components
@@ -170,7 +173,11 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 	Sorted: 
 		break;
 	}
+	//Sorted
 
+	//Rendering
+	for (size_t i = 0; i < Objects.size(); i++)	
+		(*MatComps[i])->Render();
 	
 
 	return true;

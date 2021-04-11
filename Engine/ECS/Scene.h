@@ -3,6 +3,7 @@
 #define _ENTITY_CONTAINER_H_
 #include "Entity.h"
 #include <set>
+
 namespace Engine 
 {
 	class Scene
@@ -14,6 +15,8 @@ namespace Engine
 		void DeleteEntityByPointer(Entity* entity);
 		void DeleteEntityByUUID(ULONG UUID);
 #pragma endregion
+
+		Scene(D3d*);
 
 		void SerialiseScene(std::string Path);
 		void DeSerialiseScene(std::string Path);
@@ -34,7 +37,7 @@ namespace Engine
 
 	private:
 		std::vector<Entity> Entities;
-		D3d* m_D3d; 
+		D3d** m_D3d; 
 		bool Active;
 		//Quick and dirty, but should work
 		ULONG UUIDcounter = 1;

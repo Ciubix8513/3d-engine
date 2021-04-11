@@ -16,6 +16,7 @@ namespace Engine
 	class MeshComponent : public Component
 	{ 
 		
+		friend class MaterialComponent;
 	public:
 		enum MeshType
 		{

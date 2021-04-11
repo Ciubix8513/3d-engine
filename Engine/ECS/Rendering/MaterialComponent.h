@@ -98,13 +98,14 @@ namespace Engine
 		void Shutdown() override;
 		size_t GetRenderingOrder();
 		void SetRenderingOrder(size_t NewRenderingOrder);
+		void Render();
 
 	private:
 		bool InitShader(ID3D11Device* device,  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS,UINT FLAGS2 = 0);
 		std::string GetShaderErrorMsg(ID3D10Blob* msg);
 		std::vector<std::string> GetWordsFromFile(WCHAR* fileName);
 		bool PreProcessShader(WCHAR* fileName);
-		bool Render(ID3D11DeviceContext* ctxt, int IndexCount);
+
 	private: 
 		size_t RenderingOrder;
 		ID3D11VertexShader* m_vertexShader;
@@ -115,6 +116,6 @@ namespace Engine
 		std::vector<Sampler> m_samplerBuffer;
 
 		
-		MeshComponent** mesh; //To get the data
+		MeshComponent** m_mesh; //To get the data
 	};
 }

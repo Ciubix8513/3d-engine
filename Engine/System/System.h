@@ -38,13 +38,19 @@
 		LPCWSTR m_appName;
 		HINSTANCE m_hinstance;
 		HWND m_hwnd;
+		D3d* m_D3d;
+		bool vsync = true;
+		int m_ScreenWidth = 0,
+			m_ScreenHeight = 0;
+		bool fullScreen = false;
+		/*
 		Input* m_Input;
 		Graphics* m_Graphics;
 		Sound* m_sound;
 		Fps* m_Fps;
 		Time* m_Time;
 		Cpu* m_Cpu;
-		FreeMovement* m_movement;
+		FreeMovement* m_movement;*/
 #pragma endregion
 #pragma region  public Vars
 	

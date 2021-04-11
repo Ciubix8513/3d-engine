@@ -11,7 +11,8 @@ int main()
 	
 	
 	return 1;
-	std::cout << ' ';
+
+
 	System* system;
 	bool result;
 	system = new System();

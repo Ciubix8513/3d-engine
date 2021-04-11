@@ -26,8 +26,7 @@ namespace Engine
 			Vector3 position;
 			Vector4 color;
 			Vector2 UV;
-			Vector3 normal;
-			bool operator==(vertex& other);
+			Vector3 normal;			
 
 		};
 		struct Mesh
@@ -41,12 +40,15 @@ namespace Engine
 	public:		
 		void Shutdown() override;
 		MeshComponent();		
-		void InitBuffers(ID3D11Device* device);
+		void InitBuffers();
 		void ShutDownBuffers();
 		ID3D11Buffer** GetVertexBufferPtr();
 		ID3D11Buffer** GetIndexBufferPtr();
 		std::vector<const type_info*> GetRequieredComponents() override;
 		void Initialise(std::vector<Component**>, D3d* d3d) override;
+
+		void Render();
+
 		MeshType GetMeshType();
 		void SetMeshType(MeshType type);
 		void SetMesh(Mesh mesh);

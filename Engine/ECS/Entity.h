@@ -60,7 +60,7 @@ namespace Engine
 						return;
 					}
 				}
-				Components[Components.size() - 1]->Initialise(InitComp);
+				Components[Components.size() - 1]->Initialise(InitComp, *m_D3dPtr);
 			}
 			catch (std::exception& e)
 			{
@@ -146,6 +146,7 @@ namespace Engine
 		std::vector<Component*> Components;
 		ULONG UUID;
 		std::string EntityTag;
+		D3d** m_D3dPtr;
 	public:
 		Engine::Transform** Transform;
 

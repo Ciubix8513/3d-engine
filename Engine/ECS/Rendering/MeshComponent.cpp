@@ -29,7 +29,7 @@ void Engine::MeshComponent::ShutDownBuffers()
 }
 
 
-void Engine::MeshComponent::InitBuffers(ID3D11Device* device)
+void Engine::MeshComponent::InitBuffers()
 {
 	
 	D3D11_BUFFER_DESC  indexBuffDesc;
@@ -57,7 +57,7 @@ void Engine::MeshComponent::InitBuffers(ID3D11Device* device)
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	result = device->CreateBuffer(&vertexBuffDesc, &vertexData, &m_vertexBuffer);
+	result = (*m_D3dPtr)->getDevice()->CreateBuffer(&vertexBuffDesc, &vertexData, &m_vertexBuffer);
 	if (FAILED(result)) 
 	{
 		throw std::exception("Failed to create vertex buffer");
@@ -81,7 +81,7 @@ void Engine::MeshComponent::InitBuffers(ID3D11Device* device)
 		indexBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	}
 
-	result = device->CreateBuffer(&indexBuffDesc, &indexData, &m_indexBuffer);
+	result = (*m_D3dPtr)->getDevice()->CreateBuffer(&indexBuffDesc, &indexData, &m_indexBuffer);
 	if (FAILED(result))
 	{
 		throw std::exception("Failed to create index buffer");
@@ -115,6 +115,57 @@ void Engine::MeshComponent::Initialise(std::vector<Component**> c, D3d* d3d)
 	return;
 }
 
+void Engine::MeshComponent::Render()
+{
+	//If there're any changes to the mesh, update the buffer
+	if (m_changedMesh)
+	{
+		m_changedMesh = false;
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		HRESULT res;
+		vertex* vertexPtr;
+		unsigned long* indexPtr;
+
+		//Mapping vertex buffer
+		res = (*m_D3dPtr)->getDeviceContext()->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(res))
+		{
+			throw std::exception("Failed to map vertex buffer");
+			return;
+		}
+		vertexPtr = (vertex*)mappedResource.pData;
+		//Setting the vertices
+		memcpy(vertexPtr, (void*)m_Model.vertices, m_Model.vertexCount * sizeof(vertex));
+
+		//Unmapping vertex buffer
+		(*m_D3dPtr)->getDeviceContext()->Unmap(m_vertexBuffer, 0);
+
+
+		//Mapping index buffer
+		res = (*m_D3dPtr)->getDeviceContext()->Map(m_indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(res))
+		{
+			throw std::exception("Failed to map index buffer");
+			return;
+		}
+		indexPtr = (unsigned long*)mappedResource.pData;
+		//Setting the indecies
+		memcpy(indexPtr, (void*)m_Model.indecies, m_Model.indexCount * sizeof(unsigned long));
+
+		//Unmapping index buffer
+		(*m_D3dPtr)->getDeviceContext()->Unmap(m_indexBuffer, 0);
+
+	}
+	//Setting vertex buffer
+	(*m_D3dPtr)->getDeviceContext()->IASetVertexBuffers(0, 1,&m_vertexBuffer, 0, 0);
+	//Setting index buffer
+	(*m_D3dPtr)->getDeviceContext()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//Setting primitive topology
+	(*m_D3dPtr)->getDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	return;
+}
+
 Engine::MeshComponent::MeshType Engine::MeshComponent::GetMeshType()
 {
 	return type;
@@ -126,39 +177,22 @@ void Engine::MeshComponent::SetMeshType(MeshType type1)
 		return;
 	type = type1;
 	ShutDownBuffers();
-	InitBuffers((*m_D3dPtr)->getDevice()); //if changing mesh type reinitialise buffers
+	InitBuffers(); //if changing mesh type reinitialise buffers
 	return;
 }
 
 void Engine::MeshComponent::SetMesh(Mesh mesh)
 {
-	m_Model = mesh;
+	m_Model = mesh;	
 	if (type == Static) //If mesh is static  create new buffers
 	{	
 		ShutDownBuffers();
-		InitBuffers((*m_D3dPtr)->getDevice());
+		InitBuffers();
 		return;
 	}
+	if (!m_vertexBuffer || !m_indexBuffer)	
+		InitBuffers();	
 	m_changedMesh = true;
 	return;
-}
-
-bool Engine::MeshComponent::vertex::operator==(vertex& b)
-{
-	int e = 1;
-	vertex* a = this;
-	e *= (int)(a->color.x * 10000) == (int)(b.color.x * 10000);
-	e *= (int)(a->color.y * 10000) == (int)(b.color.y * 10000);
-	e *= (int)(a->color.z * 10000) == (int)(b.color.z * 10000);
-	e *= (int)(a->color.w * 10000) == (int)(b.color.w * 10000);
-	e *= (int)(a->normal.x * 10000) == (int)(b.normal.x * 10000);
-	e *= (int)(a->normal.z * 10000) == (int)(b.normal.z * 10000);
-	e *= (int)(a->normal.y * 10000) == (int)(b.normal.y * 10000);
-	e *= (int)(a->position.x * 10000) == (int)(b.position.x * 10000);
-	e *= (int)(a->position.y * 10000) == (int)(b.position.y * 10000);
-	e *= (int)(a->position.z * 10000) == (int)(b.position.z * 10000);
-	e *= (int)(a->UV.x * 10000) == (int)(b.UV.x * 10000);
-	e *= (int)(a->UV.y * 10000) == (int)(b.UV.y * 10000);
-	return e == 1;
 }
 

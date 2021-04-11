@@ -28,6 +28,7 @@ namespace Engine
 			Vector4 color;
 			Vector2 UV;
 			Vector3 normal;			
+			bool operator==(vertex& other);
 
 		};
 		struct Mesh

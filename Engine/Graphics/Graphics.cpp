@@ -65,7 +65,7 @@
 			return false;
 
 
-		result = m_D3d->Init(scW, scH, Vsync, hwnd, FullScreen, ScreenDepth, ScreenNear);
+		result = m_D3d->Init(scW, scH, Vsync, hwnd, FullScreen);//, ScreenDepth, ScreenNear);
 		if (!result)
 		{
 			MessageBox(hwnd, L"Could not initialize DirectX 11", L"Error", 0x00000000L);//0x00000000L = OK

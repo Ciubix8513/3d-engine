@@ -199,7 +199,7 @@ void Engine::MaterialComponent::Render()
 
 	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
 	{
-		result = ctxt->Map(m_buffers[i].Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+		result = (*m_D3dPtr)->getDeviceContext()->Map(m_buffers[i].Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
 		if (FAILED(result))
 			throw std::exception(("Failed to map " + m_buffersBuffer[i].name).c_str());
 		switch (m_buffersBuffer[i].type)
@@ -228,11 +228,11 @@ void Engine::MaterialComponent::Render()
 			break;
 
 		}
-		ctxt->Unmap(m_buffers[i].Buffer, 0);
+		(*m_D3dPtr)->getDeviceContext()->Unmap(m_buffers[i].Buffer, 0);
 		if (m_buffers[i].type == VertexShader)
-			ctxt->VSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
+			(*m_D3dPtr)->getDeviceContext()->VSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
 		else
-			ctxt->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
+			(*m_D3dPtr)->getDeviceContext()->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
 	}
 
 	//Setting input layout
@@ -256,7 +256,7 @@ void Engine::MaterialComponent::Render()
 	return;
 }
 
-bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
+bool Engine::MaterialComponent::InitShader(  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
 {
 	HRESULT result;
 	ID3D10Blob* errorMsg;
@@ -297,7 +297,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilen
 	}
 
 	//Creating vertex shader
-	result = device->CreateVertexShader(vertexshaderBuff->GetBufferPointer(), vertexshaderBuff->GetBufferSize(), NULL, &m_vertexShader);
+	result = (*m_D3dPtr)->getDevice()->CreateVertexShader(vertexshaderBuff->GetBufferPointer(), vertexshaderBuff->GetBufferSize(), NULL, &m_vertexShader);
 	if(FAILED(result))
 	{
 		throw std::exception("Could not create vertex shader");
@@ -305,7 +305,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilen
 	}
 
 	//Creating pixel shader
-	result = device->CreatePixelShader(pixelShaderBuff->GetBufferPointer(), pixelShaderBuff->GetBufferSize(), NULL, &m_pixelShader);
+	result = (*m_D3dPtr)->getDevice()->CreatePixelShader(pixelShaderBuff->GetBufferPointer(), pixelShaderBuff->GetBufferSize(), NULL, &m_pixelShader);
 	if (FAILED(result))
 	{
 		throw std::exception("Could not create pixel shader");
@@ -348,7 +348,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilen
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Creating Input layout
-	result = device->CreateInputLayout(polygonLayout, numElements, vertexshaderBuff->GetBufferPointer(), vertexshaderBuff->GetBufferSize(), &m_layout);
+	result = (*m_D3dPtr)->getDevice()->CreateInputLayout(polygonLayout, numElements, vertexshaderBuff->GetBufferPointer(), vertexshaderBuff->GetBufferSize(), &m_layout);
 	if (FAILED(result))
 	{
 		throw std::exception("Failed to create input layout");
@@ -383,7 +383,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilen
 			b.Buffer = 0;
 			b.type = VertexShader;
 			b.bufferNum = count;
-			if (!b.CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
+			if (!b.CreateBuffer((*m_D3dPtr)->getDevice(), atoi(Words[i + 1].substr(2).c_str())))
 			{
 				throw std::exception(("Failed to create " + name + " buffer").c_str());
 				return false;
@@ -399,7 +399,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilen
 			s.name = name;
 			s.type = VertexShader;
 			s.samplerNum = SamplerCount;
-			s.CreateSampler(device);
+			s.CreateSampler((*m_D3dPtr)->getDevice());
 			m_samplerBuffer.push_back(s);
 			SamplerCount++;
 		}
@@ -426,7 +426,7 @@ bool Engine::MaterialComponent::InitShader(ID3D11Device* device,  WCHAR* vsFilen
 			b.type = PixelShader;
 			b.bufferNum = count;
 
-			if (!b.CreateBuffer(device, atoi(Words[i + 1].substr(2).c_str())))
+			if (!b.CreateBuffer((*m_D3dPtr)->getDevice(), atoi(Words[i + 1].substr(2).c_str())))
 			{
 				throw std::exception(("Failed to create " + name + " buffer").c_str());
 				return false;

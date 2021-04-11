@@ -18,6 +18,10 @@ namespace Engine
 
 		Scene(D3d*);
 
+
+		void ShutDown();
+		void Update();
+
 		void SerialiseScene(std::string Path);
 		void DeSerialiseScene(std::string Path);
 		bool GetActiveState();

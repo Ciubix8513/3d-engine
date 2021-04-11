@@ -43,6 +43,21 @@ Engine::Scene::Scene(D3d* d3d)
 	Active = true;
 }
 
+void Engine::Scene::ShutDown()
+{
+	for (size_t i = 0; i < Entities.size(); i++)	
+		Entities[i].Destroy();
+	return;
+	
+}
+
+void Engine::Scene::Update()
+{
+	for (size_t i = 0; i < Entities.size(); i++)	
+		Entities[i].Update();
+	
+}
+
 
 
 bool Engine::Scene::GetActiveState()
@@ -176,9 +191,10 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 	//Sorted
 
 	//Rendering
+	(*m_D3d)->BeginScene(0, 0, 0, 0);
 	for (size_t i = 0; i < Objects.size(); i++)	
 		(*MatComps[i])->Render();
-	
+	(*m_D3d)->EndScene();
 
 	return true;
 }

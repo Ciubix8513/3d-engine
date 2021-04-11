@@ -7,7 +7,7 @@ Engine::Entity::Entity(D3d* D3d)
 {
 	Name = " ";
 	UUID = 1;
-	//m_D3d = D3d;
+	m_D3dPtr = &D3d;
 }
 
 Engine::Entity::Entity()

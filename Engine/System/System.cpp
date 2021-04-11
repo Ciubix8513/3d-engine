@@ -12,6 +12,7 @@
 		m_movement = 0;
 		*/
 		m_D3d = 0;
+		testScene = 0;
 	}
 
 	System::System(System&)
@@ -31,10 +32,10 @@
 		m_D3d = new D3d;
 		if (!m_D3d)
 			return false;
-		return m_D3d->Init(m_ScreenWidth,m_ScreenHeight,vsync,m_hwnd,fullScreen);
-		
-		
-		
+		if (!m_D3d->Init(m_ScreenWidth, m_ScreenHeight, vsync, m_hwnd, fullScreen))
+			return false;
+		testScene = new Scene(m_D3d);
+		InitScene();
 		/*
 		m_Input = new Input;
 		if (!m_Input)
@@ -81,7 +82,7 @@
 		m_movement->Init();
 		*/
 
-		//return true;
+		return true;
 	}
 
 	void System::ShutDown()
@@ -132,6 +133,12 @@
 			m_D3d->ShutDown();
 			delete m_D3d;
 			m_D3d = 0;
+		}
+		if(testScene)
+		{
+			testScene->ShutDown();
+			delete testScene;
+			testScene = 0;
 		}
 		ShutDownWindows();
 		return;
@@ -188,6 +195,9 @@
 		m_movement->MoveCamera(m_Graphics->m_camera, m_Input, m_Time->GetDeltaTime());
 		
 		return m_Graphics->Frame(mouseX,mouseY,m_Cpu->GetCpuPercentage(),m_Fps->GetFps(),m_Time->GetDeltaTime());*/
+
+		testScene->Update();
+		testScene->RenderSceneFromCameraPtr(camera);
 		return true;
 	}
 
@@ -253,6 +263,27 @@
 		m_hinstance = NULL;
 		AppHandle = NULL;
 		return;
+	}
+
+	void System::InitScene()
+	{
+		//Hard coding a scene
+		testScene->AddEntity("Entity0");
+		testScene->AddEntity("Entity1");
+
+		Entity* e0 = testScene->GetEntityByName("Entity0");
+		Entity* e1 = testScene->GetEntityByName("Entity1");
+
+		e0->AddComponent<MeshComponent>();
+		e0->AddComponent<MaterialComponent>();
+
+		(*e0->GetComponent<MeshComponent>())->SetMesh(*FileManager::LoadMesh("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/data/Cube.obj"));
+		(*e0->GetComponent<MaterialComponent>())->InitShader((WCHAR*)L"C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/ColorVS.hlsl", (WCHAR*)L"C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Color.hlsl", "Color");
+		
+		e1->AddComponent<CameraComponent>();
+		camera = e1->GetComponent<CameraComponent>();
+		(*e1->Transform)->Position = Vector3(0, 0, -5);
+	
 	}
 
 	LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM  wparam, LPARAM lparam)

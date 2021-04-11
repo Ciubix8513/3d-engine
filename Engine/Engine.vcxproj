@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="ECS\Component.cpp" />
     <ClCompile Include="ECS\Entity.cpp" />
+    <ClCompile Include="ECS\FileManager.cpp" />
     <ClCompile Include="ECS\Rendering\CameraComponent.cpp" />
     <ClCompile Include="ECS\Rendering\MaterialComponent.cpp" />
     <ClCompile Include="ECS\Scene.cpp" />
@@ -183,6 +184,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Entity.h" />
+    <ClInclude Include="ECS\FileManager.h" />
     <ClInclude Include="ECS\Rendering\BufferStructs.h" />
     <ClInclude Include="ECS\Rendering\CameraComponent.h" />
     <ClInclude Include="ECS\Rendering\MaterialComponent.h" />

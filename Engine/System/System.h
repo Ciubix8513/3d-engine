@@ -13,6 +13,8 @@
 #include "../Timers/Fps.h"
 #include "../Timers/Time.h"
 #include "../Movement/FreeMovement.h"
+#include "../ECS/Scene.h"
+#include "../ECS/FileManager.h"
 #pragma endregion
 
 	class System
@@ -32,6 +34,7 @@
 		bool Frame();
 		void InitWindows(int&, int&);
 		void ShutDownWindows();
+		void InitScene();
 #pragma endregion 
 #pragma region  private Vars
 	private:
@@ -43,6 +46,10 @@
 		int m_ScreenWidth = 0,
 			m_ScreenHeight = 0;
 		bool fullScreen = false;
+
+		
+		Scene* testScene;
+		CameraComponent** camera;
 		/*
 		Input* m_Input;
 		Graphics* m_Graphics;

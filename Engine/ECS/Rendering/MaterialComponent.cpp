@@ -6,9 +6,9 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 }
 
 //Initialisation function
-void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps, D3d* d3d)
+void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps, D3d** d3d)
 {
-	m_D3dPtr = &d3d;
+	m_D3dPtr = d3d;
 	m_mesh = (MeshComponent**)&Comps[0];
 	m_layout = 0;
 	m_vertexShader = 0;
@@ -59,7 +59,7 @@ void Engine::MaterialComponent::SetRenderingOrder(size_t NewRenderingOrder)
 	RenderingOrder = NewRenderingOrder;
 	return;
 }
-std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* fileName)
+std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(std::string  fileName)
 {
 	std::ifstream f(fileName);
 	if (!f.is_open())
@@ -90,7 +90,7 @@ std::vector<std::string> Engine::MaterialComponent::GetWordsFromFile(WCHAR* file
 //else if ((*(iterators[i] + 1)).substr(0, 6) == "matrix")
 //ByteWidth = 64;
 
-bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
+bool Engine::MaterialComponent::PreProcessShader(std::string fileName)
 {
 	std::vector <std::string> Words;
 	try
@@ -133,13 +133,13 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 	}
 
 	//Creating processed file
-	std::ofstream f(((std::wstring)fileName + (std::wstring)L".processed"));
+	std::ofstream f(fileName + ".processed");
 	for (size_t i = 0; i < Words.size(); i++)
 		f << Words[i];
 	f.close();
 
 	//this might be dumb but
-	Words = GetWordsFromFile((WCHAR*)((std::wstring)fileName + (std::wstring)L".processed").c_str());
+	Words = GetWordsFromFile(fileName + ".processed");
 
 	iterators.clear();
 	//finding all cbuffers
@@ -180,7 +180,7 @@ bool Engine::MaterialComponent::PreProcessShader(WCHAR* fileName)
 		ByteWidth = 0;
 	}
 
-	std::ofstream f1(((std::wstring)fileName + (std::wstring)L".processed"));
+	std::ofstream f1(fileName + ".processed");
 	for (size_t i = 0; i < Words.size(); i++)
 		f1 << Words[i];
 	f1.close();
@@ -256,7 +256,7 @@ void Engine::MaterialComponent::Render()
 	return;
 }
 
-bool Engine::MaterialComponent::InitShader(  WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
+bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  psFilename, std::string ShaderName, UINT FLAGS1, UINT FLAGS2)
 {
 	HRESULT result;
 	ID3D10Blob* errorMsg;
@@ -268,31 +268,33 @@ bool Engine::MaterialComponent::InitShader(  WCHAR* vsFilename, WCHAR* psFilenam
 	D3D11_BUFFER_DESC matBuffDesc, lighBuffDesc, cameraBuffDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 
+	errorMsg = 0;
 	vertexshaderBuff = 0;
 	pixelShaderBuff = 0;
 	//Preprocessing shaders
 	PreProcessShader(vsFilename);
 	PreProcessShader(psFilename);
-
-
-	//Compiling vertex shader
-	result = D3DCompileFromFile((((std::wstring)vsFilename + (std::wstring)L".proceced")).c_str(), NULL, NULL,(( ShaderName + "VertexShader").c_str()), "vs_5_0", FLAGS1, FLAGS2, &vertexshaderBuff, &errorMsg);
+	 
+	
+	
+	//Compiling vertex shawder
+	result = D3DCompileFromFile(CA2W((vsFilename + ".proceced").c_str()), NULL, NULL,(( ShaderName + "VertexShader").c_str()), "vs_5_0", FLAGS1, FLAGS2, &vertexshaderBuff, &errorMsg);
 	if(FAILED(result))
 	{
 		if (errorMsg)
 			throw std::exception(GetShaderErrorMsg(errorMsg).c_str());
 		else
-			throw std::exception(((char*)vsFilename + (std::string)" does not exist").c_str());
+			throw std::exception((vsFilename + (std::string)" does not exist").c_str());
 		return false;
 	}
 	//Compiling pixel shader
-	result = D3DCompileFromFile((((std::wstring)psFilename + (std::wstring)L".proceced")).c_str(), NULL, NULL, ((ShaderName + "PixelShader").c_str()), "ps_5_0", FLAGS1, FLAGS2, &pixelShaderBuff, &errorMsg);
+	result = D3DCompileFromFile(CA2W((psFilename + ".proceced").c_str()), NULL, NULL, ((ShaderName + "PixelShader").c_str()), "ps_5_0", FLAGS1, FLAGS2, &pixelShaderBuff, &errorMsg);
 	if (FAILED(result))
 	{
 		if (errorMsg)
 			throw std::exception(GetShaderErrorMsg(errorMsg).c_str());
 		else
-			throw std::exception(((char*)psFilename + (std::string)" does not exist").c_str());
+			throw std::exception((psFilename + (std::string)" does not exist").c_str());
 		return false;
 	}
 
@@ -363,7 +365,7 @@ bool Engine::MaterialComponent::InitShader(  WCHAR* vsFilename, WCHAR* psFilenam
 
 
 	//Getting buffer data 
-	std::vector<std::string> Words = GetWordsFromFile((WCHAR*)((std::wstring)vsFilename + (std::wstring)L".proceced").c_str());
+	std::vector<std::string> Words = GetWordsFromFile(vsFilename + ".proceced");
 
 	std::string name;	
 	size_t count = 0;
@@ -407,7 +409,7 @@ bool Engine::MaterialComponent::InitShader(  WCHAR* vsFilename, WCHAR* psFilenam
 
 	count = 0;
 	SamplerCount = 0;
-	Words = GetWordsFromFile((WCHAR*)((std::wstring)psFilename + (std::wstring)L".proceced").c_str());
+	Words = GetWordsFromFile(psFilename + ".proceced");
 
 	//Pixel shader buffer creation
 	for (size_t i = 0; i < Words.size(); i++) 

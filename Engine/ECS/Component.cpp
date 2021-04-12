@@ -12,9 +12,9 @@ Engine::Component::Component()
 	return;
 }*/
 
-void Engine::Component::Initialise(std::vector<Component**>,D3d* d3d)
+void Engine::Component::Initialise(std::vector<Component**>,D3d** d3d)
 {
-	m_D3dPtr = &d3d;
+	m_D3dPtr = d3d;
 }
 
 void Engine::Component::Shutdown()

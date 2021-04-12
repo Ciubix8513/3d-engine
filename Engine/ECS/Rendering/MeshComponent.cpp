@@ -46,6 +46,7 @@ void Engine::MeshComponent::InitBuffers()
 	vertexBuffDesc.CPUAccessFlags = 0;
 	vertexBuffDesc.MiscFlags = 0;
 	vertexBuffDesc.StructureByteStride = 0;
+	
 
 	if(type == Dynamic) // If dynamic type override some params
 	{
@@ -107,9 +108,9 @@ std::vector<const type_info*> Engine::MeshComponent::GetRequieredComponents()
 	return a;
 }
 
-void Engine::MeshComponent::Initialise(std::vector<Component**> c, D3d* d3d)
+void Engine::MeshComponent::Initialise(std::vector<Component**> c, D3d** d3d)
 {
-	m_D3dPtr = &d3d;
+	m_D3dPtr = d3d;
 	transform = (Transform**)&c[0];
 	
 	return;
@@ -176,23 +177,27 @@ void Engine::MeshComponent::SetMeshType(MeshType type1)
 	if (type == type1)
 		return;
 	type = type1;
-	ShutDownBuffers();
-	InitBuffers(); //if changing mesh type reinitialise buffers
+	if (m_vertexBuffer)
+	{
+		InitBuffers(); //if changing mesh type reinitialise buffers
+		ShutDownBuffers();
+	}
 	return;
 }
 
 void Engine::MeshComponent::SetMesh(Mesh mesh)
 {
 	m_Model = mesh;	
+	m_changedMesh = true;
 	if (type == Static) //If mesh is static  create new buffers
 	{	
+		m_changedMesh = false;
 		ShutDownBuffers();
 		InitBuffers();
 		return;
 	}
 	if (!m_vertexBuffer || !m_indexBuffer)	
 		InitBuffers();	
-	m_changedMesh = true;
 	return;
 }
 

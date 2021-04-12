@@ -16,7 +16,7 @@ namespace Engine
 		void DeleteEntityByUUID(ULONG UUID);
 #pragma endregion
 
-		Scene(D3d*);
+		Scene(D3d**);
 
 
 		void ShutDown();

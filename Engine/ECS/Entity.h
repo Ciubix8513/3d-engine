@@ -19,7 +19,7 @@ namespace Engine
 	{
 		friend class Scene;
 	public:
-		Entity(D3d* D3d); Entity();
+		Entity(D3d** D3d);
 		void Destroy();
 #pragma region Tag funcs
 		void SetTag(std::string Tag);
@@ -60,7 +60,7 @@ namespace Engine
 						return;
 					}
 				}
-				Components[Components.size() - 1]->Initialise(InitComp, *m_D3dPtr);
+				Components[Components.size() - 1]->Initialise(InitComp, m_D3dPtr);
 			}
 			catch (std::exception& e)
 			{

@@ -32,9 +32,10 @@
 		m_D3d = new D3d;
 		if (!m_D3d)
 			return false;
-		if (!m_D3d->Init(m_ScreenWidth, m_ScreenHeight, vsync, m_hwnd, fullScreen))
+		bool res = m_D3d->Init(m_ScreenWidth, m_ScreenHeight, vsync, m_hwnd, fullScreen);
+		if (!res)
 			return false;
-		testScene = new Scene(m_D3d);
+		testScene = new Scene(&m_D3d);
 		InitScene();
 		/*
 		m_Input = new Input;
@@ -276,9 +277,9 @@
 
 		e0->AddComponent<MeshComponent>();
 		e0->AddComponent<MaterialComponent>();
-
+		(*e0->GetComponent<MeshComponent>())->SetMeshType(MeshComponent::Static);
 		(*e0->GetComponent<MeshComponent>())->SetMesh(*FileManager::LoadMesh("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/data/Cube.obj"));
-		(*e0->GetComponent<MaterialComponent>())->InitShader((WCHAR*)L"C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/ColorVS.hlsl", (WCHAR*)L"C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Color.hlsl", "Color");
+		(*e0->GetComponent<MaterialComponent>())->InitShader("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/ColorVS.hlsl", "C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Color.hlsl", "Color");
 		
 		e1->AddComponent<CameraComponent>();
 		camera = e1->GetComponent<CameraComponent>();

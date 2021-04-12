@@ -3,6 +3,8 @@
 #include <fstream>
 #include <string>
 #include <d3dcompiler.h>
+#include <atlbase.h>
+#include <atlconv.h>
 #include "BufferStructs.h"
 using namespace Engine;
 using namespace EngineMath;
@@ -94,17 +96,17 @@ namespace Engine
 #pragma endregion
 	public:
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component**> Comps, D3d* d3d) override;
+		void Initialise(std::vector<Component**> Comps, D3d** d3d) override;
 		void Shutdown() override;
 		size_t GetRenderingOrder();
 		void SetRenderingOrder(size_t NewRenderingOrder);
 		void Render();
-		bool InitShader( WCHAR* vsFilename, WCHAR* psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS, UINT FLAGS2 = 0);
+		bool InitShader(std::string vsFilename, std::string psFilename, std::string ShaderName, UINT FLAGS1 = D3D10_SHADER_ENABLE_STRICTNESS, UINT FLAGS2 = 0);
 
 	private:
 		std::string GetShaderErrorMsg(ID3D10Blob* msg);
-		std::vector<std::string> GetWordsFromFile(WCHAR* fileName);
-		bool PreProcessShader(WCHAR* fileName);
+		std::vector<std::string> GetWordsFromFile(std::string fileName);
+		bool PreProcessShader(std::string fileName);
 
 	private: 
 		size_t RenderingOrder;

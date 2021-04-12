@@ -2,7 +2,7 @@
 
 void Engine::Scene::AddEntity(std::string name)
 {
-	Entity A(*m_D3d);
+	Entity A(m_D3d);
 	A.AddComponent<Transform>();
 	A.Name = name;
 	A.Transform = A.GetComponent<Transform>();
@@ -37,9 +37,9 @@ void Engine::Scene::DeleteEntityByUUID(ULONG UUID)
 	return;
 }
 
-Engine::Scene::Scene(D3d* d3d)
+Engine::Scene::Scene(D3d** d3d)
 {
-	m_D3d = &d3d;
+	m_D3d = d3d;
 	Active = true;
 }
 

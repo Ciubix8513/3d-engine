@@ -274,11 +274,11 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 	//Preprocessing shaders
 	PreProcessShader(vsFilename);
 	PreProcessShader(psFilename);
-	 
-	
+	CA2W tmp1((vsFilename + ".processed").c_str());
+	auto tmp = tmp1.m_psz;
 	
 	//Compiling vertex shawder
-	result = D3DCompileFromFile(CA2W((vsFilename + ".proceced").c_str()), NULL, NULL,(( ShaderName + "VertexShader").c_str()), "vs_5_0", FLAGS1, FLAGS2, &vertexshaderBuff, &errorMsg);
+	result = D3DCompileFromFile(tmp, NULL, NULL,(( ShaderName + "VertexShader").c_str()), "vs_5_0", FLAGS1, FLAGS2, &vertexshaderBuff, &errorMsg);
 	if(FAILED(result))
 	{
 		if (errorMsg)
@@ -288,7 +288,7 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 		return false;
 	}
 	//Compiling pixel shader
-	result = D3DCompileFromFile(CA2W((psFilename + ".proceced").c_str()), NULL, NULL, ((ShaderName + "PixelShader").c_str()), "ps_5_0", FLAGS1, FLAGS2, &pixelShaderBuff, &errorMsg);
+	result = D3DCompileFromFile(CA2W((psFilename + ".processed").c_str()).m_psz, NULL, NULL, ((ShaderName + "PixelShader").c_str()), "ps_5_0", FLAGS1, FLAGS2, &pixelShaderBuff, &errorMsg);
 	if (FAILED(result))
 	{
 		if (errorMsg)
@@ -365,7 +365,7 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 
 
 	//Getting buffer data 
-	std::vector<std::string> Words = GetWordsFromFile(vsFilename + ".proceced");
+	std::vector<std::string> Words = GetWordsFromFile(vsFilename + ".processed");
 
 	std::string name;	
 	size_t count = 0;
@@ -409,7 +409,7 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 
 	count = 0;
 	SamplerCount = 0;
-	Words = GetWordsFromFile(psFilename + ".proceced");
+	Words = GetWordsFromFile(psFilename + ".processed");
 
 	//Pixel shader buffer creation
 	for (size_t i = 0; i < Words.size(); i++) 

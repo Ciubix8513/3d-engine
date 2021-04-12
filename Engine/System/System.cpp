@@ -283,7 +283,7 @@
 		
 		e1->AddComponent<CameraComponent>();
 		camera = e1->GetComponent<CameraComponent>();
-		(*e1->Transform)->Position = Vector3(0, 0, -5);
+		(*(e1->Transform))->Position = Vector3(0, 0, -5);
 	
 	}
 

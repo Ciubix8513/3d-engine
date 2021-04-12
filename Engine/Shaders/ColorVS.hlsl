@@ -1,9 +1,9 @@
 //globals
 cbuffer MatrixBuffer
 {
-	matrix worldMatrix;
-	matrix viewMatrix;
-	matrix projectionMatrix;
+    matrix worldMatrix;
+    matrix viewMatrix;
+    matrix projectionMatrix;
 };
 //structs
 struct Vertex 

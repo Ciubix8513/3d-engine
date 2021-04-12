@@ -61,6 +61,7 @@ namespace Engine
 					}
 				}
 				Components[Components.size() - 1]->Initialise(InitComp, m_D3dPtr);
+				Transform = GetComponent< Engine::Transform>();
 			}
 			catch (std::exception& e)
 			{

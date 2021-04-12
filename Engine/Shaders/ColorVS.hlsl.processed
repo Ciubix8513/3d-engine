@@ -1,10 +1,10 @@
 //globals
 cbuffer MatrixBuffer
-//0
+//192
 {
-	matrix worldMatrix;
-	matrix viewMatrix;
-	matrix projectionMatrix;
+    matrix worldMatrix;
+    matrix viewMatrix;
+    matrix projectionMatrix;
 };
 //structs
 struct Vertex 

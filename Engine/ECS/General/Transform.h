@@ -10,6 +10,9 @@ namespace Engine
 	class Transform : public Component
 	{
 	public:
+		void Initialise(std::vector<Component**> Comps, D3d** d3d) override;
+
+
 		Transform();
 		 //void Shutdown() override;
 
@@ -51,7 +54,7 @@ namespace Engine
 		Vector3 Position;
 		Vector3 Scale;
 		Quaternion Rotation;
-		std::string testData;
+		//std::string testData;
 	private:
 		std::vector<Transform**> m_Children;
 		Transform** m_Parent;

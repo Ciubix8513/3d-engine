@@ -3,9 +3,9 @@
 void Engine::Scene::AddEntity(std::string name)
 {
 	Entity A(m_D3d);
-	A.AddComponent<Transform>();
+	//A.AddComponent<Transform>();
 	A.Name = name;
-	A.Transform = A.GetComponent<Transform>();
+	//A.Transform = A.GetComponent<Transform>();
 	Entities.push_back(A);	
 	if (UUIDcounter == 0)
 		ResetUUIDs();
@@ -123,24 +123,24 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 			}
 
 	Entity** OrderedObjects = Objects.data();
-	MaterialComponent*** MatComps = new MaterialComponent* * [Objects.size()]; // Ah yes triple pointers
+	MaterialComponent** MatComps = new MaterialComponent*  [Objects.size()]; // Ah yes triple pointers
 	//Getting all components
 	for (size_t i = 0; i < Objects.size(); i++)
-		MatComps[i] = OrderedObjects[i]->GetComponent<MaterialComponent>();
+		MatComps[i] = *OrderedObjects[i]->GetComponent<MaterialComponent>();
 	//Sorting
 	bool sorted = false;
 	Entity* EntityBuffer;
-	MaterialComponent** MaterialComponentBuffer;
+	MaterialComponent* MaterialComponentBuffer;
 	while (!sorted)
 	{
-		for (size_t i = 0; i < Objects.size(); i++)
+		for (size_t i = 0; i < Objects.size() -1  ; i++)
 		{
 			if (
 				//Check rendering order
 				(
-					(*MatComps[i])->GetRenderingOrder()
+					(MatComps[i])->GetRenderingOrder()
 		>
-					(*MatComps[i + 1])->GetRenderingOrder()
+					(MatComps[i + 1])->GetRenderingOrder()
 					)
 				||
 				//Check which object is closer
@@ -164,9 +164,9 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 			if (
 				//Check rendering order
 				(
-					(*MatComps[i])->GetRenderingOrder()
+					(MatComps[i])->GetRenderingOrder()
 		>
-					(*MatComps[i + 1])->GetRenderingOrder()
+					(MatComps[i + 1])->GetRenderingOrder()
 					)
 				||
 				//Check which object is closer
@@ -191,9 +191,9 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 	//Sorted
 
 	//Rendering
-	(*m_D3d)->BeginScene(0, 0, 0, 0);
+	(*m_D3d)->BeginScene(1, 1, 0, 0);
 	for (size_t i = 0; i < Objects.size(); i++)	
-		(*MatComps[i])->Render();
+		(MatComps[i])->Render();
 	(*m_D3d)->EndScene();
 
 	return true;

@@ -118,6 +118,9 @@ void Engine::MeshComponent::Initialise(std::vector<Component**> c, D3d** d3d)
 
 void Engine::MeshComponent::Render()
 {
+
+
+
 	//If there're any changes to the mesh, update the buffer
 	if (m_changedMesh)
 	{

@@ -6,10 +6,10 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 }
 
 //Initialisation function
-void Engine::MaterialComponent::Initialise(std::vector<Component**> Comps, D3d** d3d)
+void Engine::MaterialComponent::Initialise(std::vector<Component*> Comps, D3d** d3d)
 {
 	m_D3dPtr = d3d;
-	m_mesh = (MeshComponent**)&Comps[0];
+	m_mesh = (MeshComponent*)Comps[0];
 	m_layout = 0;
 	m_vertexShader = 0;
 	m_pixelShader = 0;
@@ -191,7 +191,7 @@ bool Engine::MaterialComponent::PreProcessShader(std::string fileName)
 void Engine::MaterialComponent::Render()
 {
 	//Setting index and vertex buffers
-	(*m_mesh)->Render();
+	m_mesh->Render();
 
 	//Seting shader parameters	
 	HRESULT result;
@@ -250,7 +250,7 @@ void Engine::MaterialComponent::Render()
 	}
 
 	//Drawing the mesh!
-	(*m_D3dPtr)->getDeviceContext()->DrawIndexed((*m_mesh)->m_Model.indexCount, 0, 0);
+	(*m_D3dPtr)->getDeviceContext()->DrawIndexed((m_mesh)->m_Model.indexCount, 0, 0);
 
 
 	return;

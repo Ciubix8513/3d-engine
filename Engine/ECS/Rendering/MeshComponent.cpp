@@ -108,7 +108,7 @@ std::vector<const type_info*> Engine::MeshComponent::GetRequieredComponents()
 	return a;
 }
 
-void Engine::MeshComponent::Initialise(std::vector<Component**> c, D3d** d3d)
+void Engine::MeshComponent::Initialise(std::vector<Component*> c, D3d** d3d)
 {
 	m_D3dPtr = d3d;
 	transform = (Transform**)&c[0];

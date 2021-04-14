@@ -277,13 +277,13 @@
 
 		e0->AddComponent<MeshComponent>();
 		e0->AddComponent<MaterialComponent>();
-		(*e0->GetComponent<MeshComponent>())->SetMeshType(MeshComponent::Static);
-		(*e0->GetComponent<MeshComponent>())->SetMesh(*FileManager::LoadMesh("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/data/Cube.obj"));
-		(*e0->GetComponent<MaterialComponent>())->InitShader("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/ColorVS.hlsl", "C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Color.hlsl", "Color");
+		(e0->GetComponent<MeshComponent>())->SetMeshType(MeshComponent::Static);
+		(e0->GetComponent<MeshComponent>())->SetMesh(*FileManager::LoadMesh("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/data/Cube.obj"));
+		(e0->GetComponent<MaterialComponent>())->InitShader("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/ColorVS.hlsl", "C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Color.hlsl", "Color");
 		
 		e1->AddComponent<CameraComponent>();
 		camera = e1->GetComponent<CameraComponent>();
-		(*(e1->Transform))->Position = Vector3(0, 0, -5);
+		((e1->Transform))->Position = Vector3(0, 0, -5);
 	
 	}
 

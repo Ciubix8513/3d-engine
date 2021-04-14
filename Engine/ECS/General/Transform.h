@@ -10,7 +10,7 @@ namespace Engine
 	class Transform : public Component
 	{
 	public:
-		void Initialise(std::vector<Component**> Comps, D3d** d3d) override;
+		void Initialise(std::vector<Component*> Comps, D3d** d3d) override;
 
 
 		Transform();

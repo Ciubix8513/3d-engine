@@ -11,9 +11,9 @@ namespace Engine
 	{
 
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component**>, D3d** d3d) override;
+		void Initialise(std::vector<Component*>, D3d** d3d) override;
 	public:
-		Transform** m_Transform;
+		Transform* m_Transform;
 	};
 };
 #endif 

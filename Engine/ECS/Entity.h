@@ -41,11 +41,12 @@ namespace Engine
 				}
 				//Check for required components
 				T* Comp = new T;
-				Components.push_back((Component*)Comp);
-				Components[Components.size() - 1]->TypeID = typeid(T).hash_code();
-				std::vector<Component**> InitComp;
+				T** CompPTR = &Comp;
+				Components.push_back((Component**)CompPTR);
+				(*Components[Components.size() - 1])->TypeID = typeid(T).hash_code();
+				std::vector<Component*> InitComp;
 
-				std::vector<const type_info*> Comps = Components[Components.size() - 1]->GetRequieredComponents();
+				std::vector<const type_info*> Comps = (*Components[Components.size() - 1])->GetRequieredComponents();
 
 				for (int i = 0; i < Comps.size(); i++)
 				{
@@ -60,8 +61,8 @@ namespace Engine
 						return;
 					}
 				}
-				Components[Components.size() - 1]->Initialise(InitComp, m_D3dPtr);
-				Transform = GetComponent< Engine::Transform>();
+				(*Components[Components.size() - 1])->Initialise(InitComp, m_D3dPtr);
+				//Transform = GetComponent< Engine::Transform>();
 			}
 			catch (std::exception& e)
 			{
@@ -85,36 +86,35 @@ namespace Engine
 				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
-				if (Components[i]->TypeID == typeid(T).hash_code())
+				if ((*Components[i])->TypeID == typeid(T).hash_code())
 				{
-					Components[i]->Shutdown();
-					delete Components[i];
+					(*Components[i])->Shutdown();
+					delete (*Components[i]);
 					Components.erase(Components.begin() + i);
 					return;
 				}
 
 		};
 		template <typename T>
-		T** GetComponent()
+		T* GetComponent()
 		{
 			//Check if there's a component type T
 			try
 			{
-				if (!std::is_base_of<Component, T>::value)
-				{
+				if (!std::is_base_of<Component, T>::value)				
 					throw std::exception("Wrong component type");
-				}
+				
 			}
 			catch (std::exception& e)
 			{
 				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
-				if (Components[i]->TypeID == typeid(T).hash_code())
-					return (T**)&Components[i];
+				if ((*(Components[i]))->TypeID == typeid(T).hash_code())
+					return (T*)*Components[i];
 			return nullptr;
 		};
-		Component** GetComponent(const type_info* info);
+		Component* GetComponent(const type_info* info);
 		template <typename T>
 		bool ContainComponent()
 		{
@@ -133,7 +133,7 @@ namespace Engine
 				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (unsigned int i = 0; i < Components.size(); i++)
-				if (Components[i]->TypeID == typeid(T).hash_code())
+				if ((*Components[i])->TypeID == typeid(T).hash_code())
 					return true;
 			return false;
 		};
@@ -144,12 +144,12 @@ namespace Engine
 		void Update();
 		bool change;
 		std::string Name;
-		std::vector<Component*> Components;
+		std::vector<Component**> Components;
 		ULONG UUID;
 		std::string EntityTag;
 		D3d** m_D3dPtr;
 	public:
-		Engine::Transform** Transform;
+		Engine::Transform* Transform;
 
 	};
 };

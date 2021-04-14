@@ -49,7 +49,7 @@
 
 		
 		Scene* testScene;
-		CameraComponent** camera;
+		CameraComponent* camera;
 		/*
 		Input* m_Input;
 		Graphics* m_Graphics;

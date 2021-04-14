@@ -36,7 +36,7 @@ namespace Engine
 #pragma endregion
 
 #pragma region Rendering
-		 bool RenderSceneFromCameraPtr(CameraComponent** Camera);
+		 bool RenderSceneFromCameraPtr(CameraComponent* Camera);
 #pragma endregion
 
 	private:

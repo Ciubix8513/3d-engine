@@ -108,7 +108,7 @@ Engine::Entity* Engine::Scene::GetEntityByName_Tag(std::string Name, std::string
 	return nullptr;
 }
 
-bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
+bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent* Camera)
 {
 	//Vector of all entities that need to be rendered
 	std::vector<Entity*> Objects; 
@@ -126,7 +126,7 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 	MaterialComponent** MatComps = new MaterialComponent*  [Objects.size()]; // Ah yes triple pointers
 	//Getting all components
 	for (size_t i = 0; i < Objects.size(); i++)
-		MatComps[i] = *OrderedObjects[i]->GetComponent<MaterialComponent>();
+		MatComps[i] = OrderedObjects[i]->GetComponent<MaterialComponent>();
 	//Sorting
 	bool sorted = false;
 	Entity* EntityBuffer;
@@ -145,9 +145,9 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 				||
 				//Check which object is closer
 				(
-					((*OrderedObjects[i]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+					((OrderedObjects[i]->Transform)->GetAbsolutePosition() - ((Camera)->m_Transform)->GetAbsolutePosition()).Length()
 	>
-					((*OrderedObjects[i + 1]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+					((OrderedObjects[i + 1]->Transform)->GetAbsolutePosition() - ((Camera)->m_Transform)->GetAbsolutePosition()).Length()
 					)
 				) 
 			{
@@ -171,9 +171,9 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent** Camera)
 				||
 				//Check which object is closer
 				(
-					((*OrderedObjects[i]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+					((OrderedObjects[i]->Transform)->GetAbsolutePosition() - (Camera->m_Transform)->GetAbsolutePosition()).Length()
 	>
-					((*OrderedObjects[i + 1]->Transform)->GetAbsolutePosition() - (*(*Camera)->m_Transform)->GetAbsolutePosition()).Length()
+					((OrderedObjects[i + 1]->Transform)->GetAbsolutePosition() - (Camera->m_Transform)->GetAbsolutePosition()).Length()
 					)
 				)
 			{

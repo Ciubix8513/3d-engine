@@ -96,7 +96,7 @@ namespace Engine
 #pragma endregion
 	public:
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component**> Comps, D3d** d3d) override;
+		void Initialise(std::vector<Component*> Comps, D3d** d3d) override;
 		void Shutdown() override;
 		size_t GetRenderingOrder();
 		void SetRenderingOrder(size_t NewRenderingOrder);
@@ -118,6 +118,6 @@ namespace Engine
 		std::vector<Sampler> m_samplerBuffer;
 
 		
-		MeshComponent** m_mesh; //To get the data
+		MeshComponent* m_mesh; //To get the data
 	};
 }

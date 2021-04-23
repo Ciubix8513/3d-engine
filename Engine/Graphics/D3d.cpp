@@ -270,7 +270,7 @@
         screenAspect = (float)screenWidth / (float)screenHeight;
         Matrix4x4 a;
      
-       // m_projectionMat =  PerspectiveProjectionMatrix(FOV, screenAspect, screenNear, screenDepth);
+        //m_projectionMat =  PerspectiveProjectionMatrix(FOV, screenAspect, screenNear, screenDepth);
       //  m_worldMat = Identity();
 
        // m_orthomat = OrthographicProjectionMatrix((float)screenWidth, (float) screenHeight, screenNear, screenDepth);

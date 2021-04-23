@@ -75,6 +75,34 @@ Quaternion Engine::Transform::GetAbsoluteRotation()
         return (*m_Parent)->GetAbsoluteRotation() * Rotation;
     return Rotation;
 }
+
+Vector3 Engine::Transform::RotateVectorAbs(Vector3 vector)
+{
+    return  (EngineMath::RotationPitchYawRoll( GetAbsoluteRotation().Euler()) *  Vector4(vector,0)).XYZ();     
+}
+Vector3 Engine::Transform::RotateVectorRel(Vector3 vector)
+{
+    return  (EngineMath::RotationPitchYawRoll(GetReletiveRotation().Euler()) * Vector4(vector, 0)).XYZ();
+}
+
+Vector4 Engine::Transform::RotateVectorAbs(Vector4 vector)
+{
+    return  (EngineMath::RotationPitchYawRoll(GetAbsoluteRotation().Euler()) * vector);
+}
+Vector4 Engine::Transform::RotateVectorRel(Vector4 vector)
+{
+    return  (EngineMath::RotationPitchYawRoll(GetReletiveRotation().Euler()) * vector);
+}
+Vector2 Engine::Transform::RotateVectorAbs(Vector2 vector)
+{
+    return  (EngineMath::RotationPitchYawRoll(GetAbsoluteRotation().Euler()) * Vector4(vector, 0,0)).XY();
+}
+Vector2 Engine::Transform::RotateVectorRel(Vector2 vector)
+{
+    return  (EngineMath::RotationPitchYawRoll(GetReletiveRotation().Euler()) * Vector4(vector, 0, 0)).XY();
+}
+
+
 #pragma endregion
 #pragma region ChildParentStuff
 void Engine::Transform::SetChild(Transform** Child)

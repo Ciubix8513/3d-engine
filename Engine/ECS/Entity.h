@@ -41,12 +41,11 @@ namespace Engine
 				}
 				//Check for required components
 				T* Comp = new T;
-				T** CompPTR = &Comp;
-				Components.push_back((Component**)CompPTR);
-				(*Components[Components.size() - 1])->TypeID = typeid(T).hash_code();
+				
+				Components.push_back((Component*)Comp);
+				(Components[Components.size() - 1])->TypeID = typeid(T).hash_code();
 				std::vector<Component*> InitComp;
-
-				std::vector<const type_info*> Comps = (*Components[Components.size() - 1])->GetRequieredComponents();
+				std::vector<const type_info*> Comps = (Components[Components.size() - 1])->GetRequieredComponents();
 
 				for (int i = 0; i < Comps.size(); i++)
 				{
@@ -61,7 +60,7 @@ namespace Engine
 						return;
 					}
 				}
-				(*Components[Components.size() - 1])->Initialise(InitComp, m_D3dPtr);
+				(Components[Components.size() - 1])->Initialise(InitComp, m_D3dPtr);
 				//Transform = GetComponent< Engine::Transform>();
 			}
 			catch (std::exception& e)
@@ -86,10 +85,10 @@ namespace Engine
 				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
-				if ((*Components[i])->TypeID == typeid(T).hash_code())
+				if ((Components[i])->TypeID == typeid(T).hash_code())
 				{
-					(*Components[i])->Shutdown();
-					delete (*Components[i]);
+					(Components[i])->Shutdown();
+					delete (Components[i]);
 					Components.erase(Components.begin() + i);
 					return;
 				}
@@ -110,8 +109,8 @@ namespace Engine
 				std::cerr << "Got exceprion: " << e.what() << std::endl; //TODO: send to internal erorr handling system;			
 			}
 			for (int i = 0; i < Components.size(); i++)
-				if ((*(Components[i]))->TypeID == typeid(T).hash_code())
-					return (T*)*Components[i];
+				if ((Components[i])->TypeID == typeid(T).hash_code())
+					return (T*)Components[i];
 			return nullptr;
 		};
 		Component* GetComponent(const type_info* info);
@@ -144,7 +143,7 @@ namespace Engine
 		void Update();
 		bool change;
 		std::string Name;
-		std::vector<Component**> Components;
+		std::vector<Component*> Components;
 		ULONG UUID;
 		std::string EntityTag;
 		D3d** m_D3dPtr;

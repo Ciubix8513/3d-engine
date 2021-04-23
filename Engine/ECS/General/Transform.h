@@ -33,6 +33,14 @@ namespace Engine
 		Vector3 GetAbsoluteScale();
 		Quaternion GetReletiveRotation();
 		Quaternion GetAbsoluteRotation();
+
+		Vector3 RotateVectorAbs(Vector3 vector);
+		Vector3 RotateVectorRel(Vector3 vector);
+		Vector4 RotateVectorAbs(Vector4 vector);
+		Vector4 RotateVectorRel(Vector4 vector);
+		Vector2 RotateVectorAbs(Vector2 vector);
+		Vector2 RotateVectorRel(Vector2 vector);
+
 		Transform** GetParent();
 		Transform** GetChild(unsigned int ChildIndex);
 		Transform*** GetChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
@@ -50,6 +58,8 @@ namespace Engine
 		void RemoveChildren(std::vector<unsigned int> ChildrenIndecies);
 		void RemoveChildren(unsigned int ChildIndex0, unsigned int ChildIndex1);
 		void RemoveAllChildren();
+
+
 	public:
 		Vector3 Position;
 		Vector3 Scale;

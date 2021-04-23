@@ -162,7 +162,8 @@ void Engine::MeshComponent::Render()
 
 	}
 	//Setting vertex buffer
-	(*m_D3dPtr)->getDeviceContext()->IASetVertexBuffers(0, 1,&m_vertexBuffer, 0, 0);
+	unsigned int offset = 0, stride = sizeof(vertex);
+	(*m_D3dPtr)->getDeviceContext()->IASetVertexBuffers(0, 1,&m_vertexBuffer,&stride, &offset);
 	//Setting index buffer
 	(*m_D3dPtr)->getDeviceContext()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	//Setting primitive topology

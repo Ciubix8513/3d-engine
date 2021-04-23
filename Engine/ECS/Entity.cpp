@@ -17,7 +17,7 @@ void Engine::Entity::Destroy()
 {
 	for (int i = 0; i < Components.size(); i++)
 	{
-		(*Components[i])->Shutdown();
+		(Components[i])->Shutdown();
 		delete Components[i];
 	}
 	throw "Destroy object" + UUID ;
@@ -47,22 +47,22 @@ void Engine::Entity::SetUUID(ULONG NewUUID)
 void Engine::Entity::Update()
 {
 	for (int i = 0; i < Components.size(); i++)
-		(*Components[i])->Update();
+		(Components[i])->Update();
 	return;
 }
 
 Engine::Component* Engine::Entity::GetComponent(const type_info* info)
 {
 	for (int i = 0; i < Components.size(); i++)
-		if ((*Components[i])->TypeID == info->hash_code())
-			return *Components[i];
+		if ((Components[i])->TypeID == info->hash_code())
+			return Components[i];
 	return nullptr;
 }
 
 bool Engine::Entity::ContainComponent(const type_info* info)
 {
 	for (int i = 0; i < Components.size(); i++)
-		if ((*Components[i])->TypeID == info->hash_code())
+		if ((Components[i])->TypeID == info->hash_code())
 			return true;
 	return false;
 }

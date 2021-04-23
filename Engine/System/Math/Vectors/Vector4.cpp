@@ -136,6 +136,11 @@ Vector3 EngineMath::Vector4::XYZ()
 	return Vector3(x,y,z);
 }
 
+Vector2 EngineMath::Vector4::XY()
+{
+	return Vector2(x,y);
+}
+
 
 
 

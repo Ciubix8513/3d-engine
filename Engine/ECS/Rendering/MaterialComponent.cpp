@@ -192,48 +192,51 @@ void Engine::MaterialComponent::Render()
 {
 	//Setting index and vertex buffers
 	m_mesh->Render();
-
+	//SetStruct("MatrixBuffer",)
 	//Seting shader parameters	
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
 
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
-	{
-		result = (*m_D3dPtr)->getDeviceContext()->Map(m_buffers[i].Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-		if (FAILED(result))
-			throw std::exception(("Failed to map " + m_buffersBuffer[i].name).c_str());
-		switch (m_buffersBuffer[i].type)
+	for (size_t i = 0; i < m_buffersBuffer.size(); i++)	
+		if (m_buffersBuffer[i].Changed) 
 		{
+			m_buffersBuffer[i].Changed = false;
+			result = (*m_D3dPtr)->getDeviceContext()->Map(m_buffers[i].Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+			if (FAILED(result))
+				throw std::exception(("Failed to map " + m_buffersBuffer[i].name).c_str());
+			switch (m_buffersBuffer[i].type)
+			{
 
-		case Float:
-			*((float*)mappedSubresource.pData) = m_buffersBuffer[i].data.Float;
-			break;
-		case vector2:
-			*((EngineMath::Vector2*)mappedSubresource.pData) = m_buffersBuffer[i].data.Vector2;
+			case Float:
+				*((float*)mappedSubresource.pData) = m_buffersBuffer[i].data.Float;
+				break;
+			case vector2:
+				*((EngineMath::Vector2*)mappedSubresource.pData) = m_buffersBuffer[i].data.Vector2;
 
-			break;
-		case vector3:
-			*((EngineMath::Vector3*)mappedSubresource.pData) = m_buffersBuffer[i].data.Vector3;
+				break;
+			case vector3:
+				*((EngineMath::Vector3*)mappedSubresource.pData) = m_buffersBuffer[i].data.Vector3;
 
-			break;
-		case vector4:
-			*((EngineMath::Vector4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Vector4;
+				break;
+			case vector4:
+				*((EngineMath::Vector4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Vector4;
 
-			break;
-		case Matrix:
-			*((Matrix4x4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Matrix;
-			break;
-		case Struct:
-			*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer; //Most likely won't work
-			break;
+				break;
+			case Matrix:
+				*((Matrix4x4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Matrix;
+				break;
+			case Struct:
+				*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer; //Most likely won't work
+				break;
 
+			}
+			(*m_D3dPtr)->getDeviceContext()->Unmap(m_buffers[i].Buffer, 0);
+			if (m_buffers[i].type == VertexShader)
+				(*m_D3dPtr)->getDeviceContext()->VSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
+			else
+				(*m_D3dPtr)->getDeviceContext()->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
 		}
-		(*m_D3dPtr)->getDeviceContext()->Unmap(m_buffers[i].Buffer, 0);
-		if (m_buffers[i].type == VertexShader)
-			(*m_D3dPtr)->getDeviceContext()->VSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
-		else
-			(*m_D3dPtr)->getDeviceContext()->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
-	}
+	
 
 	//Setting input layout
 	(*m_D3dPtr)->getDeviceContext()->IASetInputLayout(m_layout);

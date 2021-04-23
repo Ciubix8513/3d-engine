@@ -64,6 +64,7 @@ namespace Engine
 			std::string name;
 			ShaderBufferType data;
 			DataType type;
+			bool Changed;
 			BufferBuffer(std::string name);
 		};
 		

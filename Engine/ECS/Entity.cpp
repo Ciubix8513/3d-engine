@@ -8,6 +8,7 @@ Engine::Entity::Entity(D3d** D3d)
 	Name = " ";
 	UUID = 1;
 	m_D3dPtr = D3d;
+	Active = true;
 	AddComponent<Engine::Transform>();
 	Transform = GetComponent<Engine::Transform>();
 }

@@ -394,6 +394,19 @@
 
     }
 
+    void D3d::BeginScene(int r, int g, int b, float a)
+    {
+        float color[4];
+        color[0] = (float)r / 256;
+        color[1] = (float)g / 256;
+        color[2] = (float)b / 256;
+        color[3] = a;
+
+        m_DeviceContext->ClearRenderTargetView(m_renderTargetView, color);
+        m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        return;
+    }
+
     void D3d::EndScene()
     {
         if (m_Vsync)

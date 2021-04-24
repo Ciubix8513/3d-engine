@@ -226,7 +226,8 @@ void Engine::MaterialComponent::Render()
 				*((Matrix4x4*)mappedSubresource.pData) = m_buffersBuffer[i].data.Matrix;
 				break;
 			case Struct:
-				*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer; //Most likely won't work
+				//*((BufferClass*)mappedSubresource.pData) = *m_buffersBuffer[i].data.Buffer.Buffer; //Most likely won't work
+				((m_buffersBuffer[i].type))
 				break;
 
 			}
@@ -383,6 +384,7 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 			//Creating buffer
 			name = Words[i].substr(8);
 			Buffer b;
+			name = name.substr(0, name.size() - 1);
 			BufferBuffer b1(name);
 
 			b.Buffer = 0;
@@ -424,6 +426,7 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 			//Creating buffer
 			name = Words[i].substr(8);
 			Buffer b;
+			name = name.substr(0, name.size() - 1);
 			BufferBuffer b1(name);
 
 
@@ -560,8 +563,9 @@ void Engine::MaterialComponent::SetStruct(std::string name, BufferClass* data, c
 			m_buffersBuffer[i].data.Buffer.Buffer = data;
 			m_buffersBuffer[i].data.Buffer.type = bufferType;
 			m_buffersBuffer[i].type = Struct;
+			return;
 		}
-	
+	return;
 }
 #pragma endregion
 
@@ -602,9 +606,9 @@ bool Engine::MaterialComponent::SetFloat(ID3D11DeviceContext* ctxt, std::string 
 	return true;
 }*/
 
-Engine::MaterialComponent::BufferBuffer::BufferBuffer(std::string name)
+Engine::MaterialComponent::BufferBuffer::BufferBuffer(std::string Name)
 {
-	name = name;
+	name = Name;
 }
 Engine::MaterialComponent::ShaderBufferType::ShaderBufferType()
 {

@@ -149,6 +149,8 @@ namespace Engine
 		D3d** m_D3dPtr;
 	public:
 		Engine::Transform* Transform;
+		bool Active;
+
 
 	};
 };

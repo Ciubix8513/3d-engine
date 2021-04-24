@@ -5,6 +5,7 @@ void Engine::Scene::AddEntity(std::string name)
 	Entity A(m_D3d);
 	//A.AddComponent<Transform>();
 	A.Name = name;
+	
 	//A.Transform = A.GetComponent<Transform>();
 	Entities.push_back(A);	
 	if (UUIDcounter == 0)
@@ -45,17 +46,18 @@ Engine::Scene::Scene(D3d** d3d)
 
 void Engine::Scene::ShutDown()
 {
-	for (size_t i = 0; i < Entities.size(); i++)	
-		Entities[i].Destroy();
+	for (Entity E : Entities)
+		E.Destroy();
 	return;
 	
 }
 
 void Engine::Scene::Update()
 {
-	for (size_t i = 0; i < Entities.size(); i++)	
-		Entities[i].Update();
-	
+	for (Entity E : Entities)
+		if (E.Active)
+			E.Update();	
+	return;
 }
 
 
@@ -116,11 +118,12 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent* Camera)
 	//Getting all objects to render
 	for (size_t i = 0; i < Entities.size(); i++)
 		for (size_t j = 0; j < RenderingComponents.size(); j++) 
-			if (Entities[i].ContainComponent(RenderingComponents[j]))
-			{
-				Objects.push_back(&Entities[i]);
-				break;
-			}
+			if(Entities[i].Active)
+				if (Entities[i].ContainComponent(RenderingComponents[j]))
+				{
+					Objects.push_back(&Entities[i]);
+					break;
+				}
 
 	Entity** OrderedObjects = Objects.data();
 	MaterialComponent** MatComps = new MaterialComponent*  [Objects.size()]; // Ah yes triple pointers
@@ -191,11 +194,14 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent* Camera)
 	//Sorted
 
 	//Rendering
-	(*m_D3d)->BeginScene(1, 1, 0, 0);
-	for (size_t i = 0; i < Objects.size(); i++)	
-		(MatComps[i])->Render();
+	(*m_D3d)->BeginScene(75, 162, 184, 0);
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		MatComps[i]->SetStruct("MatrixBuffer",new MatrixBuffer(OrderedObjects[i]->Transform->GetTransformationMatrix(), Camera->GetViewMatrix(), Camera->GetProjectionMatrix()), &typeid(MatrixBuffer));
+		MatComps[i]->Render();
+	}
 	(*m_D3d)->EndScene();
-
+	//std::cout << "Rendered scene\n";
 	return true;
 }
 

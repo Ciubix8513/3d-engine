@@ -5,23 +5,26 @@ using namespace EngineMath;
 
 namespace Engine
 {
-	class BufferClass
-	{
 	
-	};	
 
-	class MatrixBuffer : public BufferClass
+	
+	class MatrixBuffer 
 	{
 	public:
-		MatrixBuffer();
-		~MatrixBuffer();
+		MatrixBuffer(Matrix4x4 WorldMatrix, Matrix4x4 ViewMatrix, Matrix4x4 ProjectionMatrix)
+		{
+			worldMatrix = WorldMatrix;
+			viewMatrix = ViewMatrix;
+			projectionMatrix = ProjectionMatrix;
+			
 
-	private:
+		};
+		~MatrixBuffer();	
+		
 		Matrix4x4
 			worldMatrix,
 			viewMatrix,
-			projectionMatrix,
-			objectMat;
+			projectionMatrix;
 	};
 
 	class CameraBuffer

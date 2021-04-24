@@ -283,6 +283,7 @@
 		
 		e1->AddComponent<CameraComponent>();
 		camera = e1->GetComponent<CameraComponent>();
+		camera->SetCameraParams(CameraComponent::CameraType::Perspective, 60, .0001f, 1000.0f, m_ScreenWidth, m_ScreenHeight);
 		((e1->Transform))->Position = Vector3(0, 0, -5);
 	
 	}

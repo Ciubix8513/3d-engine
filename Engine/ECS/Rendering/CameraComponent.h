@@ -11,16 +11,19 @@ namespace Engine
 {
 	class CameraComponent : public Component
 	{
+	public:
 		enum CameraType
 		{
 			Perspective, Ortho
 		};
-
+	private:
 		std::vector<const type_info*> GetRequieredComponents() override;
 		void Initialise(std::vector<Component*>, D3d** d3d) override;
 		void Update() override;
+	public:
 		Matrix4x4 GetProjectionMatrix();
 		Matrix4x4 GetViewMatrix();
+		
 		void SetCameraParams(CameraType type, float fov, float near, float far,int screenWidth, int screenHeight);
 	private: 
 		Matrix4x4 m_projMat;

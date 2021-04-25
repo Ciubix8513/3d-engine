@@ -246,6 +246,9 @@
     <ClCompile Include="ECS\FileManager.cpp">
       <Filter>Main System\ECS\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Rendering\BufferStructs.cpp">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClasses\ColorShader.h">

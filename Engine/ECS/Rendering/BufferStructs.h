@@ -11,16 +11,7 @@ namespace Engine
 	class MatrixBuffer 
 	{
 	public:
-		MatrixBuffer(Matrix4x4 WorldMatrix, Matrix4x4 ViewMatrix, Matrix4x4 ProjectionMatrix)
-		{
-			worldMatrix = WorldMatrix;
-			viewMatrix = ViewMatrix;
-			projectionMatrix = ProjectionMatrix;
-			
-
-		};
-		~MatrixBuffer();	
-		
+		MatrixBuffer(Matrix4x4 WorldMatrix, Matrix4x4 ViewMatrix, Matrix4x4 ProjectionMatrix);
 		Matrix4x4
 			worldMatrix,
 			viewMatrix,

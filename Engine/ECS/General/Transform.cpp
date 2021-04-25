@@ -3,7 +3,7 @@
 void Engine::Transform::Initialise(std::vector<Component*> Comps, D3d** d3d)
 {
     Position = Vector3(0,0,0);
-    Scale = Vector3(0, 0, 0);
+    Scale = Vector3(1, 1, 1);
     Rotation = Vector4(0, 0, 0, 0);
 }
 

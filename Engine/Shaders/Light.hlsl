@@ -1,7 +1,5 @@
 SamplerState ss;
 Texture2D shaderTex;
-
-[DynamicWriteBuffer]
     
 cbuffer LightBuffer
 {
@@ -12,13 +10,7 @@ cbuffer LightBuffer
     float4 specularColor;
 };
 
-[WriteVar("_Color0")]
-float4 colorA;
 
-[WriteVar("_Matrix0")]
-matrix matrix0;
-
-sampler sampler0;
 
 struct PixelInput
 {

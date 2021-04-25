@@ -197,7 +197,8 @@ bool Engine::Scene::RenderSceneFromCameraPtr(CameraComponent* Camera)
 	(*m_D3d)->BeginScene(75, 162, 184, 0);
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
-		MatComps[i]->SetStruct<MatrixBuffer>("MatrixBuffer", MatrixBuffer(OrderedObjects[i]->Transform->GetTransformationMatrix(), Camera->GetViewMatrix(), Camera->GetProjectionMatrix()));
+		//MatComps[i]->SetStruct<MatrixBuffer>("MatrixBuffer", MatrixBuffer(OrderedObjects[i]->Transform->GetTransformationMatrix(), Camera->GetViewMatrix(), Camera->GetProjectionMatrix()));
+		MatComps[i]->SetMatrixBuffer(MatrixBuffer(OrderedObjects[i]->Transform->GetTransformationMatrix(), Camera->GetViewMatrix(), Camera->GetProjectionMatrix()));
 		MatComps[i]->Render();
 	}
 	(*m_D3d)->EndScene();

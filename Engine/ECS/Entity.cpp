@@ -21,7 +21,8 @@ void Engine::Entity::Destroy()
 		(Components[i])->Shutdown();
 		delete Components[i];
 	}
-	throw "Destroy object" + UUID ;
+	//throw "Destroy object" + UUID ;
+	return;
 }
 
 void Engine::Entity::SetTag(std::string Tag)

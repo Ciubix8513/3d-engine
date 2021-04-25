@@ -11,7 +11,8 @@ struct Vertex
 {
 	float4 position: POSITION;
 	float4 color : COLOR;
-	//float2 UV : TEXCOORD0;
+    float2 UV : TEXCOORD;
+    float3 Normal : NORMAL;
 };
 struct PixelInput
 {
@@ -22,9 +23,13 @@ struct PixelInput
 
 PixelInput ColorVertexShader(Vertex input)
 {
+   
 	PixelInput output;
+	
+ 
+	
 	input.position.w = 1.0f;
-	output.position = mul(input.position, 1);
+    output.position = input.position;	
     output.position = mul(output.position, worldMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);

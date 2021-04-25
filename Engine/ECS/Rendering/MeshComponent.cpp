@@ -161,13 +161,17 @@ void Engine::MeshComponent::Render()
 		(*m_D3dPtr)->getDeviceContext()->Unmap(m_indexBuffer, 0);
 
 	}
+	
+	
 	//Setting vertex buffer
 	unsigned int offset = 0, stride = sizeof(vertex);
 	(*m_D3dPtr)->getDeviceContext()->IASetVertexBuffers(0, 1,&m_vertexBuffer,&stride, &offset);
 	//Setting index buffer
 	(*m_D3dPtr)->getDeviceContext()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	
 	//Setting primitive topology
 	(*m_D3dPtr)->getDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	return;
 }
 

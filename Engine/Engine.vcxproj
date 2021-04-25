@@ -146,6 +146,7 @@
     <ClCompile Include="ECS\Component.cpp" />
     <ClCompile Include="ECS\Entity.cpp" />
     <ClCompile Include="ECS\FileManager.cpp" />
+    <ClCompile Include="ECS\Rendering\BufferStructs.cpp" />
     <ClCompile Include="ECS\Rendering\CameraComponent.cpp" />
     <ClCompile Include="ECS\Rendering\MaterialComponent.cpp" />
     <ClCompile Include="ECS\Scene.cpp" />

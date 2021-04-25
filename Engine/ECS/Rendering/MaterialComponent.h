@@ -22,10 +22,10 @@ namespace Engine
 		{
 			VertexShader, PixelShader
 		};
-		enum DataType
+		/*	enum DataType
 		{
 			Float, vector2, vector3, vector4, Matrix,Struct
-		};		
+		};		*/
 		struct Sampler
 		{
 			ID3D11SamplerState* sampler;
@@ -37,11 +37,12 @@ namespace Engine
 		struct Buffer
 		{
 			std::string name;
-			ID3D11Buffer* Buffer;
+			ID3D11Buffer* buffer;
 			size_t bufferNum;
 			ShaderType type;
-			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,std::string name);
-			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,D3D11_SUBRESOURCE_DATA* InitialData, std::string name);
+			Buffer(std::string Name, size_t BufferNum, ShaderType Type);
+			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth);
+			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,D3D11_SUBRESOURCE_DATA* InitialData);
 		};
 #pragma endregion
 #pragma region Set shader params functions
@@ -57,21 +58,24 @@ namespace Engine
 		template<typename T>	
 		bool SetStruct(std::string Name, T Data)
 		{
-			for (Buffer B : m_buffers)
+			for (Engine::MaterialComponent::Buffer B : m_buffers)
 				if (B.name == Name)
 				{
 					HRESULT res;
 					D3D11_MAPPED_SUBRESOURCE data;
-					res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+					res = (*m_D3dPtr)->getDeviceContext()->Map(B.buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
 					if (FAILED(res))
 						return false;
 					*(T*)data.pData = Data;
-					(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+					(*m_D3dPtr)->getDeviceContext()->Unmap(B.buffer, 0);
 					return true;
 				}
 
 			return false;
 		};
+		bool SetMatrixBuffer(MatrixBuffer data);
+
+
 
 #pragma endregion
 	public:

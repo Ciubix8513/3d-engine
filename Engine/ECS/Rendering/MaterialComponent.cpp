@@ -13,7 +13,8 @@ void Engine::MaterialComponent::Initialise(std::vector<Component*> Comps, D3d** 
 	m_layout = 0;
 	m_vertexShader = 0;
 	m_pixelShader = 0;
-
+	m_VSBnum = 0;
+	m_PSBnum = 0;
 	return;
 }
 
@@ -191,12 +192,13 @@ bool Engine::MaterialComponent::PreProcessShader(std::string fileName)
 void Engine::MaterialComponent::Render()
 {
 	//Setting index and vertex buffers
-	m_mesh->Render();
-	//SetStruct("MatrixBuffer",)
+	m_mesh->Render();	
+
+	/*
 	//Seting shader parameters	
 	HRESULT result;
+	
 	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-
 	for (size_t i = 0; i < m_buffersBuffer.size(); i++)	
 		if (m_buffersBuffer[i].Changed) 
 		{
@@ -237,7 +239,7 @@ void Engine::MaterialComponent::Render()
 			else
 				(*m_D3dPtr)->getDeviceContext()->PSSetConstantBuffers(m_buffers[i].bufferNum, 1, &m_buffers[i].Buffer);
 		}
-	
+	*/
 
 	//Setting input layout
 	(*m_D3dPtr)->getDeviceContext()->IASetInputLayout(m_layout);
@@ -252,6 +254,27 @@ void Engine::MaterialComponent::Render()
 		else
 			(*m_D3dPtr)->getDeviceContext()->PSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
 	}
+	
+	//Setting buffers
+	ID3D11Buffer* * VSBs = new ID3D11Buffer*[m_VSBnum];
+	ID3D11Buffer* * PSBs = new ID3D11Buffer*[m_PSBnum];
+	int VSBnum = 0; int PSBnum = 0;
+	for (Buffer b: m_buffers)
+	{
+		if (b.type == VertexShader)
+		{
+			VSBs[VSBnum] = b.Buffer;
+			VSBnum++;
+		}
+		else
+		{
+			PSBs[PSBnum] = b.Buffer;
+			PSBnum++;
+		}
+	}
+	(*m_D3dPtr)->getDeviceContext()->VSSetConstantBuffers(0, m_VSBnum, VSBs);
+	(*m_D3dPtr)->getDeviceContext()->PSSetConstantBuffers(0, m_PSBnum, PSBs);
+
 
 	//Drawing the mesh!
 	(*m_D3dPtr)->getDeviceContext()->DrawIndexed((m_mesh)->m_Model.indexCount, 0, 0);
@@ -383,20 +406,22 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 		{
 			//Creating buffer
 			name = Words[i].substr(8);
-			Buffer b;
 			name = name.substr(0, name.size() - 1);
-			BufferBuffer b1(name);
+
+			Buffer b;
 
 			b.Buffer = 0;
 			b.type = VertexShader;
 			b.bufferNum = count;
-			if (!b.CreateBuffer((*m_D3dPtr)->getDevice(), atoi(Words[i + 1].substr(2).c_str())))
+			if (!b.CreateBuffer((*m_D3dPtr)->getDevice(), atoi(Words[i + 1].substr(2).c_str()),name))
 			{
 				throw std::exception(("Failed to create " + name + " buffer").c_str());
 				return false;
 			}
-			m_buffersBuffer.push_back(b1);
+
+			
 			m_buffers.push_back(b);
+			m_VSBnum++;
 			count++;
 		}
 		else if(tmp == "sampler") // Check if it's a sampler
@@ -425,22 +450,21 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 		{
 			//Creating buffer
 			name = Words[i].substr(8);
-			Buffer b;
 			name = name.substr(0, name.size() - 1);
-			BufferBuffer b1(name);
 
+			Buffer b;
 
 			b.Buffer = 0;
 			b.type = PixelShader;
 			b.bufferNum = count;
 
-			if (!b.CreateBuffer((*m_D3dPtr)->getDevice(), atoi(Words[i + 1].substr(2).c_str())))
+			if (!b.CreateBuffer((*m_D3dPtr)->getDevice(), atoi(Words[i + 1].substr(2).c_str()),name))
 			{
 				throw std::exception(("Failed to create " + name + " buffer").c_str());
 				return false;
-			}
-			m_buffersBuffer.push_back(b1);
+			}	
 			m_buffers.push_back(b);
+			m_PSBnum++;
 			count++;
 		}
 		else if (tmp == "sampler") // Check if it's a sampler
@@ -467,7 +491,7 @@ std::string Engine::MaterialComponent::GetShaderErrorMsg(ID3D10Blob* msg)
 	return compileErrors;
 }
 
-bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device,size_t ByteWidth)
+bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device,size_t ByteWidth,std::string Name)
 {
 	D3D11_BUFFER_DESC Desc;
 	Desc.ByteWidth = ByteWidth;
@@ -480,9 +504,10 @@ bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device,size_t
 	auto result = device->CreateBuffer(&Desc, NULL, &this->Buffer);
 	if (FAILED(result))
 		return false;
+	name = Name;
 	return true;
 }
-bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device, size_t ByteWidth, D3D11_SUBRESOURCE_DATA* InitialData)
+bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device, size_t ByteWidth, D3D11_SUBRESOURCE_DATA* InitialData,std::string Name)
 {
 	D3D11_BUFFER_DESC Desc;
 	Desc.ByteWidth = ByteWidth;
@@ -495,77 +520,105 @@ bool Engine::MaterialComponent::Buffer::CreateBuffer(ID3D11Device* device, size_
 	auto result = device->CreateBuffer(&Desc, InitialData, &this->Buffer);
 	if (FAILED(result))
 		return false;
+	name = Name;
 	return true;
 }
 
 #pragma region Set functions
-void Engine::MaterialComponent::SetFloat(std::string name, float data)
+bool Engine::MaterialComponent::SetFloat(std::string Name, float Data)
 {
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)	
-		if (m_buffersBuffer[i].name == name)
+	for(Buffer B: m_buffers)	
+		if(B.name == Name)
 		{
-			m_buffersBuffer[i].data.Float = data;
-			m_buffersBuffer[i].type = Float;
+			HRESULT res;
+			D3D11_MAPPED_SUBRESOURCE data;
+			res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+			if (FAILED(res))
+				return false;
+			*(float*)data.pData = Data;
+			(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+			return true;
 		}
-	
+
+	return false;
 }
-void Engine::MaterialComponent::SetVector2(std::string name, Vector2 data)
+bool Engine::MaterialComponent::SetVector2(std::string Name, Vector2 Data)
 {
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
-		if (m_buffersBuffer[i].name == name)
+	for (Buffer B : m_buffers)
+		if (B.name == Name)
 		{
-			m_buffersBuffer[i].data.Vector2 = data;
-			m_buffersBuffer[i].type = vector2;
+			HRESULT res;
+			D3D11_MAPPED_SUBRESOURCE data;
+			res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+			if (FAILED(res))
+				return false;
+			*(Vector2*)data.pData = Data;
+			(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+			return true;
 		}
+
+	return false;
 }
-void Engine::MaterialComponent::SerVector3(std::string name, Vector3 data)
+bool Engine::MaterialComponent::SerVector3(std::string Name, Vector3 Data)
 {
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
-		if (m_buffersBuffer[i].name == name)
+	for (Buffer B : m_buffers)
+		if (B.name == Name)
 		{
-			m_buffersBuffer[i].data.Vector3 = data;
-			m_buffersBuffer[i].type = vector3;
+			HRESULT res;
+			D3D11_MAPPED_SUBRESOURCE data;
+			res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+			if (FAILED(res))
+				return false;
+			*(Vector3*)data.pData = Data;
+			(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+			return true;
 		}
+
+	return false;
 }
-void Engine::MaterialComponent::SetVector4(std::string name, Vector4 data)
+bool Engine::MaterialComponent::SetVector4(std::string Name, Vector4 Data)
 {
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
-		if (m_buffersBuffer[i].name == name)
+	for (Buffer B : m_buffers)
+		if (B.name == Name)
 		{
-			m_buffersBuffer[i].data.Vector4 = data;
-			m_buffersBuffer[i].type = vector4;
+			HRESULT res;
+			D3D11_MAPPED_SUBRESOURCE data;
+			res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+			if (FAILED(res))
+				return false;
+			*(Vector4*)data.pData = Data;
+			(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+			return true;
 		}
+
+	return false;
 }
-void Engine::MaterialComponent::SetMatrix(std::string name, Matrix4x4 data)
+bool Engine::MaterialComponent::SetMatrix(std::string Name, Matrix4x4 Data)
 {
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
-		if (m_buffersBuffer[i].name == name)
+	for (Buffer B : m_buffers)
+		if (B.name == Name)
 		{
-			m_buffersBuffer[i].data.Matrix = data;
-			m_buffersBuffer[i].type = Matrix;
+			HRESULT res;
+			D3D11_MAPPED_SUBRESOURCE data;
+			res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+			if (FAILED(res))
+				return false;
+			*(Matrix4x4*)data.pData = Data;
+			(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+			return true;
 		}
+
+	return false;
 }
-void Engine::MaterialComponent::SetSampler(std::string name, ID3D11SamplerState* data)
+bool Engine::MaterialComponent::SetSampler(std::string Name, ID3D11SamplerState* data)
 {
 	for (size_t i = 0; i < m_samplerBuffer.size(); i++)
-		if (m_samplerBuffer[i].name == name)
+		if (m_samplerBuffer[i].name == Name)
 		{
 			m_samplerBuffer[i].sampler->Release();
 			m_samplerBuffer[i].sampler = 0;
 			m_samplerBuffer[i].sampler = data;			
 		}
-}
-void Engine::MaterialComponent::SetStruct(std::string name, BufferClass* data, const type_info* bufferType)
-{
-	for (size_t i = 0; i < m_buffersBuffer.size(); i++)
-		if (m_buffersBuffer[i].name == name)
-		{
-			m_buffersBuffer[i].data.Buffer.Buffer = data;
-			m_buffersBuffer[i].data.Buffer.type = bufferType;
-			m_buffersBuffer[i].type = Struct;
-			return;
-		}
-	return;
 }
 #pragma endregion
 
@@ -606,18 +659,7 @@ bool Engine::MaterialComponent::SetFloat(ID3D11DeviceContext* ctxt, std::string 
 	return true;
 }*/
 
-Engine::MaterialComponent::BufferBuffer::BufferBuffer(std::string Name)
-{
-	name = Name;
-}
-Engine::MaterialComponent::ShaderBufferType::ShaderBufferType()
-{
-	Float = 0;
-	Vector2 = EngineMath::Vector2(0, 0);
-	Vector3 = EngineMath::Vector3(0, 0,0);
-	Vector4 = EngineMath::Vector4(0, 0,0,0);
-	Matrix = EngineMath::Matrix4x4();
-}
+
 bool Engine::MaterialComponent::Sampler::CreateSampler(ID3D11Device* device)
 {
 	HRESULT result;

@@ -15,23 +15,6 @@ namespace Engine
 	{
 		
 		friend class Launcher;
-	public:
-		struct StructBuffer
-		{
-			BufferClass* Buffer;
-			const std::type_info* type;
-		};
-		union ShaderBufferType
-		{			
-			float Float;
-			Vector2 Vector2;
-			Vector3 Vector3;
-			Vector4 Vector4;
-			Matrix4x4 Matrix;
-			StructBuffer Buffer;
-			ShaderBufferType();
-
-		};
 #pragma region Structs
 		
 	private:
@@ -53,46 +36,42 @@ namespace Engine
 		};
 		struct Buffer
 		{
+			std::string name;
 			ID3D11Buffer* Buffer;
 			size_t bufferNum;
 			ShaderType type;
-			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth);
-			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,D3D11_SUBRESOURCE_DATA* InitialData);
+			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,std::string name);
+			bool CreateBuffer(ID3D11Device* device, size_t ByteWidth,D3D11_SUBRESOURCE_DATA* InitialData, std::string name);
 		};
-		struct BufferBuffer
-		{
-			std::string name;
-			ShaderBufferType data;
-			DataType type;
-			bool Changed;
-			BufferBuffer(std::string name);
-		};
-		
-	public:
-		//List of predefined buffers
-		/*struct MatrixBuffer
-		{
-			Matrix4x4
-				worldMatrix,
-				viewMatrix,
-				projectionMatrix,
-				objectMat;
-		};
-		struct CameraBuffer
-		{
-			Vector3 postion;
-			float padding;
-		};*/
 #pragma endregion
 #pragma region Set shader params functions
-		void SetFloat( std::string name, float data);
-		void SetVector2(std::string name, Vector2 data);
-		void SerVector3(std::string name, Vector3 data);
-		void SetVector4(std::string name, Vector4 data);
-		void SetMatrix(std::string name, Matrix4x4 data);
-		void SetSampler(std::string name, ID3D11SamplerState* data); 
+	public:
+		bool SetFloat( std::string name, float data);
+		bool SetVector2(std::string name, Vector2 data);
+		bool SerVector3(std::string name, Vector3 data);
+		bool SetVector4(std::string name, Vector4 data);
+		bool SetMatrix(std::string name, Matrix4x4 data);
+		bool SetSampler(std::string name, ID3D11SamplerState* data); 
 		//bool SetTexture(std::string name, float data);//TODO: add texture		
-		void SetStruct(std::string name, BufferClass* data,const std::type_info* bufferType);
+		
+		template<typename T>	
+		bool SetStruct(std::string Name, T Data)
+		{
+			for (Buffer B : m_buffers)
+				if (B.name == Name)
+				{
+					HRESULT res;
+					D3D11_MAPPED_SUBRESOURCE data;
+					res = (*m_D3dPtr)->getDeviceContext()->Map(B.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+					if (FAILED(res))
+						return false;
+					*(T*)data.pData = Data;
+					(*m_D3dPtr)->getDeviceContext()->Unmap(B.Buffer, 0);
+					return true;
+				}
+
+			return false;
+		};
 
 #pragma endregion
 	public:
@@ -114,10 +93,9 @@ namespace Engine
 		ID3D11VertexShader* m_vertexShader;
 		ID3D11PixelShader* m_pixelShader;
 		ID3D11InputLayout* m_layout;
-		std::vector<Buffer> m_buffers;
-		std::vector<BufferBuffer> m_buffersBuffer;
-		std::vector<Sampler> m_samplerBuffer;
-
+		std::vector<Engine::MaterialComponent::Buffer> m_buffers;
+		std::vector<Engine::MaterialComponent::Sampler> m_samplerBuffer;
+		int m_VSBnum, m_PSBnum;
 		
 		MeshComponent* m_mesh; //To get the data
 	};

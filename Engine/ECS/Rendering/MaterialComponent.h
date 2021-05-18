@@ -6,6 +6,7 @@
 #include <atlbase.h>
 #include <atlconv.h>
 #include "BufferStructs.h"
+#include "../../Graphics/Texture.h"
 using namespace Engine;
 using namespace EngineMath;
 
@@ -21,11 +22,7 @@ namespace Engine
 		enum ShaderType
 		{
 			VertexShader, PixelShader
-		};
-		/*	enum DataType
-		{
-			Float, vector2, vector3, vector4, Matrix,Struct
-		};		*/
+		};		
 		struct Sampler
 		{
 			ID3D11SamplerState* sampler;
@@ -33,6 +30,13 @@ namespace Engine
 			ShaderType type;
 			size_t samplerNum;
 			bool CreateSampler(ID3D11Device* device);
+		};
+		struct Tex
+		{
+			Texture* texture;
+			std::string name;
+			ShaderType type;
+			size_t TextureNum;			
 		};
 		struct Buffer
 		{
@@ -53,7 +57,7 @@ namespace Engine
 		bool SetVector4(std::string name, Vector4 data);
 		bool SetMatrix(std::string name, Matrix4x4 data);
 		bool SetSampler(std::string name, ID3D11SamplerState* data); 
-		//bool SetTexture(std::string name, float data);//TODO: add texture		
+		bool SetTexture(std::string name, Texture* data,bool deleteData = true);
 		
 		template<typename T>	
 		bool SetStruct(std::string Name, T Data)
@@ -80,7 +84,8 @@ namespace Engine
 #pragma endregion
 	public:
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component*> Comps, D3d** d3d) override;
+		void Initialise(std::vector<Component*> Comps, D3d** d3d, ULONG entityUUID) override;
+		std::string GetName() override;
 		void Shutdown() override;
 		size_t GetRenderingOrder();
 		void SetRenderingOrder(size_t NewRenderingOrder);
@@ -99,6 +104,7 @@ namespace Engine
 		ID3D11InputLayout* m_layout;
 		std::vector<Engine::MaterialComponent::Buffer> m_buffers;
 		std::vector<Engine::MaterialComponent::Sampler> m_samplerBuffer;
+		std::vector<Engine::MaterialComponent::Tex> m_textureBuffer;
 		int m_VSBnum, m_PSBnum;
 		
 		MeshComponent* m_mesh; //To get the data

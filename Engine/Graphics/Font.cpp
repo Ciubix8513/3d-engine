@@ -45,7 +45,7 @@ void Font::ShutDown()
 
 ID3D11ShaderResourceView* Font::GetTexture()
 {
-    return m_Texture->GetTexture();
+    return *m_Texture->GetTexture();
 }
 
 void Font::BuidVertexarray(void* vertices, char* sentence, float drawX, float drawY)

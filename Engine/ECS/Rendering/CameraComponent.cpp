@@ -5,11 +5,16 @@ std::vector<const type_info*> Engine::CameraComponent::GetRequieredComponents()
 	return {&typeid(Transform)};
 }
 
-void Engine::CameraComponent::Initialise(std::vector<Component*> Components, D3d** d3d)
+void Engine::CameraComponent::Initialise(std::vector<Component*> Components, D3d** d3d, ULONG entityUUID)
 {
 	m_Transform = (Transform*)Components[0];
-
+	EntityUUID = entityUUID;
 	return;
+}
+
+std::string Engine::CameraComponent::GetName()
+{
+	return "Camera";
 }
 
 void Engine::CameraComponent::Update()

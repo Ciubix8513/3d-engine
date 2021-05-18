@@ -390,6 +390,7 @@
 
         m_DeviceContext->ClearRenderTargetView(m_renderTargetView, color);
         m_DeviceContext->ClearDepthStencilView(m_DepthStencilView,D3D11_CLEAR_DEPTH,1.0f,0);
+                
         return;
 
     }

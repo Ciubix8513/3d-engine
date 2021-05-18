@@ -279,16 +279,22 @@
 		e0->AddComponent<MaterialComponent>();
 		(e0->GetComponent<MeshComponent>())->SetMeshType(MeshComponent::Static);
 		(e0->GetComponent<MeshComponent>())->SetMesh(*FileManager::LoadMesh("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/data/Cube.obj"));
-		(e0->GetComponent<MaterialComponent>())->InitShader("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/ColorVS.hlsl", "C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Color.hlsl", "Color");
+		(e0->GetComponent<MaterialComponent>())->InitShader("C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/TextureVS.hlsl", "C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/Shaders/Texture.hlsl", "Texture");
 		e0->Transform->Position = Vector3(0, 0, 0);
 		e0->Transform->Scale = Vector3(1, 1, 1);
-		e0->Transform->SetRotation(Vector3(0, 90, 0));
+		e0->Transform->SetRotation(Vector3(0, 180, 0));
 
 		e1->AddComponent<CameraComponent>();
 		camera = e1->GetComponent<CameraComponent>();
 		camera->SetCameraParams(CameraComponent::CameraType::Perspective, 60, .0001f, 1000.0f, m_ScreenWidth, m_ScreenHeight);
-		((e1->Transform))->Position = Vector3(0, 2, -2);
+		((e1->Transform))->Position = Vector3(0, 2, -1.3);
 		e1->Transform->SetRotation(Vector3(45, 0, 0));
+
+		Texture* tex = new Texture();
+		tex->Init(m_D3d->getDevice(), m_D3d->getDeviceContext(),(char*) "C:/Users/Zver/Desktop/Engine/Project/Engine/Engine/data/UVChecker.tga");
+		(e0->GetComponent<MaterialComponent>())->SetTexture("shaderTex", tex, false);
+
+	//	FileManager::SaveScene("C:/Users/Zver/Desktop/TestScene",testScene); 
 	
 	}
 

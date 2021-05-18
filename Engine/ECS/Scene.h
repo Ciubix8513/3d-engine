@@ -8,6 +8,7 @@ namespace Engine
 {
 	class Scene
 	{
+		friend class FileManager;
 	public:
 		void AddEntity(std::string name = "");
 
@@ -22,11 +23,12 @@ namespace Engine
 		void ShutDown();
 		void Update();
 
-		void SerialiseScene(std::string Path);
-		void DeSerialiseScene(std::string Path);
+		/*void SerialiseScene(std::string Path);
+		void DeSerialiseScene(std::string Path);*/
 		bool GetActiveState();
 		void SetActiveState(bool state);
 		void ResetUUIDs();
+		
 
 #pragma region Get entity functions
 		 Engine::Entity* GetEntityByName(std::string Name);

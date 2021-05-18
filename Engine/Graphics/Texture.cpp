@@ -84,9 +84,9 @@ void Texture::Shutdown()
     return;
 }
 
-ID3D11ShaderResourceView* Texture::GetTexture()
+ID3D11ShaderResourceView** Texture::GetTexture()
 {
-    return m_textureView;
+    return &m_textureView;
 }
 
 bool Texture::loadTarga(char* file, int& height, int& width)

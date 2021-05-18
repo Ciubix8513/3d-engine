@@ -9,8 +9,11 @@ using namespace Engine;
 int main()
 {
 	
-	
-	//return 1;
+	std:ofstream out("Engine.log");
+	std::streambuf* coutbuff = std::cout.rdbuf();
+	std::cout.rdbuf(out.rdbuf());
+
+
 
 
 	System* system;
@@ -24,6 +27,9 @@ int main()
 	system->ShutDown();
 	delete system;
 	system = 0;
+
+	std::cout.rdbuf(coutbuff);
+
 	return 1;
 }
 

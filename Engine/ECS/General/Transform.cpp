@@ -1,11 +1,24 @@
 #include "Transform.h"
 
-void Engine::Transform::Initialise(std::vector<Component*> Comps, D3d** d3d)
+void Engine::Transform::Initialise(std::vector<Component*> Comps, D3d** d3d, ULONG entityUUID)
 {
     Position = Vector3(0,0,0);
     Scale = Vector3(1, 1, 1);
     Rotation = Vector4(0, 0, 0, 0);
+    EntityUUID = entityUUID;
 }
+
+std::string Engine::Transform::GetName()
+{
+    return "Transform";
+}
+
+//void Engine::Transform::Serialise(std::string Fname)
+//{
+//    std::ofstream f(Fname);
+//    f << (void*)this;
+//   f.close();
+//}
 
 Engine::Transform::Transform()
 {

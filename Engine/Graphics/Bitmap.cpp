@@ -66,7 +66,7 @@ int Bitmap::GetIndexCount()
 
 ID3D11ShaderResourceView* Bitmap::GetTexture()
 {
-    return m_Texture->GetTexture();
+    return *m_Texture->GetTexture();
 }
 
 bool Bitmap::Initbuffers(ID3D11Device* device)

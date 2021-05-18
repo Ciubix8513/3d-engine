@@ -1,3 +1,6 @@
+[WriteVar("Test")]
+float a;
+
 //globals
 cbuffer MatrixBuffer
 {

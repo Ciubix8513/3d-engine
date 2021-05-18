@@ -12,9 +12,10 @@ Engine::Component::Component()
 	return;
 }*/
 
-void Engine::Component::Initialise(std::vector<Component*>,D3d** d3d)
+void Engine::Component::Initialise(std::vector<Component*>,D3d** d3d, ULONG entityUUID)
 {
 	m_D3dPtr = d3d;
+	EntityUUID = entityUUID;
 }
 
 void Engine::Component::Shutdown()
@@ -24,6 +25,21 @@ void Engine::Component::Shutdown()
 
 void Engine::Component::Update()
 {
+}
+
+void Engine::Component::Serialise(std::string Fname)
+{
+	std::ofstream f;
+	f.open(Fname);
+	if (!f.is_open())
+		return;
+	f << (void*)this;
+	f.close();
+}
+
+std::string Engine::Component::GetName()
+{
+	return "ERROR!";
 }
 
 std::vector<const type_info*> Engine::Component::GetRequieredComponents()

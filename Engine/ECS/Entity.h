@@ -17,6 +17,7 @@ namespace Engine
 	using namespace Engine;
 	class Entity
 	{
+		friend class FileManager;
 		friend class Scene;
 	public:
 		Entity(D3d** D3d);
@@ -60,7 +61,7 @@ namespace Engine
 						return;
 					}
 				}
-				(Components[Components.size() - 1])->Initialise(InitComp, m_D3dPtr);
+				(Components[Components.size() - 1])->Initialise(InitComp, m_D3dPtr,UUID);
 				//Transform = GetComponent< Engine::Transform>();
 			}
 			catch (std::exception& e)

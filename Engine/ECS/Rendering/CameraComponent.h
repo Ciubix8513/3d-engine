@@ -18,7 +18,9 @@ namespace Engine
 		};
 	private:
 		std::vector<const type_info*> GetRequieredComponents() override;
-		void Initialise(std::vector<Component*>, D3d** d3d) override;
+		void Initialise(std::vector<Component*>, D3d** d3d, ULONG entityUUID) override;
+		std::string GetName() override;
+
 		void Update() override;
 	public:
 		Matrix4x4 GetProjectionMatrix();

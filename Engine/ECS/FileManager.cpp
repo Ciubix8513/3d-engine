@@ -196,9 +196,29 @@ MeshComponent::Mesh* Engine::FileManager::LoadMesh(std::string FileName)
 	mesh.indecies = new unsigned long[Indecies.size()];
 	mesh.vertices = new MeshComponent::vertex[FinalVertices.size()];
 	for (size_t i = 0; i < mesh.vertexCount; i++)
+	{
 		mesh.vertices[i] = FinalVertices[i];
+		std::cout << "Vertex" << i << ": " << mesh.vertices[i].position.x << " , " << mesh.vertices[i].position.y << " , " << mesh.vertices[i].position.z << ' ';
+	}
 	for (size_t i = 0; i < mesh.indexCount; i++)
 		mesh.indecies[i] = Indecies[i];
 
+
+
 	return &mesh;
+}
+
+//Scene Engine::FileManager::LoadScene(std::string FileName)
+//{
+
+
+//	return ;
+//}
+
+void Engine::FileManager::SaveScene(std::string FileName, Scene* scene)
+{	
+	for (size_t i = 0; i < scene->Entities.size(); i++)
+		for (size_t j = 0; j < scene->Entities[i].Components.size(); j++)
+			scene->Entities[i].Components[j]->Serialise(FileName + "/" +scene->Entities[i].Name + "/" + scene->Entities[i].Components[j]->GetName()+".Comp");
+	return;
 }

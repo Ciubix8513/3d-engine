@@ -10,7 +10,9 @@ namespace Engine
 	{
 	public:
 		static MeshComponent::Mesh* LoadMesh(std::string FileName);
-
+		
+		static Scene LoadScene(std::string FileName);
+		static void SaveScene(std::string FileName, Scene* scene);
 	};
 };
 

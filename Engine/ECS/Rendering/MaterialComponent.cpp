@@ -8,7 +8,7 @@ std::vector<const type_info*> Engine::MaterialComponent::GetRequieredComponents(
 }
 
 //Initialisation function
-void Engine::MaterialComponent::Initialise(std::vector<Component*> Comps, D3d** d3d)
+void Engine::MaterialComponent::Initialise(std::vector<Component*> Comps, D3d** d3d, ULONG entityUUID)
 {
 	m_D3dPtr = d3d;
 	m_mesh = (MeshComponent*)Comps[0];
@@ -17,7 +17,13 @@ void Engine::MaterialComponent::Initialise(std::vector<Component*> Comps, D3d** 
 	m_pixelShader = 0;
 	m_VSBnum = 0;
 	m_PSBnum = 0;
+	EntityUUID = entityUUID;
 	return;
+}
+
+std::string Engine::MaterialComponent::GetName()
+{
+	return "Material";
 }
 
 //Cleanup function
@@ -135,10 +141,35 @@ bool Engine::MaterialComponent::PreProcessShader(std::string fileName)
 
 	}
 
+	//A very stupid fix but should work
+	std::vector <std::string> NewWords;
+	for (std::string s : Words)
+	{
+		std::string tmp;
+		bool Space = false;
+		for (size_t i = 0; i < s.size(); i++)		
+			if (s[i] == '\t')
+			{				
+				tmp += "    ";
+				
+				Space = true;
+			}
+			else if (s[i] == ' ')
+			{
+				tmp += ' ';
+				Space = true;
+			}
+			else
+			{
+				Space = false;
+				tmp += s[i];
+			}		
+		NewWords.push_back( tmp);
+	}
 	//Creating processed file
 	std::ofstream f(fileName + ".processed");
-	for (size_t i = 0; i < Words.size(); i++)
-		f << Words[i];
+	for (size_t i = 0; i < NewWords.size(); i++)
+		f << NewWords[i];
 	f.close();
 
 	//this might be dumb but
@@ -159,7 +190,7 @@ bool Engine::MaterialComponent::PreProcessShader(std::string fileName)
 		while ((**(i) != "};\n"))
 		{
 			tmp = (**(i)).substr(0, 10);
-			if (tmp == "    float")
+			if (tmp == "    float ")
 				ByteWidth += 4;
 			else if (tmp == "    float2")
 				ByteWidth += 8;
@@ -175,6 +206,10 @@ bool Engine::MaterialComponent::PreProcessShader(std::string fileName)
 			if (NumVars == 1000000000000000)			
 				std::cout << "I fucked up\n";
 			
+		}
+		if(ByteWidth == 0)
+		{
+			throw std::exception("Wrong shader syntax");
 		}
 
 		(*(i)) -= NumVars;
@@ -238,6 +273,16 @@ void Engine::MaterialComponent::Render()
 			(*m_D3dPtr)->getDeviceContext()->VSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
 		else
 			(*m_D3dPtr)->getDeviceContext()->PSSetSamplers(m_samplerBuffer[i].samplerNum, 1, &m_samplerBuffer[i].sampler);
+	}
+	//Setting textures
+	for (size_t i = 0; i < m_textureBuffer.size(); i++)
+	{
+		if (m_textureBuffer[i].type == VertexShader)
+			if (m_textureBuffer[i].texture != nullptr)
+				(*m_D3dPtr)->getDeviceContext()->VSSetShaderResources(m_textureBuffer[i].TextureNum, 1, m_textureBuffer[i].texture->GetTexture());
+		if (m_textureBuffer[i].type == PixelShader)
+			if(m_textureBuffer[i].texture != nullptr)
+				(*m_D3dPtr)->getDeviceContext()->PSSetShaderResources(m_textureBuffer[i].TextureNum, 1, m_textureBuffer[i].texture->GetTexture());			
 	}
 	
 	//Drawing the mesh!
@@ -361,7 +406,8 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 	std::string name;	
 	size_t count = 0;
 	size_t SamplerCount = 0;
-	
+	size_t TextureCount = 0;
+
 	//Vertex shader buffer creation
 	for (size_t i = 0; i < Words.size(); i++) 
 	{
@@ -385,9 +431,10 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 			m_VSBnum++;
 			count++;
 		}
-		else if(tmp == "sampler") // Check if it's a sampler
+		else if (tmp == "SamplerS") // Check if it's a sampler
 		{
-			name = Words[i].substr(9);
+			name = Words[i].substr(13);
+			name = name.substr(0, name.size() - 2);
 			Engine::MaterialComponent::Sampler s;
 			s.name = name;
 			s.type = VertexShader;
@@ -396,17 +443,30 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 			m_samplerBuffer.push_back(s);
 			SamplerCount++;
 		}
+		else if (tmp == "Texture2")
+		{
+			name = Words[i].substr(10);
+			name = name.substr(0, name.size() - 2);
+			Engine::MaterialComponent::Tex t;
+			t.name = name;
+			t.type = VertexShader;
+			t.TextureNum = TextureCount;
+			m_textureBuffer.push_back(t);
+			TextureCount++;
+		}
 	}
 
 	count = 0;
 	SamplerCount = 0;
+	TextureCount = 0;
 	Words = GetWordsFromFile(psFilename + ".processed");
 
 	//Pixel shader buffer creation
 	for (size_t i = 0; i < Words.size(); i++) 
 	{
 
-		std::string tmp = Words[i].substr(0, 8);
+		std::string tmp = Words[i].substr(0,8);
+
 		if (tmp == "cbuffer ")// Finding all buffers
 		{
 			//Creating buffer
@@ -424,15 +484,29 @@ bool Engine::MaterialComponent::InitShader(std::string vsFilename, std::string  
 			m_PSBnum++;
 			count++;
 		}
-		else if (tmp == "sampler") // Check if it's a sampler
+		else if (tmp == "SamplerS") // Check if it's a sampler
 		{
-			name = Words[i].substr(9);
+			name = Words[i].substr(13);
+			name = name.substr(0, name.size() - 2);
 			Engine::MaterialComponent::Sampler s;
 			s.name = name;
 			s.type = PixelShader;
 			s.samplerNum = SamplerCount;
+			s.CreateSampler((*m_D3dPtr)->getDevice());
 			m_samplerBuffer.push_back(s);
 			SamplerCount++;
+		}
+		else if(tmp == "Texture2")
+		{
+			name = Words[i].substr(10);
+			name = name.substr(0, name.size() - 2);
+			Engine::MaterialComponent::Tex t;
+			t.name = name;
+			t.type = PixelShader;
+			t.TextureNum = TextureCount;
+			t.texture = nullptr;
+			m_textureBuffer.push_back(t);
+			TextureCount++;
 		}
 	}
 
@@ -609,6 +683,21 @@ bool Engine::MaterialComponent::SetSampler(std::string Name, ID3D11SamplerState*
 			m_samplerBuffer[i].sampler = data;			
 			return true;
 		}
+	return false;
+}
+bool Engine::MaterialComponent::SetTexture(std::string Name, Texture* data, bool deleteData)
+{
+	for (size_t i = 0; i < m_textureBuffer.size(); i++)
+		if (m_textureBuffer[i].name == Name)
+		{			
+			if (deleteData)
+				m_textureBuffer[i].texture->Shutdown();			
+			m_textureBuffer[i].texture = 0;
+			m_textureBuffer[i].texture = data;
+			return true;
+		}
+
+
 	return false;
 }
 #pragma endregion

@@ -27,7 +27,7 @@ public:
 	bool Init(ID3D11Device*, ID3D11DeviceContext*, char*);
 	void Shutdown();
 
-	ID3D11ShaderResourceView* GetTexture();
+	ID3D11ShaderResourceView** GetTexture();
 #pragma endregion
 #pragma region private funcs
 private:

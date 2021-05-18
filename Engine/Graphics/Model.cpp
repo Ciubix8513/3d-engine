@@ -324,7 +324,7 @@ int Model::GetIndexCount()
 
 ID3D11ShaderResourceView* Model::GetTexture()
 {
-	return m_texture->GetTexture();
+	return *m_texture->GetTexture();
 }
 
 bool Model::LoadTexture(ID3D11Device* device, ID3D11DeviceContext* ctxt, char* file)

@@ -121,9 +121,6 @@
     <Filter Include="Main System\ECS\Components">
       <UniqueIdentifier>{cf4d5b82-3e81-4bbd-bd80-bed9536fa51d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main System\ECS\Components\Rendering">
-      <UniqueIdentifier>{ee3c1f8a-2524-46d2-a949-137e6f90b5f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main System\ECS\Components\General">
       <UniqueIdentifier>{07d4194e-5141-4467-aa0f-4e2942902091}</UniqueIdentifier>
     </Filter>
@@ -132,6 +129,9 @@
     </Filter>
     <Filter Include="Main System\ECS\Headers">
       <UniqueIdentifier>{e1ce341c-582c-4053-83c3-19bd642ff19a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main System\ECS\Components\Rendering">
+      <UniqueIdentifier>{1803930c-4875-4aeb-95c2-7383974dfb9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,22 +231,25 @@
     <ClCompile Include="ECS\General\Transform.cpp">
       <Filter>Main System\ECS\Components\General</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Rendering\MeshComponent.cpp">
-      <Filter>Main System\ECS\Components\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Scene.cpp">
+      <Filter>Main System\ECS\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\FileManager.cpp">
       <Filter>Main System\ECS\Sources</Filter>
     </ClCompile>
     <ClCompile Include="ECS\Rendering\MaterialComponent.cpp">
       <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Rendering\CameraComponent.cpp">
+    <ClCompile Include="ECS\Rendering\MeshComponent.cpp">
       <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\FileManager.cpp">
-      <Filter>Main System\ECS\Sources</Filter>
+    <ClCompile Include="ECS\Rendering\Skybox.cpp">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="ECS\Rendering\BufferStructs.cpp">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Rendering\CameraComponent.cpp">
       <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
@@ -347,23 +350,26 @@
     <ClInclude Include="ECS\General\Transform.h">
       <Filter>Main System\ECS\Components\General</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Rendering\MeshComponent.h">
-      <Filter>Main System\ECS\Components\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Scene.h">
       <Filter>Main System\ECS\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Rendering\MaterialComponent.h">
-      <Filter>Main System\ECS\Components\Rendering</Filter>
+    <ClInclude Include="ECS\FileManager.h">
+      <Filter>Main System\ECS\Headers</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Rendering\CameraComponent.h">
       <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Rendering\BufferStructs.h">
+    <ClInclude Include="ECS\Rendering\MaterialComponent.h">
       <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\FileManager.h">
-      <Filter>Main System\ECS\Headers</Filter>
+    <ClInclude Include="ECS\Rendering\MeshComponent.h">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Rendering\Skybox.h">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Rendering\BufferStructs.h">
+      <Filter>Main System\ECS\Components\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

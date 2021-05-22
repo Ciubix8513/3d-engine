@@ -29,6 +29,7 @@ namespace Engine
 	protected:
 		D3d** m_D3dPtr;
 		ULONG EntityUUID;
+		bool DeactivationTrigger;
 	};
 }
 

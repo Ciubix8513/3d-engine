@@ -48,8 +48,15 @@ void Engine::Entity::SetUUID(ULONG NewUUID)
 
 void Engine::Entity::Update()
 {
-	for (int i = 0; i < Components.size(); i++)
+	for (int i = 0; i < Components.size(); i++) 
+	{
 		(Components[i])->Update();
+		if(Components[i]->DeactivationTrigger)
+		{
+			Components[i]->DeactivationTrigger = false;
+			Active = false;
+		}
+	}
 	return;
 }
 
